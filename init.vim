@@ -1,6 +1,7 @@
 set ttyfast
 set showmatch
 set ignorecase
+set smartcase
 set nohlsearch
 set incsearch
 set autoindent

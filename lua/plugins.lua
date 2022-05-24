@@ -1,18 +1,8 @@
 -- this file can be loaded by calling `lua require('plugins')` from your init.vim
 
--- only required if you have packer configured as `opt`
-vim.cmd [[packadd packer.nvim]]
-vim.cmd [[
-  augroup packer_user_config
-    autocmd!
-    autocmd bufwritepost plugins.lua source <afile> | PackerSync
-  augroup end
-]]
-
 vim.g.gruvbox_material_background = 'medium'
-vim.g.gruvbox_material_better_performace = 1
 vim.g.gruvbox_material_enable_bold = 1
-vim.g.gruvbox_material_cursor = 'green'
+vim.g.gruvbox_material_cursor = 'auto'
 vim.g.gruvbox_material_transparent_background = 0
 vim.g.gruvbox_material_show_eob = 1
 vim.g.gruvbox_material_palette = 'material'
@@ -23,6 +13,76 @@ vim.cmd [[ colorscheme gruvbox-material ]]
 -- vim.g.everforest_background = 'soft'
 -- vim.g.everforest_better_performace = 1
 -- vim.cmd [[ colorscheme everforest ]]
+
+-- -- Default options
+-- require('nightfox').setup({
+--   options = {
+--     -- Compiled file's destination location
+--     compile_path = vim.fn.stdpath("cache") .. "/nightfox",
+--     compile_file_suffix = "_compiled", -- Compiled file suffix
+--     transparent = false, -- Disable setting background
+--     terminal_colors = true, -- Set terminal colors (vim.g.terminal_color_*) used in `:terminal`
+--     dim_inactive = false, -- Non focused panes set to alternative background
+--     styles = { -- Style to be applied to different syntax groups
+--       comments = "italic", -- Value is any valid attr-list value `:help attr-list`
+--       conditionals = "NONE",
+--       constants = "NONE",
+--       functions = "NONE",
+--       keywords = "NONE",
+--       numbers = "NONE",
+--       operators = "NONE",
+--       strings = "NONE",
+--       types = "NONE",
+--       variables = "NONE",
+--     },
+--     inverse = { -- Inverse highlight for different types
+--       match_paren = false,
+--       visual = false,
+--       search = false,
+--     },
+--     modules = { -- List of various plugins and additional options
+--       -- ...
+--     },
+--   },
+--   palettes = {
+--     nightfox = {
+--       -- A specific style's value will be used over the `all`'s value
+--       -- red = "#c94f6d",
+--       -- comment = "#60728a",
+--     },
+--   },
+--   specs = {
+--     nightfox = {
+--       syntax = {
+--         bracket = "white.dim",
+--         builtin0 = "red.dim",
+--         builtin1 = "",
+--         builtin2 = "",
+--         -- comment = "",
+--         conditional = "red.dim",
+--         -- const = "",
+--         -- dep = "",
+--         field = "white.dim",
+--         func = "blue",
+--         -- ident = "",
+--         keyword = "red.dim",
+--         -- number = "",
+--         -- operator = "",
+--         preproc = "red.dim",
+--         -- regex = "",
+--         -- statement = "",
+--         string = "green",
+--         type = "cyan",
+--         variable = "white.dim",
+--       },
+--     },
+--   },
+--   groups = {
+--   },
+-- })
+
+-- -- setup must be called before loading
+-- vim.cmd("colorscheme nightfox")
 
 require('telescope').setup({
   defaults = {
@@ -50,7 +110,7 @@ require('telescope').setup({
 require('telescope').load_extension('fzf')
 
 local opts = { noremap = true, silent = true }
-vim.api.nvim_set_keymap('n', '<leader>f', '<cmd>Telescope find_files find_command=rg,--ignore,--hidden,--files<CR>', opts)
+vim.api.nvim_set_keymap('n', '<leader>f', '<cmd>Telescope find_files find_command=rg,--ignore,--files<CR>', opts) -- optional: --hidden
 vim.api.nvim_set_keymap('n', '<leader>g', '<cmd>Telescope live_grep<CR>', opts)
 vim.api.nvim_set_keymap('n', '<leader>b', '<cmd>Telescope buffers<CR>', opts)
 vim.api.nvim_set_keymap('n', '<leader>o', '<cmd>Telescope oldfiles<CR>', opts)
@@ -142,11 +202,11 @@ vim.diagnostic.config({
   update_in_insert = true,
   severity_sort = false,
   float = {
-      focusable = false,
-      style = "minimal",
-      source = "always",
-      prefix = "",
-    },
+    focusable = false,
+    style = "minimal",
+    source = "always",
+    prefix = "",
+  },
 })
 
 vim.cmd [[
@@ -324,50 +384,3 @@ require('lualine').setup {
   tabline = {},
   extensions = {}
 }
-
-return require('packer').startup({ function()
-  -- packer can manage itself
-  use 'wbthomason/packer.nvim'
-  use 'sainnhe/everforest'
-  use 'sainnhe/gruvbox-material'
-  -- use "rebelot/kanagawa.nvim"
-  -- use 'marko-cerovac/material.nvim'
-  -- use 'Mofiqul/adwaita.nvim'
-  -- use 'windwp/wind-colors'
-  -- use 'kyazdani42/blue-moon'
-  -- use 'fenetikm/falcon'
-  -- use { 'lifepillar/vim-gruvbox8', opt = true }
-  -- use 'ellisonleao/gruvbox.nvim' -- colorscheme
-  -- use 'davidosomething/vim-colors-meh' -- colorscheme
-  use 'neovim/nvim-lspconfig' -- lsp client
-  use 'hrsh7th/nvim-cmp' -- autocompletion plugin
-  use 'hrsh7th/cmp-nvim-lsp' -- lsp source for nvim-cmp
-  use 'saadparwaiz1/cmp_luasnip' -- snippets source for nvim-cmp
-  use 'l3mon4d3/luasnip' -- snippets plugin
-  use 'tpope/vim-surround' -- surround
-  use 'tpope/vim-commentary' -- faster code commenting
-  use 'tpope/vim-fugitive' -- git integration
-  use 'akinsho/toggleterm.nvim' -- terminal integration
-  use 'nvim-lualine/lualine.nvim' -- statusline
-  use 'lewis6991/impatient.nvim' -- Startup profiler
-  use { 'nvim-treesitter/nvim-treesitter', run = ':tsupdate' } -- treesitter syntax highlighting
-  use 'nvim-treesitter/nvim-treesitter-textobjects' -- Additional textobjects for treesitter
-  use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' } -- fzf native c for telescope
-  use { 'nvim-telescope/telescope.nvim',
-    requires = { { 'nvim-lua/plenary.nvim' } }
-  } -- fuzzy finder
-  use {
-    'goolord/alpha-nvim',
-    config = function()
-      require("configs.alpha")
-    end,
-  }
-end,
-config = {
-  display = {
-    open_fn = function()
-      return require('packer.util').float({ border = 'single' })
-    end
-  }
-} }
-)

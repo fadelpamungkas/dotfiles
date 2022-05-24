@@ -110,6 +110,11 @@ _G.packer_plugins = {
     path = "/Users/fadel/.local/share/nvim/site/pack/packer/start/luasnip",
     url = "https://github.com/l3mon4d3/luasnip"
   },
+  ["nightfox.nvim"] = {
+    loaded = true,
+    path = "/Users/fadel/.local/share/nvim/site/pack/packer/start/nightfox.nvim",
+    url = "https://github.com/EdenEast/nightfox.nvim"
+  },
   ["nvim-cmp"] = {
     loaded = true,
     path = "/Users/fadel/.local/share/nvim/site/pack/packer/start/nvim-cmp",

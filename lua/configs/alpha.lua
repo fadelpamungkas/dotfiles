@@ -44,6 +44,10 @@ local phrase_gen = io.popen('sh "$HOME"/scripts/other/random_4chin_word.sh | tr 
 local phrase = phrase_gen:read("*a")
 phrase_gen:close()
 
+local dir_gen = io.popen('echo expand("%:p:h")')
+local dir = dir_gen:read("*a")
+dir_gen:close()
+
 local heading = {
 	type = "text",
 	val = " ? " .. date .. " No." .. id .. " ?",
@@ -55,7 +59,7 @@ local heading = {
 
 local post_buttons = {
 	type = "text",
-	val = " They don't get it. For me, it's nvim.",
+	val = " dir " .. dir,
 	opts = {
 		position = "left",
 		hl = "AlphaFooter",

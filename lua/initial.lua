@@ -6,6 +6,8 @@ vim.opt.cursorline = true
 vim.opt.termguicolors = true
 vim.opt.splitbelow = true -- Open new split below
 vim.opt.splitright = true -- Open new split to the right
+vim.g.netrw_banner = 0
+vim.g.netrw_liststyle = 3
 
 -- Remap space as leader key
 vim.api.nvim_set_keymap( 'n' , '<Space>', '<Nop>', { silent = true })
@@ -16,10 +18,10 @@ vim.keymap.set('i', 'jk','<Esc>')
 vim.api.nvim_set_keymap( 'v' , '>', '>gv', { noremap = true })
 vim.api.nvim_set_keymap( 'v' , '<', '<gv', { noremap = true })
 
-vim.api.nvim_set_keymap( 'n' , '<leader>.', '<cmd>:vertical resize +2<CR>', { noremap = true })
-vim.api.nvim_set_keymap( 'n' , '<leader>,', '<cmd>:vertical resize -2<CR>', { noremap = true })
-vim.api.nvim_set_keymap( 'n' , '<leader>=', '<cmd>resize +2<CR>', { noremap = true })
-vim.api.nvim_set_keymap( 'n' , '<leader>-', '<cmd>resize -2<CR>', { noremap = true })
+vim.api.nvim_set_keymap( 'n' , 'Right', '<cmd>:vertical resize +2<CR>', { noremap = true })
+vim.api.nvim_set_keymap( 'n' , 'Left', '<cmd>:vertical resize -2<CR>', { noremap = true })
+vim.api.nvim_set_keymap( 'n' , 'Up', '<cmd>resize +2<CR>', { noremap = true })
+vim.api.nvim_set_keymap( 'n' , 'Down', '<cmd>resize -2<CR>', { noremap = true })
 vim.keymap.set('n', '<c-j>', '<c-w>j')
 vim.keymap.set('n', '<c-k>', '<c-w>k')
 vim.keymap.set('n', '<c-h>', '<c-w>h')

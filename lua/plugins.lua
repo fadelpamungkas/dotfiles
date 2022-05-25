@@ -1,88 +1,88 @@
 -- this file can be loaded by calling `lua require('plugins')` from your init.vim
 
-vim.g.gruvbox_material_background = 'medium'
-vim.g.gruvbox_material_enable_bold = 1
-vim.g.gruvbox_material_cursor = 'auto'
-vim.g.gruvbox_material_transparent_background = 0
-vim.g.gruvbox_material_show_eob = 1
-vim.g.gruvbox_material_palette = 'material'
--- vim.g.gruvbox_material_diagnostic_text_highlight = 1
--- vim.g.gruvbox_material_enable_italic = 1
-vim.cmd [[ colorscheme gruvbox-material ]]
+-- vim.g.gruvbox_material_background = 'medium'
+-- vim.g.gruvbox_material_enable_bold = 1
+-- vim.g.gruvbox_material_cursor = 'auto'
+-- vim.g.gruvbox_material_transparent_background = 0
+-- vim.g.gruvbox_material_show_eob = 1
+-- vim.g.gruvbox_material_palette = 'material'
+-- -- vim.g.gruvbox_material_diagnostic_text_highlight = 1
+-- -- vim.g.gruvbox_material_enable_italic = 1
+-- vim.cmd [[ colorscheme gruvbox-material ]]
 
 -- vim.g.everforest_background = 'soft'
 -- vim.g.everforest_better_performace = 1
 -- vim.cmd [[ colorscheme everforest ]]
 
--- -- Default options
--- require('nightfox').setup({
---   options = {
---     -- Compiled file's destination location
---     compile_path = vim.fn.stdpath("cache") .. "/nightfox",
---     compile_file_suffix = "_compiled", -- Compiled file suffix
---     transparent = false, -- Disable setting background
---     terminal_colors = true, -- Set terminal colors (vim.g.terminal_color_*) used in `:terminal`
---     dim_inactive = false, -- Non focused panes set to alternative background
---     styles = { -- Style to be applied to different syntax groups
---       comments = "italic", -- Value is any valid attr-list value `:help attr-list`
---       conditionals = "NONE",
---       constants = "NONE",
---       functions = "NONE",
---       keywords = "NONE",
---       numbers = "NONE",
---       operators = "NONE",
---       strings = "NONE",
---       types = "NONE",
---       variables = "NONE",
---     },
---     inverse = { -- Inverse highlight for different types
---       match_paren = false,
---       visual = false,
---       search = false,
---     },
---     modules = { -- List of various plugins and additional options
---       -- ...
---     },
---   },
---   palettes = {
---     nightfox = {
---       -- A specific style's value will be used over the `all`'s value
---       -- red = "#c94f6d",
---       -- comment = "#60728a",
---     },
---   },
---   specs = {
---     nightfox = {
---       syntax = {
---         bracket = "white.dim",
---         builtin0 = "red.dim",
---         builtin1 = "",
---         builtin2 = "",
---         -- comment = "",
---         conditional = "red.dim",
---         -- const = "",
---         -- dep = "",
---         field = "white.dim",
---         func = "blue",
---         -- ident = "",
---         keyword = "red.dim",
---         -- number = "",
---         -- operator = "",
---         preproc = "red.dim",
---         -- regex = "",
---         -- statement = "",
---         string = "green",
---         type = "cyan",
---         variable = "white.dim",
---       },
---     },
---   },
---   groups = {
---   },
--- })
+-- Default options
+require('nightfox').setup({
+  options = {
+    -- Compiled file's destination location
+    compile_path = vim.fn.stdpath("cache") .. "/nightfox",
+    compile_file_suffix = "_compiled", -- Compiled file suffix
+    transparent = false, -- Disable setting background
+    terminal_colors = true, -- Set terminal colors (vim.g.terminal_color_*) used in `:terminal`
+    dim_inactive = false, -- Non focused panes set to alternative background
+    styles = { -- Style to be applied to different syntax groups
+      comments = "italic", -- Value is any valid attr-list value `:help attr-list`
+      conditionals = "NONE",
+      constants = "NONE",
+      functions = "NONE",
+      keywords = "NONE",
+      numbers = "NONE",
+      operators = "NONE",
+      strings = "NONE",
+      types = "NONE",
+      variables = "NONE",
+    },
+    inverse = { -- Inverse highlight for different types
+      match_paren = false,
+      visual = false,
+      search = false,
+    },
+    modules = { -- List of various plugins and additional options
+      -- ...
+    },
+  },
+  palettes = {
+    nightfox = {
+      -- A specific style's value will be used over the `all`'s value
+      -- red = "#c94f6d",
+      -- comment = "#60728a",
+    },
+  },
+  specs = {
+    nightfox = {
+      syntax = {
+        bracket = "white.dim",
+        builtin0 = "red",
+        builtin1 = "white.dim",
+        builtin2 = "yellow",
+        -- comment = "",
+        conditional = "cyan.dim",
+        -- const = "",
+        -- dep = "",
+        field = "white.dim",
+        func = "blue",
+        ident = "blue",
+        keyword = "cyan.dim",
+        -- number = "",
+        -- operator = "",
+        preproc = "red",
+        -- regex = "",
+        -- statement = "",
+        string = "green",
+        type = "blue.dim",
+        variable = "white.dim",
+      },
+    },
+  },
+  groups = {
+  },
+})
 
--- -- setup must be called before loading
--- vim.cmd("colorscheme nightfox")
+-- setup must be called before loading
+vim.cmd("colorscheme nightfox")
 
 require('telescope').setup({
   defaults = {
@@ -338,7 +338,7 @@ cmp.setup {
 require('lualine').setup {
   options = {
     icons_enabled = false,
-    theme = 'gruvbox-material',
+    theme = 'nightfox',
     component_separators = '|',
     section_separators = '',
     disabled_filetypes = {},

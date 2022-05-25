@@ -5,6 +5,7 @@ set smartcase
 set nohlsearch
 set incsearch
 set autoindent
+set smartindent
 set number
 set clipboard=unnamedplus
 set mouse=a

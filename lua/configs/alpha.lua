@@ -1,28 +1,28 @@
 local present, alpha = pcall(require, "alpha")
 if not present then
-	return
+  return
 end
 
 local header = {
-	type = "text",
-	val = {
+  type = "text",
+  val = {
     [[ ]],
-		[[ ]],
-		[[ ]],
-		[[ ]],
-		[[ ]],
-		[[ ]],
-		[[ ]],
-		[[ ]],
-		[[ ]],
-		[[ ]],
-		[[ ]],
-		[[ ]],
-	},
-	opts = {
-		position = "left",
-		hl = "AlphaAscii",
-	},
+    [[ ]],
+    [[ ]],
+    [[ ]],
+    [[ ]],
+    [[ ]],
+    [[ ]],
+    [[ ]],
+    [[ ]],
+    [[ ]],
+    [[ ]],
+    [[ ]],
+  },
+  opts = {
+    position = "left",
+    hl = "AlphaAscii",
+  },
 }
 
 local plugins_gen = io.popen('fd -d 2 . $HOME"/.local/share/nvim/site/pack/packer" | head -n -2 | wc -l | tr -d "\n" ')
@@ -49,130 +49,133 @@ local dir = dir_gen:read("*a")
 dir_gen:close()
 
 local heading = {
-	type = "text",
-	val = " ? " .. date .. " No." .. id .. " ?",
-	opts = {
-		position = "left",
-		hl = "AlphaButtons",
-	},
+  type = "text",
+  val = " ? " .. date .. " No." .. id .. " ?",
+  opts = {
+    position = "left",
+    hl = "AlphaButtons",
+  },
 }
 
 local post_buttons = {
-	type = "text",
-	val = " dir " .. dir,
-	opts = {
-		position = "left",
-		hl = "AlphaFooter",
-	},
+  type = "text",
+  val = " dir " .. dir,
+  opts = {
+    position = "left",
+    hl = "AlphaFooter",
+  },
 }
 
 local pre_foot = {
-	type = "text",
-	val = " >>" .. id_2 .. "(OP)                      ",
-	opts = {
-		position = "left",
-		hl = "AlphaEmphasis",
-	},
+  type = "text",
+  val = " >>" .. id_2 .. "(OP)                      ",
+  opts = {
+    position = "left",
+    hl = "AlphaEmphasis",
+  },
 }
 
 local footer = {
-	type = "text",
-	val = " I've " .. plugins .. " plugins, it launches instantly kek.",
-	opts = {
-		position = "left",
-		hl = "AlphaFooter",
-	},
+  type = "text",
+  val = " I've " .. plugins .. " plugins, it launches instantly kek.",
+  opts = {
+    position = "left",
+    hl = "AlphaFooter",
+  },
 }
 
 local pre_foot_2 = {
-	type = "text",
-	val = " >>" .. id_1 .. "                                ",
-	opts = {
-		position = "left",
-		hl = "AlphaEmphasis",
-	},
+  type = "text",
+  val = " >>" .. id_1 .. "                                ",
+  opts = {
+    position = "left",
+    hl = "AlphaEmphasis",
+  },
 }
 
 local footer_2 = {
-	type = "text",
-	val = " " .. phrase .. "      ",
-	opts = {
-		position = "left",
-		hl = "AlphaFooter",
-	},
+  type = "text",
+  val = " " .. phrase .. "      ",
+  opts = {
+    position = "left",
+    hl = "AlphaFooter",
+  },
 }
 
 local function button(sc, txt, keybind)
-	local sc_ = sc:gsub("%s", ""):gsub("SPC", "<leader>")
+  local sc_ = sc:gsub("%s", ""):gsub("SPC", "<leader>")
 
-	local opts = {
-		position = "left",
-		text = txt,
-		shortcut = sc,
-		cursor = 0,
-		width = 44,
-		align_shortcut = "right",
-		hl_shortcut = "AlphaShortcuts",
-		hl = "AlphaHeader",
-	}
-	if keybind then
-		opts.keymap = { "n", sc_, keybind, { noremap = true, silent = true } }
-	end
+  local opts = {
+    position = "left",
+    text = txt,
+    shortcut = sc,
+    cursor = 0,
+    width = 44,
+    align_shortcut = "right",
+    hl_shortcut = "AlphaShortcuts",
+    hl = "AlphaHeader",
+  }
+  if keybind then
+    opts.keymap = { "n", sc_, keybind, { noremap = true, silent = true } }
+  end
 
-	return {
-		type = "button",
-		val = txt,
-		on_press = function()
-			local key = vim.api.nvim_replace_termcodes(sc_, true, false, true)
-			vim.api.nvim_feedkeys(key, "normal", false)
-		end,
-		opts = opts,
-	}
+  return {
+    type = "button",
+    val = txt,
+    on_press = function()
+      local key = vim.api.nvim_replace_termcodes(sc_, true, false, true)
+      vim.api.nvim_feedkeys(key, "normal", false)
+    end,
+    opts = opts,
+  }
 end
 
 local buttons = {
-	type = "group",
-	val = {
-		button("<L>o", " >oldfiles", ":Telescope oldfiles <CR>"),
-		button("<L>f", " >fuzzy", ":Telescope find_files <CR>"),
-		button("<L>g", " >regex", ":Telescope live_grep <CR>"),
-		button("n", " >new", ":ene <BAR> startinsert <CR>"),
-		button("c", " >config", ":e ~/.config/nvim/ <CR>"),
-	},
-	opts = {
-		spacing = 0,
-	},
+  type = "group",
+  val = {
+    button("<L>o", " >oldfiles", ":Telescope oldfiles <CR>"),
+    button("<L>f", " >fuzzy", ":Telescope find_files <CR>"),
+    button("<L>g", " >regex", ":Telescope live_grep <CR>"),
+    button("n", " >new", ":ene <BAR> startinsert <CR>"),
+    button("c", " >config", ":e ~/.config/nvim/ <CR>"),
+  },
+  opts = {
+    spacing = 0,
+  },
 }
 
 local section = {
-	header = header,
-	buttons = buttons,
-	heading = heading,
-	post_buttons = post_buttons,
-	pre_foot = pre_foot,
-	footer = footer,
-	pre_foot_2 = pre_foot_2,
-	footer_2 = footer_2,
+  header = header,
+  buttons = buttons,
+  heading = heading,
+  post_buttons = post_buttons,
+  pre_foot = pre_foot,
+  footer = footer,
+  pre_foot_2 = pre_foot_2,
+  footer_2 = footer_2,
 }
 
 local opts = {
-	layout = {
-		{ type = "padding", val = 1 },
-		section.header,
-		{ type = "padding", val = 1 },
-		section.heading,
-		{ type = "padding", val = 1 },
-		section.buttons,
-		section.post_buttons,
-		{ type = "padding", val = 1 },
-		section.pre_foot,
-		section.footer,
-		{ type = "padding", val = 1 },
-		section.pre_foot_2,
-		section.footer_2,
-	},
-	opts = {
-		-- margin = 44,
-	},
+  layout = {
+    { type = "padding", val = 1 },
+    section.header,
+    { type = "padding", val = 1 },
+    section.heading,
+    { type = "padding", val = 1 },
+    section.buttons,
+    section.post_buttons,
+    { type = "padding", val = 1 },
+    section.pre_foot,
+    section.footer,
+    { type = "padding", val = 1 },
+    section.pre_foot_2,
+    section.footer_2,
+  },
+  opts = {
+    noautocmd = true,
+    -- margin = 44,
+  },
 }
+vim.cmd [[autocmd User AlphaReady vsplit .]]
+
 alpha.setup(opts)

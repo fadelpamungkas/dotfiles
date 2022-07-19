@@ -5,8 +5,8 @@ vim.diagnostic.config({
   -- virtual_text = {
   --   prefix = '●', -- could be '●', '▎', 'x'
   -- },
-  signs = true,
-  underline = true,
+  signs = false,
+  underline = false,
   update_in_insert = true,
   severity_sort = false,
   float = {
@@ -33,9 +33,16 @@ local opts = { noremap = true, silent = true }
 vim.api.nvim_set_keymap('n', '<leader>dd', '<cmd>lua vim.diagnostic.open_float()<cr>', opts)
 vim.api.nvim_set_keymap('n', '<leader>ds', '<cmd>lua vim.diagnostic.enable()<cr>', opts)
 vim.api.nvim_set_keymap('n', '<leader>dh', '<cmd>lua vim.diagnostic.disable()<cr>', opts)
-vim.api.nvim_set_keymap('n', '<leader>d[', '<cmd>lua vim.diagnostic.goto_prev()<cr>', opts)
-vim.api.nvim_set_keymap('n', '<leader>d]', '<cmd>lua vim.diagnostic.goto_next()<cr>', opts)
-vim.api.nvim_set_keymap('n', '<leader>dq', '<cmd>lua vim.diagnostic.setloclist()<cr>', opts)
+vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>', opts)
+vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>', opts)
+-- vim.api.nvim_set_keymap('n', '<leader>dq', '<cmd>lua vim.diagnostic.setloclist()<cr>', opts)
+vim.api.nvim_set_keymap('n', '<leader>dq', '<cmd>TroubleToggle document_diagnostics<cr>', opts)
+
+-- add additional capabilities supported by nvim-cmp
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+
+local lspconfig = require('lspconfig')
 
 -- use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -57,35 +64,40 @@ local on_attach = function(client, bufnr)
   --     vim.diagnostic.open_float(nil, opts)
   --   end
   -- })
+  --
+  if client.name == 'tsserver' then
+		client.resolved_capabilities.document_formatting = false
+  end
 
   -- enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   -- mappings.
   -- see `:help vim.lsp.*` for documentation on any of the below functions
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ';D', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ';d', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ';k', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ';i', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ';s', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ';wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ';wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ';wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ';t', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ';rn', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ';ca', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ';r', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ';f', '<cmd>lua vim.lsp.buf.formatting()<cr>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>cD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>cd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ci', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>cs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ct', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>cn', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>cr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', ';;', '<cmd>lua vim.lsp.buf.formatting()<cr>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl',
+    '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>', opts)
+
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>td', '<cmd>TroubleToggle definitions<cr>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ti', '<cmd>TroubleToggle implementations<cr>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tt', '<cmd>TroubleToggle type_definitions<cr>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tr', '<cmd>TroubleToggle references<cr>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>cq', '<cmd>TroubleToggle quickfix<cr>', opts)
 end
 
--- add additional capabilities supported by nvim-cmp
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
-
-local lspconfig = require('lspconfig')
-
 -- enable some language servers with the additional completion capabilities offered by nvim-cmp
-local servers = { 'gopls', 'rust_analyzer', 'pyright', 'sumneko_lua' }
+local servers = { 'gopls', 'rust_analyzer', 'pyright', 'sumneko_lua', 'tsserver', 'tailwindcss', 'eslint' }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     on_attach = on_attach,

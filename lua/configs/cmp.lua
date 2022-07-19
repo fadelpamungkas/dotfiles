@@ -31,7 +31,17 @@ cmp.setup {
     autocomplete = true,
   },
   view = {
-    entries = "custom" -- can be "custom", "wildmenu" or "native"
+    entries = "custom", -- can be "custom", "wildmenu" or "native"
+    selection_order = "near_cursor",
+  },
+  window = {
+    completion = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
+    -- completion = {
+    --   winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
+    --   col_offset = 0,
+    --   side_padding = 1,
+    -- },
   },
   snippet = {
     expand = function(args)
@@ -41,10 +51,11 @@ cmp.setup {
   mapping = cmp.mapping.preset.insert({
     ['<c-d>'] = cmp.mapping.scroll_docs(-4),
     ['<c-f>'] = cmp.mapping.scroll_docs(4),
-    [';;'] = cmp.mapping.complete(),
-    ['<cr>'] = cmp.mapping.confirm {
+    -- [';;'] = cmp.mapping.complete(),
+    ['<C-Space>'] = cmp.mapping.close(),
+    ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.replace,
-      select = false,
+      select = true,
     },
     ['<tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() == false then

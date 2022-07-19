@@ -13,6 +13,7 @@ toggleterm.setup({
 	start_in_insert = true,
 	insert_mappings = true,
 	persist_size = true,
+  persist_mode = false,
 	direction = "float",
 	close_on_exit = true,
 	shell = vim.o.shell,
@@ -24,6 +25,17 @@ toggleterm.setup({
 			background = "Normal",
 		},
 	},
+  -- function to run on opening the terminal
+  on_open = function(term)
+    vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", {noremap = true, silent = true})
+  end,
+  -- function to run on closing the terminal
+  -- on_close = function(term)
+  --   vim.cmd([[echo "Closing terminal"]])
+  -- end,
+  -- on_exit = function(term)
+  --   vim.cmd([[echo "Exiting terminal"]])
+  -- end,
 })
 
 function _G.set_terminal_keymaps()

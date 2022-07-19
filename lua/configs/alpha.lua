@@ -6,18 +6,8 @@ end
 local header = {
   type = "text",
   val = {
-    [[ ]],
-    [[ ]],
-    [[ ]],
-    [[ ]],
-    [[ ]],
-    [[ ]],
-    [[ ]],
-    [[ ]],
-    [[ ]],
-    [[ ]],
-    [[ ]],
-    [[ ]],
+[[  ]],
+[[  ]],
   },
   opts = {
     position = "left",
@@ -176,6 +166,8 @@ local opts = {
     -- margin = 44,
   },
 }
+
+-- Split Aplha with Explorer on startup
 vim.cmd [[autocmd User AlphaReady vsplit .]]
 
 alpha.setup(opts)

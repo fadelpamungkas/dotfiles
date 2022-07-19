@@ -32,7 +32,7 @@ opt.splitbelow = true -- Open new split below
 opt.splitright = true -- Open new split to the right
 opt.completeopt = { "menu", "menuone", "noselect" }
 opt.scrolloff = 4 -- Columns of context
-opt.signcolumn = "yes" -- always show signcolumns
+opt.signcolumn = "no" -- always show signcolumns
 g.netrw_banner = 0
 g.netrw_liststyle = 3
 g.netrw_sizestyle = "H"
@@ -60,6 +60,7 @@ map('n', '<c-k>', '<c-w>k', { noremap = true })
 map('n', '<c-h>', '<c-w>h', { noremap = true })
 map('n', '<c-l>', '<c-w>l', { noremap = true })
 map('n', 'gV', '`[V`]', { noremap = true }) -- Selecting pasted text
+map('n', '<leader>e', ':Rexplore<CR>', { noremap = true })
 
 -- Highlight on yank
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })

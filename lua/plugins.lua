@@ -32,23 +32,68 @@ packer.init {
 }
 
 packer.startup({ function()
-  use 'lewis6991/impatient.nvim' -- Startup profiler
+  use { 'lewis6991/impatient.nvim' } -- Startup profiler
   -- packer can manage itself
-  use 'wbthomason/packer.nvim'
+  use { 'wbthomason/packer.nvim' }
 
   -- Colorscheme
-  use 'sainnhe/gruvbox-material'
-  use 'EdenEast/nightfox.nvim'
+  use { 'sainnhe/gruvbox-material' }
+  use { 'EdenEast/nightfox.nvim' }
   -- use 'cocopon/iceberg.vim'
-  -- use 'davidosomething/vim-colors-meh'
+  use 'davidosomething/vim-colors-meh'
   -- use 'kyazdani42/blue-moon'
-  -- use { "mcchrish/zenbones.nvim", requires = "rktjmp/lush.nvim"}
+  -- use {
+  --   'He4eT/desolate.nvim',
+  --   requires = { 'rktjmp/lush.nvim' },
+  --}
+  -- use { 'ldelossa/vimdark' }
+  use {
+    "mcchrish/zenbones.nvim",
+    requires = "rktjmp/lush.nvim"
+  }
+  use {
+    'VonHeikemen/little-wonder',
+    config = function()
+      local lw = require('little-wonder')
+      local rubber = require('little-wonder.themes.rubber')
+
+      local theme = rubber.update({
+        syntax = {
+          comment = { gui = '#939393', cterm = 246 },
+          error_bg = { gui = '#FC8680', cterm = 163 },
+        }
+      })
+
+      lw.apply('darkling', theme)
+    end,
+  }
+  use { 'Yazeed1s/minimal.nvim' }
+  -- use { 'kvrohit/rasmus.nvim' }
+  -- use {
+  --   'meliora-theme/neovim',
+  --   requires = { 'rktjmp/lush.nvim' },
+  --   config = function()
+  --     require('meliora').setup({
+  --       neutral = true
+  --     })
+  --   end,
+  -- }
+  -- use({
+  --   'projekt0n/github-nvim-theme',
+  --   config = function()
+  --     require('github-theme').setup({
+  --       -- ...
+  --     })
+  --   end
+  -- })
+  --
+  -- use { 'RRethy/nvim-base16' }
   -- use 'fenetikm/falcon'
   -- use 'ishan9299/nvim-solarized-lua'
   -- use 'sainnhe/everforest'
   -- use "rebelot/kanagawa.nvim"
   -- use 'windwp/wind-colors'
-  -- use { 'lifepillar/g.uvbox8', opt = true }
+  -- use { 'lifepillar/gruvbox8', opt = true }
   -- use 'ellisonleao/gruvbox.nvim'
 
   -- Language Support Protocol
@@ -64,6 +109,35 @@ packer.startup({ function()
       lazy "nvim-lspconfig"
     end,
   } -- lsp client
+  use {
+    "jose-elias-alvarez/null-ls.nvim",
+    config = function()
+      require('configs.null-ls')
+    end,
+    requires = { "nvim-lua/plenary.nvim" },
+  } -- additional language server
+  use {
+    'hrsh7th/cmp-nvim-lsp',
+    -- opt = true,
+    config = function()
+      require('configs.lsp')
+    end,
+    -- setup = function()
+    --   lazy "cmp-nvim-lsp"
+    -- end,
+  } -- lsp source for nvim-cmp
+
+  use {
+    "folke/trouble.nvim",
+    opt = true,
+    config = function()
+      require('configs.trouble')
+    end,
+    setup = function()
+      lazy "trouble.nvim"
+    end,
+  } -- trouble code
+
   use { 'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
     config = function()
@@ -85,46 +159,88 @@ packer.startup({ function()
   } -- snippets source for nvim-cmp
 
   use {
-    'hrsh7th/cmp-nvim-lsp',
-    after = 'cmp_luasnip',
+    "williamboman/nvim-lsp-installer",
     config = function()
-      require('configs.lsp')
+      require("nvim-lsp-installer").setup()
     end,
-  } -- lsp source for nvim-cmp
+  }
 
   -- Editing support
-  use { 'tpope/vim-surround',
-    after = 'nvim-treesitter',
-  } -- Surround
-  use { 'numToStr/Comment.nvim',
+  use({
+    "kylechui/nvim-surround",
+    config = function()
+      require("nvim-surround").setup({
+        -- Configuration here, or leave empty to use defaults
+      })
+    end
+  }) -- cover any code
+  -- use {
+  --   'tpope/vim-surround',
+  --   after = 'nvim-treesitter',
+  -- } -- Surround
+
+  use { 'jinh0/eyeliner.nvim' } -- fast inline jumps
+
+  use {
+    'numToStr/Comment.nvim',
     module = "Comment",
-    keys = { "gc", "gb" },
+    keys = {
+      { "n", "gcc" },
+      { "n", "gbc" },
+      { "n", "gco" },
+      { "n", "gcO" },
+      { "n", "gcA" },
+      { "x", "gc" },
+      { "x", "gb" },
+    },
     config = function()
       require("configs.comment")
     end,
-
-    event = 'InsertEnter *',
   } -- Smart comment
-  use { 'windwp/nvim-autopairs',
+
+  use {
+    'windwp/nvim-autopairs',
     after = 'nvim-cmp',
     config = function()
       require('nvim-autopairs').setup()
     end,
-    event = 'InsertEnter *',
   } -- Autopairs
+
+  use {
+    'windwp/nvim-ts-autotag',
+    after = 'nvim-cmp',
+    config = function()
+      require('nvim-ts-autotag').setup()
+    end,
+  }
+
   -- use { 'ggandor/lightspeed.nvim',
   --   opt = true,
   --   setup = function()
   --     lazy 'lightspeed.nvim'
   --   end,
   -- } -- Motion
+  --
   -- use 'tpope/vim-commentary' -- faster code commenting
 
   -- Git Integration
+  use {
+    'TimUntersberger/neogit',
+    requires = 'nvim-lua/plenary.nvim',
+    cmd = 'Neogit',
+    keys = {
+      { "n", "<leader>g" },
+    },
+    config = function()
+      require('configs.neogit')
+    end,
+  }
+
   -- use 'tpope/vim-fugitive' -- git integration
 
   -- Treesitter
-  use { 'nvim-treesitter/nvim-treesitter', run = ':tsupdate',
+  use {
+    'nvim-treesitter/nvim-treesitter', run = ':tsupdate',
     opt = true,
     setup = function()
       lazy 'nvim-treesitter'
@@ -145,9 +261,32 @@ packer.startup({ function()
     end,
   }
 
+  -- SmoothScrolling
+  use {
+    'declancm/cinnamon.nvim',
+    config = function()
+      require('cinnamon').setup({
+        -- KEYMAPS:
+        default_keymaps = true, -- Create default keymaps.
+        extra_keymaps = true, -- Create extra keymaps.
+        extended_keymaps = true, -- Create extended keymaps.
+        override_keymaps = false, -- Replace any existing keymaps.
+
+        -- OPTIONS:
+        always_scroll = false, -- Scroll the cursor even when the window hasn't scrolled.
+        centered = true, -- Keep cursor centered in window when using window scrolling.
+        default_delay = 3, -- The default delay (in ms) between each line when scrolling.
+        hide_cursor = false, -- Hide the cursor when scrolling. Requires enabling termguicolors.
+        horizontal_scroll = true, -- Enable smooth horizontal scrolling when view shifts left or right.
+        scroll_limit = 150, -- Max number of lines moved before scrolling is skipped.
+      })
+    end
+  }
+
   -- Telescope
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' } -- fzf native c for telescope
-  use { 'nvim-telescope/telescope.nvim',
+  use {
+    'nvim-telescope/telescope.nvim',
     requires = {
       'nvim-lua/plenary.nvim',
       'telescope-fzf-native.nvim',
@@ -158,21 +297,25 @@ packer.startup({ function()
     config = function()
       require('configs.telescope')
     end,
-
     cmd = 'Telescope',
     module = 'telescope',
   } -- fuzzy finder
 
   -- Terminal Integration
-  use { 'akinsho/toggleterm.nvim',
+  use {
+    'akinsho/toggleterm.nvim',
     cmd = 'ToggleTerm',
+    keys = {
+      { "n", "<c-\\>" },
+    },
     config = function()
       require('configs.toggleterm')
     end,
   } -- terminal integration
 
   -- Startup
-  use { 'dstein64/vim-startuptime',
+  use {
+    'dstein64/vim-startuptime',
     cmd = 'StartupTime',
     config = function()
       vim.g.startuptime_tries = 10

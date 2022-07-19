@@ -5,13 +5,14 @@ end
 
 treesitter.setup {
   -- a list of parser names, or "all"
-  ensure_installed = { "go", "gomod", "gowork", "lua", "javascript", "json", "yaml", "toml" },
+  -- ensure_installed = { "go", "gomod", "gowork", "lua", "javascript", "json", "yaml", "toml" },
+  ensure_installed = "all",
 
   -- install parsers synchronously (only applied to `ensure_installed`)
   sync_install = false,
 
   -- list of parsers to ignore installing (for "all")
-  ignore_install = {},
+  ignore_install = { "phpdoc" },
 
   highlight = {
     -- `false` will disable the whole extension

@@ -39,14 +39,7 @@ packer.startup({ function()
   -- Colorscheme
   use { 'sainnhe/gruvbox-material' }
   use { 'EdenEast/nightfox.nvim' }
-  -- use 'cocopon/iceberg.vim'
   use 'davidosomething/vim-colors-meh'
-  -- use 'kyazdani42/blue-moon'
-  -- use {
-  --   'He4eT/desolate.nvim',
-  --   requires = { 'rktjmp/lush.nvim' },
-  --}
-  -- use { 'ldelossa/vimdark' }
   use {
     "mcchrish/zenbones.nvim",
     requires = "rktjmp/lush.nvim"
@@ -68,6 +61,13 @@ packer.startup({ function()
     end,
   }
   use { 'Yazeed1s/minimal.nvim' }
+  -- use 'cocopon/iceberg.vim'
+  -- use 'kyazdani42/blue-moon'
+  -- use {
+  --   'He4eT/desolate.nvim',
+  --   requires = { 'rktjmp/lush.nvim' },
+  --}
+  -- use { 'ldelossa/vimdark' }
   -- use { 'kvrohit/rasmus.nvim' }
   -- use {
   --   'meliora-theme/neovim',
@@ -122,9 +122,6 @@ packer.startup({ function()
     config = function()
       require('configs.lsp')
     end,
-    -- setup = function()
-    --   lazy "cmp-nvim-lsp"
-    -- end,
   } -- lsp source for nvim-cmp
 
   use {
@@ -174,12 +171,23 @@ packer.startup({ function()
       })
     end
   }) -- cover any code
-  -- use {
-  --   'tpope/vim-surround',
-  --   after = 'nvim-treesitter',
-  -- } -- Surround
 
-  use { 'jinh0/eyeliner.nvim' } -- fast inline jumps
+  use { 
+    'jinh0/eyeliner.nvim',
+    config = function()
+      require('configs.eyeliner')
+    end,
+  } -- fast inline jumps
+
+  use { 
+    'lukas-reineke/indent-blankline.nvim',
+    keys = {
+      { "n", "<c-i>" },
+    },
+    config = function()
+      require('configs.indent')
+    end,
+  } -- Indentation
 
   use {
     'numToStr/Comment.nvim',
@@ -265,21 +273,7 @@ packer.startup({ function()
   use {
     'declancm/cinnamon.nvim',
     config = function()
-      require('cinnamon').setup({
-        -- KEYMAPS:
-        default_keymaps = true, -- Create default keymaps.
-        extra_keymaps = true, -- Create extra keymaps.
-        extended_keymaps = true, -- Create extended keymaps.
-        override_keymaps = false, -- Replace any existing keymaps.
-
-        -- OPTIONS:
-        always_scroll = false, -- Scroll the cursor even when the window hasn't scrolled.
-        centered = true, -- Keep cursor centered in window when using window scrolling.
-        default_delay = 3, -- The default delay (in ms) between each line when scrolling.
-        hide_cursor = false, -- Hide the cursor when scrolling. Requires enabling termguicolors.
-        horizontal_scroll = true, -- Enable smooth horizontal scrolling when view shifts left or right.
-        scroll_limit = 150, -- Max number of lines moved before scrolling is skipped.
-      })
+      require('configs.cinnamon')
     end
   }
 

@@ -1,4 +1,5 @@
 local present, telescope = pcall(require, "telescope")
+local trouble = require("trouble.providers.telescope")
 if not present then
   return
 end
@@ -12,8 +13,12 @@ telescope.setup({
     mappings = {
       n = {
         ["q"] = require('telescope.actions').close,
+        ["s"] = require('telescope.actions').select_horizontal,
+        ["v"] = require('telescope.actions').select_vertical,
         ["p"] = require('telescope.actions.layout').toggle_preview,
+        ["<c-t>"] = trouble.open_with_trouble,
       },
+      i = { ["<c-t>"] = trouble.open_with_trouble },
     },
     layout_config = {
       bottom_pane = {
@@ -72,6 +77,10 @@ telescope.setup({
     },
     oldfiles = {
       layout_strategy = 'bottom_pane',
+    },
+    colorscheme = {
+      layout_strategy = 'bottom_pane',
+      enable_preview = true,
     },
     buffers = {
       -- theme = "ivy",

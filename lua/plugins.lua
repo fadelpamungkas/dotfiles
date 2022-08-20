@@ -37,37 +37,52 @@ packer.startup({ function()
   use { 'wbthomason/packer.nvim' }
 
   -- Colorscheme
-  use { 'sainnhe/gruvbox-material' }
-  use { 'EdenEast/nightfox.nvim' }
-  use 'davidosomething/vim-colors-meh'
   use {
-    "mcchrish/zenbones.nvim",
-    requires = "rktjmp/lush.nvim"
+    'EdenEast/nightfox.nvim',
+    config = function()
+      require('configs.colorscheme')
+    end,
   }
+  use { 'sainnhe/gruvbox-material' }
   use {
     'VonHeikemen/little-wonder',
     config = function()
-      local lw = require('little-wonder')
-      local rubber = require('little-wonder.themes.rubber')
-
-      local theme = rubber.update({
-        syntax = {
-          comment = { gui = '#939393', cterm = 246 },
-          error_bg = { gui = '#FC8680', cterm = 163 },
-        }
-      })
-
-      lw.apply('darkling', theme)
+      vim.cmd "colorscheme lw-owl"
     end,
   }
-  use { 'Yazeed1s/minimal.nvim' }
+  use {
+    "mcchrish/zenbones.nvim",
+    requires = "rktjmp/lush.nvim",
+    config = function()
+      vim.cmd "colorscheme zenwritten"
+    end,
+  }
+  use { 'fenetikm/falcon' }
+  use {
+    'olivercederborg/poimandres.nvim',
+    config = function()
+      require('poimandres').setup {}
+    end
+  }
+  -- use { 'Yazeed1s/minimal.nvim' }
+  -- use { 'Mofiqul/adwaita.nvim' }
+  -- use { 'ldelossa/vimdark' }
+  -- use { 'ishan9299/modus-theme-vim' }
+  -- use { 'kdheepak/monochrome.nvim', config = function()
+  --   vim.cmd 'colorscheme monochrome'
+  -- end }
+  -- use {
+  --   "chrsm/paramount-ng.nvim",
+  --   requires = { "rktjmp/lush.nvim" }
+  -- }
+  -- use { "catppuccin/nvim", as = "catppuccin" }
+  -- use 'davidosomething/vim-colors-meh'
   -- use 'cocopon/iceberg.vim'
   -- use 'kyazdani42/blue-moon'
   -- use {
   --   'He4eT/desolate.nvim',
   --   requires = { 'rktjmp/lush.nvim' },
   --}
-  -- use { 'ldelossa/vimdark' }
   -- use { 'kvrohit/rasmus.nvim' }
   -- use {
   --   'meliora-theme/neovim',
@@ -88,15 +103,40 @@ packer.startup({ function()
   -- })
   --
   -- use { 'RRethy/nvim-base16' }
-  -- use 'fenetikm/falcon'
-  -- use 'ishan9299/nvim-solarized-lua'
-  -- use 'sainnhe/everforest'
-  -- use "rebelot/kanagawa.nvim"
-  -- use 'windwp/wind-colors'
+  -- use({
+  --   'rose-pine/neovim',
+  --   as = 'rose-pine',
+  --   tag = 'v1.*',
+  --   config = function()
+  --     vim.cmd('colorscheme rose-pine')
+  --   end
+  -- })
+  -- use {
+  --   'rockerBOO/boo-colorscheme-nvim',
+  --   config = function()
+  --     require('boo-colorscheme').use(
+  --       { theme = 'sunset_cloud' }
+  --     )
+  --   end,
+  -- }
+  -- use { 'wuelnerdotexe/vim-enfocado' }
+  -- use { 'frenzyexists/aquarium-vim' }
+  -- use { 'bluz71/vim-moonfly-colors' }
+  -- use { 'ishan9299/nvim-solarized-lua' }
+  -- use { 'sainnhe/everforest' }
+  -- use { 'rebelot/kanagawa.nvim' }
+  -- use { 'windwp/wind-colors' }
   -- use { 'lifepillar/gruvbox8', opt = true }
   -- use 'ellisonleao/gruvbox.nvim'
 
   -- Language Support Protocol
+
+  use {
+    'williamboman/mason.nvim',
+    config = function()
+      require("mason").setup()
+    end,
+  }
   use {
     'neovim/nvim-lspconfig',
     opt = true,
@@ -172,14 +212,14 @@ packer.startup({ function()
     end
   }) -- cover any code
 
-  use { 
+  use {
     'jinh0/eyeliner.nvim',
     config = function()
       require('configs.eyeliner')
     end,
   } -- fast inline jumps
 
-  use { 
+  use {
     'lukas-reineke/indent-blankline.nvim',
     keys = {
       { "n", "<c-i>" },
@@ -257,10 +297,18 @@ packer.startup({ function()
       require("configs.treesitter")
     end,
   } -- treesitter syntax highlighting
+
   use {
     'nvim-treesitter/nvim-treesitter-textobjects',
     after = 'nvim-treesitter',
   } -- Additional textobjects for treesitter
+
+  use {
+    'haringsrob/nvim_context_vt',
+    config = function()
+      require('configs.contextvt')
+    end,
+  }
 
   -- Statusline
   use { 'nvim-lualine/lualine.nvim',
@@ -306,6 +354,11 @@ packer.startup({ function()
       require('configs.toggleterm')
     end,
   } -- terminal integration
+
+  -- Explorer
+  use {
+    'theblob42/drex.nvim',
+  }
 
   -- Startup
   use {

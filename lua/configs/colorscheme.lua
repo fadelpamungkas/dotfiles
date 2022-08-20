@@ -3,20 +3,6 @@ if not present then
 	return
 end
 
--- vim.g.gruvbox_material_background = 'medium'
--- vim.g.gruvbox_material_enable_bold = 1
--- vim.g.gruvbox_material_cursor = 'auto'
--- vim.g.gruvbox_material_transparent_background = 0
--- vim.g.gruvbox_material_show_eob = 1
--- vim.g.gruvbox_material_palette = 'material'
--- -- vim.g.gruvbox_material_diagnostic_text_highlight = 1
--- -- vim.g.gruvbox_material_enable_italic = 1
--- vim.cmd [[ colorscheme gruvbox-material ]]
-
--- vim.g.everforest_background = 'medium'
--- vim.g.everforest_better_performace = 1
--- vim.cmd [[ colorscheme everforest ]]
-
 nightfox.setup({
   options = {
     -- Compiled file's destination location
@@ -85,5 +71,3 @@ nightfox.setup({
 
 -- setup must be called before loading
 vim.cmd("colorscheme nightfox")
-
--- vim.cmd("colorscheme meh")

@@ -3,171 +3,84 @@ if not present then
   return
 end
 
-local header = {
-  type = "text",
-  val = {
-[[  ]],
-[[  ]],
-  },
-  opts = {
-    position = "left",
-    hl = "AlphaAscii",
-  },
-}
+local dashboard = require("alpha.themes.dashboard")
 
-local plugins_gen = io.popen('fd -d 2 . $HOME"/.local/share/nvim/site/pack/packer" | head -n -2 | wc -l | tr -d "\n" ')
-local plugins = plugins_gen:read("*a")
-plugins_gen:close()
+local function footer()
+  local total_plugins = #vim.tbl_keys(packer_plugins)
+  -- local datetime = os.date("%d-%m-%Y  %H:%M:%S")
+  local version = vim.version()
+  local nvim_version_info = "  v" .. version.major .. "." .. version.minor .. "." .. version.patch
 
-local date_gen = io.popen('echo "$(date +%d)/$(date +%m)/$(date +%y)($(date +%a))$(date +%X)" | tr -d "\n"')
-local date = date_gen:read("*a")
-date_gen:close()
-
-local id_gen = io.popen('shuf -i 10000000-99999999 -n 1 | tr -d "\n"')
-local id = id_gen:read("*a")
-id_gen:close()
-
-local id_1 = tostring(tonumber(id) - 1)
-local id_2 = tostring(tonumber(id) - 2)
-
-local phrase_gen = io.popen('sh "$HOME"/scripts/other/random_4chin_word.sh | tr -d "\n"')
-local phrase = phrase_gen:read("*a")
-phrase_gen:close()
-
-local dir_gen = io.popen('echo expand("%:p:h")')
-local dir = dir_gen:read("*a")
-dir_gen:close()
-
-local heading = {
-  type = "text",
-  val = " ? " .. date .. " No." .. id .. " ?",
-  opts = {
-    position = "left",
-    hl = "AlphaButtons",
-  },
-}
-
-local post_buttons = {
-  type = "text",
-  val = " dir " .. dir,
-  opts = {
-    position = "left",
-    hl = "AlphaFooter",
-  },
-}
-
-local pre_foot = {
-  type = "text",
-  val = " >>" .. id_2 .. "(OP)                      ",
-  opts = {
-    position = "left",
-    hl = "AlphaEmphasis",
-  },
-}
-
-local footer = {
-  type = "text",
-  val = " I've " .. plugins .. " plugins, it launches instantly kek.",
-  opts = {
-    position = "left",
-    hl = "AlphaFooter",
-  },
-}
-
-local pre_foot_2 = {
-  type = "text",
-  val = " >>" .. id_1 .. "                                ",
-  opts = {
-    position = "left",
-    hl = "AlphaEmphasis",
-  },
-}
-
-local footer_2 = {
-  type = "text",
-  val = " " .. phrase .. "      ",
-  opts = {
-    position = "left",
-    hl = "AlphaFooter",
-  },
-}
-
-local function button(sc, txt, keybind)
-  local sc_ = sc:gsub("%s", ""):gsub("SPC", "<leader>")
-
-  local opts = {
-    position = "left",
-    text = txt,
-    shortcut = sc,
-    cursor = 0,
-    width = 44,
-    align_shortcut = "right",
-    hl_shortcut = "AlphaShortcuts",
-    hl = "AlphaHeader",
-  }
-  if keybind then
-    opts.keymap = { "n", sc_, keybind, { noremap = true, silent = true } }
-  end
-
-  return {
-    type = "button",
-    val = txt,
-    on_press = function()
-      local key = vim.api.nvim_replace_termcodes(sc_, true, false, true)
-      vim.api.nvim_feedkeys(key, "normal", false)
-    end,
-    opts = opts,
-  }
+  return total_plugins .. " plugins" .. nvim_version_info
 end
 
-local buttons = {
-  type = "group",
-  val = {
-    button("<L>o", " >oldfiles", ":Telescope oldfiles <CR>"),
-    button("<L>f", " >fuzzy", ":Telescope find_files <CR>"),
-    button("<L>g", " >regex", ":Telescope live_grep <CR>"),
-    button("n", " >new", ":ene <BAR> startinsert <CR>"),
-    button("c", " >config", ":e ~/.config/nvim/ <CR>"),
-  },
-  opts = {
-    spacing = 0,
-  },
+dashboard.section.header.val = {
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                         .^!^                                           .!~:                        ",
+  "                    ^!JPB&B!.                                            !&&BPJ!:                   ",
+  "                ^?P#@@@@@G.                   :       :                   !@@@@@&BY!:               ",
+  "             ^JB@@@@@@@@@7                   .#~     ?P                   .&@@@@@@@@&G?:            ",
+  "          .7G@@@@@@@@@@@@#!                  ?@#^   ~@@^                 .5@@@@@@@@@@@@@G7.         ",
+  "        .?#@@@@@@@@@@@@@@@@BY!^.             B@@&BBB&@@Y              :~Y&@@@@@@@@@@@@@@@@#?.       ",
+  "       !#@@@@@@@@@@@@@@@@@@@@@@#G5Y?!~^:..  !@@@@@@@@@@#.   ..::^!7J5B&@@@@@@@@@@@@@@@@@@@@@B!      ",
+  "     .5@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&&##B#@@@@@@@@@@@BBBB##&@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Y     ",
+  "    :B@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@5    ",
+  "   .B@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@?   ",
+  "   5@&#BGGPPPPPGGB&@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&BGGPP5PPPGBB#&#.  ",
+  "   ^:..           .^!YB@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&57^.            .:^.  ",
+  "                       ~G@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Y.                      ",
+  "                         P@@@#BGGGGB#@@@@@@@@@@@@@@@@@@@@@@@@@#BP5555PG#@@@P                        ",
+  "                         :J!:.      .^!JG&@@@@@@@@@@@@@@@@#57^.        .:!5~                        ",
+  "                                         :?G@@@@@@@@@@@@P!.                                         ",
+  "                                            ~5@@@@@@@@5^                                            ",
+  "                                              ^P@@@@G^                                              ",
+  "                                                !#@?                                                ",
+  "                                                                                                    ",
+  "                                                                                                    ",
+  "                                                                                                    ",
 }
 
-local section = {
-  header = header,
-  buttons = buttons,
-  heading = heading,
-  post_buttons = post_buttons,
-  pre_foot = pre_foot,
-  footer = footer,
-  pre_foot_2 = pre_foot_2,
-  footer_2 = footer_2,
+-- Set menu
+dashboard.section.buttons.val = {
+  dashboard.button("n", ":enew startinsert", ":ene <BAR> startinsert <CR>"),
+  dashboard.button("c", ":e /.config/nvim/init.lua",
+    ":e $HOME/.config/nvim/init.lua | :cd %:p:h | vsplit . | wincmd k | pwd<CR>"),
+  dashboard.button("q", ":qa", ":qa<CR>"),
 }
 
-local opts = {
-  layout = {
-    { type = "padding", val = 1 },
-    section.header,
-    { type = "padding", val = 1 },
-    section.heading,
-    { type = "padding", val = 1 },
-    section.buttons,
-    section.post_buttons,
-    { type = "padding", val = 1 },
-    section.pre_foot,
-    section.footer,
-    { type = "padding", val = 1 },
-    section.pre_foot_2,
-    section.footer_2,
-  },
-  opts = {
-    noautocmd = true,
-    -- margin = 44,
-  },
+-- Set footer
+local handle = assert(io.popen('fortune -s'))
+local fortune = handle:read("*all")
+handle:close()
+dashboard.section.footer.val = footer()
+-- dashboard.section.header.opts.hl = "Title"
+-- dashboard.section.buttons.opts.hl = "Debug"
+-- dashboard.section.footer.opts.hl = "Title"
+dashboard.config.opts.noautocmd = true
+dashboard.config.opts = {
+  setup = function()
+    vim.api.nvim_create_autocmd('User', {
+      pattern = 'AlphaReady',
+      desc = 'disable status and tabline for alpha',
+      callback = function()
+        vim.go.laststatus = 0
+        vim.opt.showtabline = 0
+      end,
+    })
+    vim.api.nvim_create_autocmd('BufUnload', {
+      buffer = 0,
+      desc = 'enable status and tabline after alpha',
+      callback = function()
+        vim.go.laststatus = 2
+        vim.opt.showtabline = 1
+      end,
+    })
+  end,
 }
 
 -- Split Aplha with Explorer on startup
-vim.cmd [[autocmd User AlphaReady vsplit .]]
+-- vim.cmd [[autocmd User AlphaReady vsplit .]]
 
-alpha.setup(opts)
+alpha.setup(dashboard.opts)

@@ -3,6 +3,8 @@ if not present then
   return
 end
 
+vim.api.nvim_set_keymap('n', '<leader>l', '<cmd>EyelinerToggle<CR>', { noremap = true })
+
 vim.api.nvim_set_hl(0, 'EyelinerPrimary', { bold = true, underline = true })
 vim.api.nvim_set_hl(0, 'EyelinerSecondary', { bold = true })
 

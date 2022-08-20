@@ -31,7 +31,7 @@ opt.termguicolors = true
 opt.splitbelow = true -- Open new split below
 opt.splitright = true -- Open new split to the right
 opt.completeopt = { "menu", "menuone", "noselect" }
-opt.scrolloff = 4 -- Columns of context
+opt.scrolloff = 2 -- Columns of context
 opt.signcolumn = "no" -- always show signcolumns
 g.netrw_banner = 0
 g.netrw_liststyle = 3
@@ -159,4 +159,3 @@ cmd("PackerSnapshotRollback", function(info)
 end, { nargs = "+" })
 
 require('plugins')
-require('configs.colorscheme')

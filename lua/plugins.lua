@@ -57,13 +57,17 @@ packer.startup({ function()
       vim.cmd "colorscheme zenwritten"
     end,
   }
-  use { 'fenetikm/falcon' }
-  use {
-    'olivercederborg/poimandres.nvim',
-    config = function()
-      require('poimandres').setup {}
-    end
-  }
+  use { 'vimoxide/vim-cinnabar' }
+  use { 'pbrisbin/vim-colors-off' }
+  use { 'andreypopp/vim-colors-plain' }
+  -- use { 'shaunsingh/oxocarbon.nvim', run = './install.sh' }
+  -- use { 'fenetikm/falcon' }
+  -- use {
+  --   'olivercederborg/poimandres.nvim',
+  --   config = function()
+  --     require('poimandres').setup {}
+  --   end
+  -- }
   -- use { 'Yazeed1s/minimal.nvim' }
   -- use { 'Mofiqul/adwaita.nvim' }
   -- use { 'ldelossa/vimdark' }
@@ -357,8 +361,18 @@ packer.startup({ function()
 
   -- Explorer
   use {
-    'theblob42/drex.nvim',
+    'elihunter173/dirbuf.nvim',
+    cmd = 'DirBuf',
+    keys = {
+      { "n", "<leader>e" },
+    },
+    config = function()
+      require('configs.dirbuf')
+    end,
   }
+  -- use {
+  --   'theblob42/drex.nvim',
+  -- }
 
   -- Startup
   use {

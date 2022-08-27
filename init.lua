@@ -60,7 +60,7 @@ map('n', '<c-k>', '<c-w>k', { noremap = true })
 map('n', '<c-h>', '<c-w>h', { noremap = true })
 map('n', '<c-l>', '<c-w>l', { noremap = true })
 map('n', 'gV', '`[V`]', { noremap = true }) -- Selecting pasted text
-map('n', '<leader>e', ':Rexplore<CR>', { noremap = true })
+-- map('n', '<leader>e', ':Rexplore<CR>', { noremap = true })
 
 -- Highlight on yank
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })

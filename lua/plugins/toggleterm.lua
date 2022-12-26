@@ -4,9 +4,6 @@ local M = {
   keys = { "<C-/>", "<leader>E" },
 }
 
--- function M.init()
--- end
-
 function M.config()
 	local toggleterm = require("toggleterm")
 	toggleterm.setup({

@@ -15,9 +15,9 @@ return {
 		end,
 	},
 
-  {
-    "williamboman/mason-lspconfig.nvim",
-  },
+	{
+		"williamboman/mason-lspconfig.nvim",
+	},
 
 	{
 		"dstein64/vim-startuptime",
@@ -75,6 +75,7 @@ return {
 			require("gitsigns").setup()
 		end,
 	},
+
 	{
 		"sindrets/diffview.nvim",
 		cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewToggleFiles", "DiffviewFocusFiles" },

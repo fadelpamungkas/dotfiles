@@ -83,7 +83,7 @@ function M.config()
 		local bufopts = { noremap = true, silent = true, buffer = bufnr }
 		vim.keymap.set("n", "gh", function()
 			vim.lsp.buf.format({
-				filter = function(client)
+				filter = function()
 					return client.name == "null-ls"
 				end,
 				bufnr = bufnr,

@@ -9,6 +9,9 @@ local M = {
 		{ "gc", mode = "x" },
 		{ "gb", mode = "x" },
 	},
+	dependencies = {
+		"JoosepAlviste/nvim-ts-context-commentstring",
+	},
 }
 
 function M.config()
@@ -74,11 +77,9 @@ function M.config()
 		},
 
 		---Pre-hook, called before commenting the line
-		---@type fun(ctx: Ctx):string
-		pre_hook = nil,
+		pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
 
 		---Post-hook, called after commenting is done
-		---@type fun(ctx: Ctx)
 		post_hook = nil,
 	})
 end

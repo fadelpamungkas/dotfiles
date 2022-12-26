@@ -16,7 +16,7 @@ function M.config()
 	local treesitter = require("nvim-treesitter.configs")
 	treesitter.setup({
 		-- a list of parser names, or "all"
-		ensure_installed =  "all" ,
+		ensure_installed = "all",
 		-- ensure_installed = {
 		-- 	"bash",
 		-- 	"c",
@@ -67,12 +67,9 @@ function M.config()
 		-- 	"json",
 		-- },
 
-		-- 		-- install parsers synchronously (only applied to `ensure_installed`)
 		sync_install = false,
-		--
-		-- 		-- list of parsers to ignore installing (for "all")
 		ignore_install = { "phpdoc", "comment" },
-		--
+		context_commentstrint = { enable = true, enable_autocmd = false },
 		highlight = {
 			enable = true,
 			disable = {},

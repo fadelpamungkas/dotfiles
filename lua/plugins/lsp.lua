@@ -83,7 +83,7 @@ function M.config()
 		local bufopts = { noremap = true, silent = true, buffer = bufnr }
 		vim.keymap.set("n", "gh", function()
 			vim.lsp.buf.format({
-				filter = function()
+				filter = function(client)
 					return client.name == "null-ls"
 				end,
 				bufnr = bufnr,
@@ -103,6 +103,7 @@ function M.config()
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>cs", "<cmd>lua vim.lsp.buf.signature_help()<cr>", opts)
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
+		-- vim.keymap.set({ "n", "x" }, "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>")
 
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>", opts)
 		vim.api.nvim_buf_set_keymap(

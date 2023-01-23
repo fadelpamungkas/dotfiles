@@ -4,6 +4,9 @@
         "vim",
         "use",
         "mason_lspconfig",
-        "require"
+        "require",
+        "NONE",
+        "catppuccin",
+        "bufnr"
     ]
 }

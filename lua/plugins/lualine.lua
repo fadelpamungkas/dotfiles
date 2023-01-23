@@ -13,49 +13,79 @@ function M.config()
 		c1 = "#228B22",
 		c2 = "#C70039",
 		black = "#282828",
-		white = "#ebdbb2",
+		yellow = "#ebdbb2",
+		white = "#ffffff",
 		red = "#fb4934",
 		green = "#b8bb26",
-		blue = "#83a598",
-		yellow = "#fe8019",
+		lightblue = "#83a598",
+		blue2 = "#0404ea",
+		blue = "#04048d",
+		cyan = "#0ce8e5",
+		orange = "#fe8019",
 		gray = "#a89984",
 		darkgray = "#3c3836",
 		lightgray = "#504945",
 		inactivegray = "#7c6f64",
 	}
 
-	local transparent_bg = {
+	-- local transparent_bg = {
+	-- 	normal = {
+	-- 		a = { bg = colors.bg },
+	-- 		b = { bg = colors.bg },
+	-- 		c = { bg = colors.bg },
+	-- 	},
+	-- 	insert = {
+	-- 		a = { bg = NONE, fg = colors.blue },
+	-- 		b = { bg = NONE, fg = colors.blue },
+	-- 		c = { bg = NONE, fg = colors.blue },
+	-- 	},
+	-- 	visual = {
+	-- 		a = { bg = NONE },
+	-- 		b = { bg = NONE },
+	-- 		c = { bg = NONE },
+	-- 	},
+	-- 	replace = {
+	-- 		a = { bg = NONE },
+	-- 		b = { bg = NONE },
+	-- 		c = { bg = NONE },
+	-- 	},
+	-- 	command = {
+	-- 		a = { bg = NONE },
+	-- 		b = { bg = NONE },
+	-- 		c = { bg = NONE },
+	-- 	},
+	-- 	inactive = {
+	-- 		a = { bg = NONE },
+	-- 		b = { bg = NONE },
+	-- 		c = { bg = NONE },
+	-- 	},
+	-- }
+
+	local blue_bg = {
 		normal = {
-			a = { bg = NONE },
-			b = { bg = NONE },
-			c = { bg = NONE },
+			a = { bg = colors.blue, fg = colors.fg },
+			b = { bg = colors.blue, fg = colors.fg },
+			c = { bg = colors.blue, fg = colors.fg },
 		},
 		insert = {
-			a = { bg = NONE, fg = colors.blue },
-			b = { bg = NONE, fg = colors.blue },
-			c = { bg = NONE, fg = colors.blue },
-		},
-		visual = {
-			a = { bg = NONE },
-			b = { bg = NONE },
-			c = { bg = NONE },
-		},
-		replace = {
-			a = { bg = NONE },
-			b = { bg = NONE },
-			c = { bg = NONE },
-		},
-		command = {
-			a = { bg = NONE },
-			b = { bg = NONE },
-			c = { bg = NONE },
-		},
-		inactive = {
-			a = { bg = NONE },
-			b = { bg = NONE },
-			c = { bg = NONE },
+			a = { bg = colors.blue, fg = colors.fg },
+			b = { bg = colors.blue, fg = colors.fg },
+			c = { bg = colors.blue, fg = colors.fg },
 		},
 	}
+
+	-- local white_bg = {
+	-- 	normal = {
+	-- 		a = { bg = colors.white, fg = colors.black },
+	-- 		b = { bg = colors.white, fg = colors.black },
+	-- 		c = { bg = colors.white, fg = colors.black },
+	-- 	},
+	-- 	insert = {
+	-- 		a = { bg = colors.white, fg = colors.black },
+	-- 		b = { bg = colors.white, fg = colors.black },
+	-- 		c = { bg = colors.white, fg = colors.black },
+	-- 	},
+	-- }
 
 	local function diff_source()
 		local gitsigns = vim.b.gitsigns_status_dict
@@ -72,7 +102,7 @@ function M.config()
 	lualine.setup({
 		options = {
 			icons_enabled = false,
-			theme = transparent_bg,
+			theme = blue_bg,
 			component_separators = "",
 			section_separators = "|",
 			disabled_filetypes = {
@@ -83,7 +113,7 @@ function M.config()
 			always_divide_middle = false,
 			globalstatus = true,
 			padding = 1,
-			fmt = string.lower,
+			-- fmt = string.lower,
 			refresh = {
 				statusline = 100,
 				tabline = 1000,
@@ -95,9 +125,33 @@ function M.config()
 			lualine_b = {},
 			lualine_c = {
 				{
+					"filename",
+					file_status = true, -- Displays file status (readonly status, modified status)
+					newfile_status = true, -- Display new file status (new file means no write after created)
+					path = 1, -- 0: Just the filename
+					-- 1: Relative path
+					-- 2: Absolute path
+					-- 3: Absolute path, with tilde as the home directory
+
+					shorting_target = 40, -- Shortens path to leave 40 spaces in the window
+					-- for other components. (terrible name, any suggestions?)
+					symbols = {
+						modified = "[+]", -- Text to show when the file is modified.
+						readonly = "[-]", -- Text to show when the file is non-modifiable or readonly.
+						unnamed = "[UNNAMED]", -- Text to show for unnamed buffers.
+						newfile = "[NEW]", -- Text to show for new created file before first writting
+					},
+				},
+				-- {
+				-- 	"mode",
+				-- 	-- fmt = function(str)
+				-- 	-- 	return str:sub(1, 1)
+				-- 	-- end,
+				-- },
+				{
 					require("lazy.status").updates,
 					cond = require("lazy.status").has_updates,
-					color = { fg = "#ffffff" },
+					color = { fg = "#ff9e64" },
 				},
 				{
 					"lsp_progress",
@@ -142,8 +196,8 @@ function M.config()
 						info = "DiagnosticInfo", -- Changes diagnostics' info color.
 						hint = "DiagnosticHint", -- Changes diagnostics' hint color.
 					},
-					symbols = { error = "E ", warn = "W ", info = "I ", hint = "H " },
-					colored = true, -- Displays diagnostics status in color if set to true.
+					symbols = { error = "E", warn = "W", info = "I", hint = "H" },
+					colored = false, -- Displays diagnostics status in color if set to true.
 					update_in_insert = true, -- Update diagnostics in insert mode.
 					always_visible = false, -- Show diagnostics even if there are none.
 					fmt = string.upper,
@@ -164,24 +218,25 @@ function M.config()
 					-- or nil on failure. count <= 0 won't be displayed.
 				},
 				{ "b:gitsigns_head" },
-				{
-					"filename",
-					file_status = true, -- Displays file status (readonly status, modified status)
-					newfile_status = true, -- Display new file status (new file means no write after created)
-					path = 1, -- 0: Just the filename
-					-- 1: Relative path
-					-- 2: Absolute path
-					-- 3: Absolute path, with tilde as the home directory
-
-					shorting_target = 40, -- Shortens path to leave 40 spaces in the window
-					-- for other components. (terrible name, any suggestions?)
-					symbols = {
-						modified = "[+]", -- Text to show when the file is modified.
-						readonly = "[-]", -- Text to show when the file is non-modifiable or readonly.
-						unnamed = "[No Name]", -- Text to show for unnamed buffers.
-						newfile = "[New]", -- Text to show for new created file before first writting
-					},
-				},
+				-- {
+				-- 	function()
+				-- 		local msg = "NO SERVER"
+				-- 		local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
+				-- 		local clients = vim.lsp.get_active_clients()
+				-- 		if next(clients) == nil then
+				-- 			return msg
+				-- 		end
+				-- 		for _, client in ipairs(clients) do
+				-- 			local filetypes = client.config.filetypes
+				-- 			if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
+				-- 				return client.name
+				-- 			end
+				-- 		end
+				-- 		return msg
+				-- 	end,
+				-- },
+				{ "filesize", fmt = string.upper },
+				{ "encoding", fmt = string.upper },
 				{ "location" },
 				{ "progress" },
 				{
@@ -221,23 +276,6 @@ function M.config()
 			--   {
 			--     'filesize'
 			--   },
-			--   {
-			--     function()
-			--       local msg = 'LSP == nil'
-			--       local buf_ft = vim.api.nvim_buf_get_option(0, 'filetype')
-			--       local clients = vim.lsp.get_active_clients()
-			--       if next(clients) == nil then
-			--         return msg
-			--       end
-			--       for _, client in ipairs(clients) do
-			--         local filetypes = client.config.filetypes
-			--         if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
-			--           return client.name
-			--         end
-			--       end
-			--       return msg
-			--     end,
-			--   }
 			-- },
 			-- lualine_x = { 'encoding', 'fileformat', 'filetype', 'progress' },
 			-- lualine_y = {},

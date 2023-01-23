@@ -4,15 +4,13 @@ return {
 		"nyoom-engineering/oxocarbon.nvim",
 		lazy = false,
 		config = function()
-			vim.cmd([[colorscheme oxocarbon]])
+			vim.cmd.colorscheme("oxocarbon")
 		end,
 	},
 
 	{
 		"williamboman/mason.nvim",
-		config = function()
-			require("mason").setup()
-		end,
+		config = true,
 	},
 
 	{
@@ -66,6 +64,20 @@ return {
 			require("leap").add_default_mappings()
 			vim.api.nvim_set_hl(0, "LeapBackdrop", { link = "Comment" })
 		end,
+		dependencies = {
+			"ggandor/flit.nvim",
+			config = function()
+				require("flit").setup({
+					keys = { f = "f", F = "F", t = "t", T = "T" },
+					-- A string like "nv", "nvo", "o", etc.
+					labeled_modes = "nv",
+					multiline = true,
+					-- Like `leap`s similar argument (call-specific overrides).
+					-- E.g.: opts = { equivalence_classes = {} }
+					opts = {},
+				})
+			end,
+		},
 	},
 
 	{
@@ -79,11 +91,45 @@ return {
 	{
 		"sindrets/diffview.nvim",
 		cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewToggleFiles", "DiffviewFocusFiles" },
-
-		config = function()
-			require("diffview").setup({})
-		end,
+		opts = { use_icons = false },
 	},
+
+	{
+		"folke/persistence.nvim",
+		event = "BufReadPre",
+		opts = { options = { "buffers", "curdir", "tabpages", "winsize", "help" } },
+		keys = {
+			{
+				"<leader>rs",
+				function()
+					require("persistence").load()
+				end,
+				desc = "Restore Session",
+			},
+			{
+				"<leader>rl",
+				function()
+					require("persistence").load({ last = true })
+				end,
+				desc = "Restore Last Session",
+			},
+			{
+				"<leader>rd",
+				function()
+					require("persistence").stop()
+				end,
+				desc = "Don't Save Current Session",
+			},
+		},
+	},
+
+	-- {
+	-- 	"folke/zen-mode.nvim",
+	-- 	cmd = { "ZenMode" },
+	-- 	config = function()
+	-- 		require("zen-mode").setup({})
+	-- 	end,
+	-- },
 	-- use({
 	-- 	"nagy135/typebreak.nvim",
 	-- 	requires = "nvim-lua/plenary.nvim",

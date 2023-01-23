@@ -38,7 +38,7 @@ function M.config()
 			{ "g", cmd("Telescope live_grep") },
 			{ "o", cmd("Telescope oldfiles"), { desc = "recently opened files" } },
 			{ "h", cmd("Telescope help_tags"), { desc = "vim help" } },
-			{ "m", cmd("MarksListBuf"), { desc = "marks" } },
+			{ "m", cmd("Telescope marks"), { desc = "marks" } },
 			{ "k", cmd("Telescope keymaps") },
 			{ "O", cmd("Telescope vim_options") },
 			{ "r", cmd("Telescope resume") },
@@ -56,12 +56,14 @@ function M.config()
 
 	-- _c_ Virtual Context
 	-- _t_ Typebreak
+  -- _l_ Eyeliner
 	local hintOpt = [[
   ^ ^        Activate
   ^
+  _c_ Colorizer
   _o_ Symbols Outline
-  _l_ Eyeliner
 
+  _l_ laststatus
   _h_ cmdheight
   _s_ signcolumn
   _n_ %{nu} number
@@ -91,10 +93,22 @@ function M.config()
 			-- { 'e', cmd 'lua vim.diagnostic.enable()', { exit = true, desc = 'Enable Diagnostic' } },
 			-- { 'd', cmd 'lua vim.diagnostic.disable()', { exit = true, desc = 'Disable Diagnostic' } },
 
-			{ "o", cmd("SymbolsOutline"), { exit = true, desc = "Indentation" } },
-			{ "l", cmd("EyelinerToggle"), { exit = true, desc = "Indentation" } },
+			{ "c", cmd("ColorizerToggle"), { exit = true, desc = "Colorizer" } },
+			{ "o", cmd("SymbolsOutline"), { exit = true, desc = "Symbol" } },
+			-- { "l", cmd("EyelinerToggle"), { exit = true, desc = "Inline Jump" } },
 			-- { "c", cmd("NvimContextVtToggle"), { exit = true, desc = "Virtual Context" } },
 			-- { "t", require("typebreak").start, { exit = true, desc = "Typebreak" } },
+			{
+				"l",
+				function()
+					if vim.o.laststatus == 2 then
+						vim.o.laststatus = 0
+					else
+						vim.o.laststatus = 2
+					end
+				end,
+				{ desc = "laststatus" },
+			},
 			{
 				"h",
 				function()
@@ -186,9 +200,9 @@ function M.config()
 	local hintGit = [[
  _J_: next hunk   _s_: stage hunk        _d_: show deleted   _b_: blame line
  _K_: prev hunk   _u_: undo last stage   _p_: preview hunk   _B_: blame show full 
- ^ ^              _S_: stage buffer      _P_: open git panel _/_: show base file
+ _D_: DiffView    _S_: stage buffer      _P_: open git panel _/_: show base file
  ^
- ^ ^              _g_: Neogit              _<Esc>_ / _q_: exit
+ ^ ^              _n_: Neogit              _<Esc>_ / _q_: exit
 ]]
 
 	hydra({
@@ -262,7 +276,8 @@ function M.config()
 				{ desc = "blame show full" },
 			},
 			{ "/", gitsigns.show, { exit = true, desc = "show base file" } }, -- show the base of the file
-			{ "g", "<Cmd>Neogit<CR>", { exit = true, desc = "Neogit" } },
+			{ "D", "<Cmd>DiffviewOpen<CR>", { exit = true, desc = "DiffView" } },
+			{ "n", "<Cmd>Neogit<CR>", { exit = true, desc = "Neogit" } },
 			{ "q", nil, { exit = true, nowait = true, desc = "exit" } },
 			{ "<Esc>", nil, { exit = true, nowait = true, desc = "exit" } },
 		},

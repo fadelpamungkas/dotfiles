@@ -78,10 +78,10 @@ function M.config()
 		incremental_selection = {
 			enable = true,
 			keymaps = {
-				init_selection = "gnn",
-				node_incremental = "grn",
-				scope_incremental = "grc",
-				node_decremental = "grm",
+				init_selection = "<c-n>",
+				node_incremental = "<c-n>",
+				scope_incremental = "<c-m>",
+				node_decremental = "<c-p>",
 			},
 		},
 		indent = {
@@ -98,6 +98,12 @@ function M.config()
 					["ac"] = "@class.outer",
 					["ic"] = "@class.inner",
 				},
+				selection_modes = {
+					["@parameter.outer"] = "v", -- charwise
+					["@function.outer"] = "V", -- linewise
+					["@class.outer"] = "<c-v>", -- blockwise
+				},
+				include_surrounding_whitespace = true,
 			},
 			move = {
 				enable = true,

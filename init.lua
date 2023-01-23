@@ -10,13 +10,16 @@ local g = vim.g
 local map = vim.api.nvim_set_keymap
 
 if g.neovide ~= nil then
-	vim.o.guifont = "Inconsolata Nerd Font Mono:h14"
+	-- vim.o.guifont = "Fira Code:h13"
+	-- vim.o.guifont = "Monaco:h13"
+	vim.o.guifont = "Menlo:h13"
+	-- vim.o.guifont = "InconsolataLGC Nerd Font Mono:h13"
 	g.neovide_cursor_antialiasing = true
 	g.neovide_cursor_vfx_mode = ""
 	g.neovide_cursor_animation_length = 0.05
 	g.neovide_cursor_trail_size = 0
 	g.neovide_scale_factor = 1
-	g.neovide_transparency = 0.95
+	g.neovide_transparency = 1
 	g.transparency = 0.5 -- g.neovide_background_color = "#0f1117"
 	vim.keymap.set("n", "<F9>", ":let g:neovide_fullscreen = !g:neovide_fullscreen<CR>")
 end
@@ -31,7 +34,7 @@ opt.hlsearch = false
 opt.incsearch = true
 opt.autoindent = true
 opt.smartindent = true
-opt.showmode = false
+opt.showmode = true
 opt.mouse = ""
 opt.tabstop = 2
 opt.softtabstop = 2
@@ -65,8 +68,9 @@ map("n", "<c-k>", "<c-w>k", { noremap = true })
 map("n", "<c-h>", "<c-w>h", { noremap = true })
 map("n", "<c-l>", "<c-w>l", { noremap = true })
 map("n", "gV", "`[V`]", { noremap = true })
-map("n", "n", "nzzzv", { noremap = true })
-map("n", "N", "Nzzzv", { noremap = true })
+map("n", "<leader>n", [[/\<<c-r><c-w>\><CR>]], { noremap = true })
+-- map("n", "n", "nzzzv", { noremap = true })
+-- map("n", "N", "Nzzzv", { noremap = true })
 
 map("v", ">", ">gv", { noremap = true })
 map("v", "<", "<gv", { noremap = true })
@@ -76,7 +80,7 @@ map("v", "K", ":m '<-2<CR>gv=gv", { noremap = true })
 map("x", "<leader>p", [["_dP]], { noremap = true })
 map("x", "<leader>P", [["_dp]], { noremap = true })
 
-map("n", "<leader>o", "<cmd>SymbolsOutlineOpen<CR>", { noremap = true })
+-- map("n", "<leader>o", "<cmd>SymbolsOutlineOpen<CR>", { noremap = true })
 
 -- don't load the plugins below
 local builtins = {

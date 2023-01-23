@@ -1,13 +1,19 @@
 local M = {
 	"akinsho/toggleterm.nvim",
 	cmd = "ToggleTerm",
-  keys = { "<C-/>", "<leader>E" },
+	keys = { "<C-/>", "<leader>e", "<leader>/" },
 }
 
 function M.config()
 	local toggleterm = require("toggleterm")
 	toggleterm.setup({
-		size = 20,
+		size = function(term)
+			if term.direction == "horizontal" then
+				return 15
+			elseif term.direction == "vertical" then
+				return vim.o.columns * 0.4
+			end
+		end,
 		open_mapping = [[<c-/>]],
 		hide_numbers = true,
 		shade_filetypes = {},
@@ -15,7 +21,7 @@ function M.config()
 		shading_factor = 2,
 		start_in_insert = true,
 		insert_mappings = true,
-		persist_size = true,
+		persist_size = false,
 		persist_mode = false,
 		direction = "horizontal",
 		close_on_exit = true,
@@ -55,7 +61,12 @@ function M.config()
 
 	local Terminal = require("toggleterm.terminal").Terminal
 
-	local lf = Terminal:new({ cmd = "lf", hidden = true })
+	local vterm = Terminal:new({ direction = "vertical", hidden = true })
+	function _VTERM_TOGGLE()
+		vterm:toggle()
+	end
+
+	local lf = Terminal:new({ direction = "tab", cmd = "lf", hidden = true })
 	function _LF_TOGGLE()
 		lf:toggle()
 	end
@@ -78,7 +89,8 @@ function M.config()
 		htop:toggle()
 	end
 
-	vim.keymap.set("n", "<leader>E", "<cmd>lua _LF_TOGGLE()<CR>")
+	vim.keymap.set("n", "<leader>e", "<cmd>lua _LF_TOGGLE()<CR>")
+	vim.keymap.set("n", "<leader>/", "<cmd>lua _VTERM_TOGGLE()<CR>")
 end
 
 return M

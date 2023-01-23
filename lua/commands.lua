@@ -35,6 +35,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 		"man",
 		"lspinfo",
 		"startuptime",
+		"spectre_panel",
 		"tsplayground",
 		"PlenaryTestPopup",
 	},
@@ -60,5 +61,29 @@ vim.api.nvim_create_autocmd("BufUnload", {
 	callback = function()
 		vim.go.laststatus = 3
 		vim.opt.showtabline = 1
+	end,
+})
+
+-- auto toggle highlight search
+local ns = vim.api.nvim_create_namespace("toggle_hlsearch")
+
+local function toggle_hlsearch(char)
+	if vim.fn.mode() == "n" then
+		local keys = { "<CR>", "n", "N", "*", "#", "?", "/" }
+		local new_hlsearch = vim.tbl_contains(keys, vim.fn.keytrans(char))
+
+		if vim.opt.hlsearch:get() ~= new_hlsearch then
+			vim.opt.hlsearch = new_hlsearch
+		end
+	end
+end
+
+vim.on_key(toggle_hlsearch, ns)
+
+-- Leap
+vim.api.nvim_create_autocmd("ColorScheme", {
+	callback = function()
+		vim.api.nvim_set_hl(0, "LeapBackdrop", { link = "Comment" })
+		-- etc.
 	end,
 })

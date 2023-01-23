@@ -1,14 +1,16 @@
 local M = {
 	"goolord/alpha-nvim",
 	lazy = false,
-  enable = true,
+	enable = true,
 }
 
 function M.config()
 	local alpha = require("alpha")
 	local nvim_version = vim.version()
 	local version = "v" .. nvim_version.major .. "." .. nvim_version.minor .. "." .. nvim_version.patch
-	local plugins = require("lazy").stats().count .. " plugins"
+	local stats = require("lazy").stats()
+	local plugins = stats.count .. " plugins"
+	-- local stime = (math.floor(stats.startuptime * 100 + 0.5) / 100) .. "ms"
 
 	local fake_button = {
 		type = "group",

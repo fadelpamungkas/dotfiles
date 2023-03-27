@@ -1,6 +1,6 @@
 return {
 	"karb94/neoscroll.nvim",
-	keys = { "<C-u>", "<C-d>", "gg", "G" },
+	keys = { "<C-u>", "<C-d>", "<C-b>", "<C-f>", "<C-y>", "<C-e>", "zt", "zz", "zb", "gg", "G" },
 	config = function()
 		require("neoscroll").setup({
 			-- All these keys will be mapped to their corresponding default scrolling animation
@@ -16,12 +16,12 @@ return {
 		})
 		local map = {}
 
-		map["<C-u>"] = { "scroll", { "-vim.wo.scroll", "true", "150" } }
-		map["<C-d>"] = { "scroll", { "vim.wo.scroll", "true", "150" } }
-		-- map["<C-b>"] = { "scroll", { "-vim.api.nvim_win_get_height(0)", "true", "250" } }
-		-- map["<C-f>"] = { "scroll", { "vim.api.nvim_win_get_height(0)", "true", "250" } }
-		map["<C-y>"] = { "scroll", { "-0.10", "false", "150" } }
-		map["<C-e>"] = { "scroll", { "0.10", "false", "150" } }
+		map["<C-u>"] = { "scroll", { "-vim.wo.scroll", "true", "50" } }
+		map["<C-d>"] = { "scroll", { "vim.wo.scroll", "true", "50" } }
+		map["<C-b>"] = { "scroll", { "-vim.api.nvim_win_get_height(0)", "true", "100" } }
+		map["<C-f>"] = { "scroll", { "vim.api.nvim_win_get_height(0)", "true", "100" } }
+		map["<C-y>"] = { "scroll", { "-0.10", "false", "50" } }
+		map["<C-e>"] = { "scroll", { "0.10", "false", "50" } }
 		map["zt"] = { "zt", { "150" } }
 		map["zz"] = { "zz", { "150" } }
 		map["zb"] = { "zb", { "150" } }

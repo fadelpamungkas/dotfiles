@@ -10,7 +10,5 @@ return {
 			desc = "ts-node-action",
 		},
 	},
-	config = function() -- Optional
-		require("ts-node-action").setup({})
-	end,
+	config = true,
 }

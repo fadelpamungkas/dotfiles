@@ -1,7 +1,7 @@
 return {
 	"NvChad/nvim-colorizer.lua",
 	cmd = "ColorizerToggle",
-	config = {
+	opts = {
 		filetypes = { "*", "!lazy" },
 		buftype = { "*", "!prompt", "!nofile" },
 		user_default_options = {

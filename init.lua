@@ -1,19 +1,16 @@
--- Load Impatient if available
--- local present, impatient = pcall(require, "impatient")
--- if present then
--- 	impatient.enable_profile()
--- end
-
 -- Bacic Vim Configurations
 local opt = vim.opt
 local g = vim.g
-local map = vim.api.nvim_set_keymap
+local function map(mode, lhs, rhs, opts)
+	opts = opts or {}
+	opts.silent = opts.silent ~= false
+	vim.keymap.set(mode, lhs, rhs, opts)
+end
 
 if g.neovide ~= nil then
 	-- vim.o.guifont = "Fira Code:h13"
 	-- vim.o.guifont = "Monaco:h13"
 	vim.o.guifont = "Menlo:h13"
-	-- vim.o.guifont = "InconsolataLGC Nerd Font Mono:h13"
 	g.neovide_cursor_antialiasing = true
 	g.neovide_cursor_vfx_mode = ""
 	g.neovide_cursor_animation_length = 0.05
@@ -24,7 +21,7 @@ if g.neovide ~= nil then
 	vim.keymap.set("n", "<F9>", ":let g:neovide_fullscreen = !g:neovide_fullscreen<CR>")
 end
 
-opt.updatetime = 50
+opt.updatetime = 200
 opt.background = "dark"
 opt.clipboard = "unnamedplus"
 opt.showmatch = true
@@ -50,64 +47,47 @@ opt.completeopt = { "menu", "menuone", "noselect" }
 opt.scrolloff = 2 -- Columns of context
 opt.signcolumn = "auto" -- always show signcolumns
 opt.cmdheight = 1 -- v0.8.0
+opt.laststatus = 3
 
 -- Remap space as leader key
 map("n", "<Space>", "<Nop>", { silent = true })
 g.mapleader = " "
 g.maplocalleader = " "
 
-map("i", "jk", "<Esc>", { noremap = true })
+map("i", "jk", "<Esc>")
+map("i", "<Esc>", "<Esc>")
 
-map("n", "<c-s>", [[:%s/\<<c-r><c-w>\>/<c-r><c-w>/gI<left><left><left>]], { noremap = true })
-map("n", "<Right>", "<cmd>:vertical resize +2<CR>", { noremap = true })
-map("n", "<Left>", "<cmd>:vertical resize -2<CR>", { noremap = true })
-map("n", "<Up>", "<cmd>resize +2<CR>", { noremap = true })
-map("n", "<Down>", "<cmd>resize -2<CR>", { noremap = true })
-map("n", "<c-j>", "<c-w>j", { noremap = true })
-map("n", "<c-k>", "<c-w>k", { noremap = true })
-map("n", "<c-h>", "<c-w>h", { noremap = true })
-map("n", "<c-l>", "<c-w>l", { noremap = true })
-map("n", "gV", "`[V`]", { noremap = true })
-map("n", "<leader>n", [[/\<<c-r><c-w>\><CR>]], { noremap = true })
--- map("n", "n", "nzzzv", { noremap = true })
--- map("n", "N", "Nzzzv", { noremap = true })
+-- better up/down
+map("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+map("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 
-map("v", ">", ">gv", { noremap = true })
-map("v", "<", "<gv", { noremap = true })
-map("v", "J", ":m '>+1<CR>gv=gv", { noremap = true })
-map("v", "K", ":m '<-2<CR>gv=gv", { noremap = true })
+map("n", "<c-s>", [[:%s/\<<c-r><c-w>\>/<c-r><c-w>/gI<left><left><left>]])
+map("n", "<Right>", "<cmd>:vertical resize +2<CR>")
+map("n", "<Left>", "<cmd>:vertical resize -2<CR>")
+map("n", "<Up>", "<cmd>resize +2<CR>")
+map("n", "<Down>", "<cmd>resize -1<CR>")
+map("n", "<c-j>", "<c-w>j")
+map("n", "<c-k>", "<c-w>k")
+map("n", "<c-h>", "<c-w>h")
+map("n", "<c-l>", "<c-w>l")
+map("n", "gV", "`[V`]")
+map({ "n", "x" }, "gw", "*N")
 
-map("x", "<leader>p", [["_dP]], { noremap = true })
-map("x", "<leader>P", [["_dp]], { noremap = true })
+-- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
+map("n", "n", "'Nn'[v:searchforward]", { expr = true })
+map("x", "n", "'Nn'[v:searchforward]", { expr = true })
+map("o", "n", "'Nn'[v:searchforward]", { expr = true })
+map("n", "N", "'nN'[v:searchforward]", { expr = true })
+map("x", "N", "'nN'[v:searchforward]", { expr = true })
+map("o", "N", "'nN'[v:searchforward]", { expr = true })
 
--- map("n", "<leader>o", "<cmd>SymbolsOutlineOpen<CR>", { noremap = true })
+map("v", ">", ">gv")
+map("v", "<", "<gv")
+-- map("v", "J", ":m '>+1<CR>gv=gv")
+-- map("v", "K", ":m '<-2<CR>gv=gv")
 
--- don't load the plugins below
-local builtins = {
-	"gzip",
-	"zip",
-	"zipPlugin",
-	"fzf",
-	"tar",
-	"tarPlugin",
-	"getscript",
-	"getscriptPlugin",
-	"vimball",
-	"vimballPlugin",
-	"2html_plugin",
-	"matchit",
-	"matchparen",
-	"logiPat",
-	"rrhelper",
-	"netrw",
-	"netrwPlugin",
-	"netrwSettings",
-	"netrwFileHandlers",
-}
-
-for _, plugin in ipairs(builtins) do
-	vim.g["loaded_" .. plugin] = 1
-end
+map("x", "<leader>p", [["_dP]])
+map("x", "<leader>P", [["_dp]])
 
 require("lazyconfig")
 

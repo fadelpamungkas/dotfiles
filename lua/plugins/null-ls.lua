@@ -1,10 +1,10 @@
 return {
 	"jose-elias-alvarez/null-ls.nvim",
 	event = "BufReadPre",
-	dependencies = { "nvim-lua/plenary.nvim" },
+	dependencies = { "nvim-lua/plenary.nvim", "mason.nvim" },
 	opts = function()
 		local null_ls = require("null-ls")
-		null_ls.setup({
+		return {
 			sources = {
 				null_ls.builtins.formatting.prettierd,
 				null_ls.builtins.formatting.gofmt,
@@ -34,6 +34,6 @@ return {
 					end,
 				}),
 			},
-		})
+		}
 	end,
 }

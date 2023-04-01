@@ -1,20 +1,15 @@
 return {
-	-- { "lewis6991/impatient.nvim", lazy = false, enable = true },
-	{
-		"nyoom-engineering/oxocarbon.nvim",
-		lazy = false,
-		config = function()
-			vim.cmd.colorscheme("oxocarbon")
-		end,
-	},
 
 	{
-		"williamboman/mason.nvim",
+		"simrat39/rust-tools.nvim",
 		config = true,
+		ft = "rust",
 	},
 
 	{
-		"williamboman/mason-lspconfig.nvim",
+		"akinsho/flutter-tools.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		ft = "dart",
 	},
 
 	{
@@ -26,66 +21,82 @@ return {
 	},
 
 	{
+		"smjonas/inc-rename.nvim",
+		cmd = "IncRename",
+		keys = {
+			{
+				"gR",
+				-- ":IncRename ",
+				function()
+					require("inc_rename")
+					return ":IncRename " .. vim.fn.expand("<cword>")
+				end,
+				mode = { "n", "x", "o" },
+				desc = "Rename",
+				expr = true,
+			},
+		},
+		config = true,
+	},
+
+	{
 		"nvim-treesitter/nvim-treesitter-context",
 		event = "BufReadPre",
-		config = function()
-			require("treesitter-context").setup()
-		end,
+		config = true,
 	},
 
 	{
 		"kylechui/nvim-surround",
 		event = "BufReadPre",
-		config = function()
-			require("nvim-surround").setup()
-		end,
+		config = true,
 	},
 
 	{
 		"windwp/nvim-autopairs",
 		event = "InsertEnter",
-		config = function()
-			require("nvim-autopairs").setup()
-		end,
+		config = true,
 	},
 
 	{
 		"windwp/nvim-ts-autotag",
 		event = "InsertEnter",
-		config = function()
-			require("nvim-ts-autotag").setup()
-		end,
+		config = true,
 	},
 
 	{
 		"ggandor/leap.nvim",
-		event = "BufReadPre",
-		config = function()
-			require("leap").add_default_mappings()
-			vim.api.nvim_set_hl(0, "LeapBackdrop", { link = "Comment" })
-		end,
-		dependencies = {
-			"ggandor/flit.nvim",
-			config = function()
-				require("flit").setup({
-					keys = { f = "f", F = "F", t = "t", T = "T" },
-					-- A string like "nv", "nvo", "o", etc.
-					labeled_modes = "nv",
-					multiline = true,
-					-- Like `leap`s similar argument (call-specific overrides).
-					-- E.g.: opts = { equivalence_classes = {} }
-					opts = {},
-				})
-			end,
+		keys = {
+			{ "s", mode = { "n", "x", "o" }, desc = "Leap forward to" },
+			{ "S", mode = { "n", "x", "o" }, desc = "Leap backward to" },
+			{ "gs", mode = { "n", "x", "o" }, desc = "Leap from windows" },
 		},
+		config = function(_, opts)
+			local leap = require("leap")
+			for k, v in pairs(opts) do
+				leap.opts[k] = v
+			end
+			leap.add_default_mappings(true)
+			vim.keymap.del({ "x", "o" }, "x")
+			vim.keymap.del({ "x", "o" }, "X")
+		end,
+	},
+
+	{
+		"ggandor/flit.nvim",
+		keys = function()
+			local ret = {}
+			for _, key in ipairs({ "f", "F", "t", "T" }) do
+				ret[#ret + 1] = { key, mode = { "n", "x", "o" }, desc = key }
+			end
+			return ret
+		end,
+		opts = { labeled_modes = "nx" },
 	},
 
 	{
 		"lewis6991/gitsigns.nvim",
 		event = "BufReadPre",
-		config = function()
-			require("gitsigns").setup()
-		end,
+		config = true,
 	},
 
 	{
@@ -122,6 +133,113 @@ return {
 			},
 		},
 	},
+
+	{
+		"zbirenbaum/copilot.lua",
+		cmd = "Copilot",
+		event = "InsertEnter",
+		config = function()
+			require("copilot").setup({
+				panel = {
+					enabled = true,
+					auto_refresh = false,
+					keymap = {
+						jump_prev = "[[",
+						jump_next = "]]",
+						accept = "<CR>",
+						refresh = "gr",
+						open = "<C-CR>",
+					},
+					layout = {
+						position = "bottom", -- | top | left | right
+						ratio = 0.4,
+					},
+				},
+				suggestion = {
+					enabled = true,
+					auto_trigger = false,
+					debounce = 75,
+					keymap = {
+						accept = "<C-;>",
+						accept_word = false,
+						accept_line = false,
+						next = "<C-]>",
+						prev = "<C-[>",
+						dismiss = "<C-\\>",
+					},
+				},
+				filetypes = {
+					yaml = false,
+					markdown = false,
+					help = false,
+					gitcommit = false,
+					gitrebase = false,
+					hgcommit = false,
+					svn = false,
+					cvs = false,
+					["."] = false,
+				},
+				copilot_node_command = "node", -- Node.js version must be > 16.x
+				server_opts_overrides = {},
+			})
+		end,
+	},
+
+	{
+		"nvim-neorg/neorg",
+		ft = "norg",
+		build = ":Neorg sync-parsers",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		opts = {
+			load = {
+				["core.defaults"] = {},
+				["core.norg.concealer"] = {},
+				["core.norg.completion"] = {
+					config = { engine = "nvim-cmp" },
+				},
+				["core.integrations.nvim-cmp"] = {},
+
+				["core.norg.dirman"] = { -- Manages Neorg workspaces
+					config = {
+						workspaces = {
+							notes = "~/notes",
+						},
+					},
+				},
+			},
+		},
+		-- config = function()
+		-- 	require("neorg").setup({
+		-- 		load = {
+		-- 			["core.defaults"] = {}, -- Loads default behaviour
+		-- 			["core.norg.dirman"] = { -- Manages Neorg workspaces
+		-- 				config = {
+		-- 					workspaces = {
+		-- 						notes = "~/notes",
+		-- 					},
+		-- 				},
+		-- 			},
+		-- 		},
+		-- 	})
+		-- end,
+	},
+
+	-- {
+	-- 	"ThePrimeagen/refactoring.nvim",
+	-- 	keys = {
+	-- 		{
+	-- 			"<leader>r",
+	-- 			function()
+	-- 				require("refactoring").select_refactor()
+	-- 			end,
+	-- 			mode = "v",
+	-- 			noremap = true,
+	-- 			silent = true,
+	-- 			expr = false,
+	-- 		},
+	-- 	},
+	-- 	opts = {},
+	-- },
 
 	-- {
 	-- 	"folke/zen-mode.nvim",

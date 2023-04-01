@@ -6,18 +6,17 @@ Preconfigured Neovim
 
 - File searching, fuzzy finder, etc with telescope
 - Terminal management with toggleterm
-- File manager with dirbuf
+- File manager with oil
 - minimalist statusline with lualine
 - Git integration with gitsigns and neogit
-- LSP configuration with lspconfig and mason
+- LSP configuration with lspconfig, mason, and null-ls
 - autocompletion with nvim-cmp
 - Syntax highlighting with nvim-treesitter
 - auto braces and tags with nvim-autopairs and nvim-autotag
 - Snippet with luasnip
 - Submode and popup mappings with hydra
 - Code outline with symbols-outline
-- virtual code context with nvim-context-vt
-- inline and on-screen jumps with eyeliner and leap.nvim
+- inline and on-screen jumps with flit and leap.nvim
 - startup dashboard with alpha
 - toggle number, signcolumn, cmdheight, diagnostics, etc to keep minimalist
 - 3 choosen colorscheme with oxocarbon as default ones

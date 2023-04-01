@@ -3,9 +3,7 @@ local M = {
 	cmd = "Telescope",
 	dependencies = {
 		{ "nvim-lua/plenary.nvim" },
-		-- { "nvim-telescope/telescope-file-browser.nvim" },
 		{ "nvim-telescope/telescope-project.nvim" },
-		-- { "gnikdroy/projections.nvim" },
 		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 	},
 }
@@ -22,9 +20,6 @@ function M.init()
 	vim.keymap.set("n", "<leader>m", function()
 		require("telescope").extensions.project.project({})
 	end, { desc = "Find Project" })
-	-- vim.keymap.set("n", "<leader>M", function()
-	-- 	vim.cmd("Telescope projections")
-	-- end)
 end
 
 function M.config()
@@ -91,16 +86,8 @@ function M.config()
 		return layout
 	end
 
-	-- require("projections").setup({})
 	telescope.setup({
 		extensions = {
-			-- fzf = {
-			--   fuzzy = true, -- false will only do exact matching
-			--   override_generic_sorter = true, -- override the generic sorter
-			--   override_file_sorter = true, -- override the file sorter
-			--   case_mode = "smart_case", -- or "ignore_case" or "respect_case"
-			--   -- the default case_mode is "smart_case"
-			-- },
 		},
 		defaults = {
 			layout_strategy = "bottom_pane",
@@ -225,26 +212,6 @@ function M.config()
 	})
 	telescope.load_extension("fzf")
 	telescope.load_extension("project")
-	-- telescope.load_extension("file_browser")
-	-- telescope.load_extension("projections")
-	--
-	-- -- Autostore session on VimExit
-	-- local Session = require("projections.session")
-	-- vim.api.nvim_create_autocmd({ "VimLeavePre" }, {
-	-- 	callback = function()
-	-- 		Session.store(vim.loop.cwd())
-	-- 	end,
-	-- })
-	--
-	-- -- Switch to project if vim was started in a project dir
-	-- local switcher = require("projections.switcher")
-	-- vim.api.nvim_create_autocmd({ "VimEnter" }, {
-	-- 	callback = function()
-	-- 		if vim.fn.argc() == 0 then
-	-- 			switcher.switch(vim.loop.cwd())
-	-- 		end
-	-- 	end,
-	-- })
 end
 
 return M

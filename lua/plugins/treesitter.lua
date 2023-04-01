@@ -1,7 +1,7 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
 	build = ":TSUpdate",
-	event = "BufReadPre",
+	event = { "BufReadPost", "BufNewFile" },
 	dependencies = {
 		"nvim-treesitter/nvim-treesitter-textobjects",
 	},
@@ -34,6 +34,8 @@ return {
 					lookahead = true, -- automatically jump forward to textobj, similar to targets.vim
 					keymaps = {
 						-- you can use the capture groups defined in textobjects.scm
+						["aa"] = "@parameter.outer",
+						["ia"] = "@parameter.inner",
 						["af"] = "@function.outer",
 						["if"] = "@function.inner",
 						["ac"] = "@class.outer",

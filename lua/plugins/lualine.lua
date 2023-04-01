@@ -9,7 +9,7 @@ return {
 			component_separators = "",
 			section_separators = "|",
 			disabled_filetypes = {
-				statusline = {},
+				statusline = { "alpha" },
 				winbar = {},
 			},
 			ignore_focus = {},

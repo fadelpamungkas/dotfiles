@@ -51,7 +51,7 @@ vim.api.nvim_create_autocmd("User", {
 	pattern = "AlphaReady",
 	desc = "disable status and tabline for alpha",
 	callback = function()
-		vim.go.laststatus = 0
+		vim.opt.laststatus = 0
 		vim.opt.showtabline = 0
 	end,
 })
@@ -59,7 +59,7 @@ vim.api.nvim_create_autocmd("BufUnload", {
 	buffer = 0,
 	desc = "enable status and tabline after alpha",
 	callback = function()
-		vim.go.laststatus = 3
+		vim.opt.laststatus = 3
 		vim.opt.showtabline = 1
 	end,
 })

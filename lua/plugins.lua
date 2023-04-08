@@ -1,4 +1,10 @@
 return {
+	{
+		"toppair/peek.nvim",
+		run = "deno task --quiet build:fast",
+		ft = { "markdown" },
+		opts = { app = "browser" },
+	},
 
 	{
 		"simrat39/rust-tools.nvim",
@@ -10,14 +16,6 @@ return {
 		"akinsho/flutter-tools.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
 		ft = "dart",
-	},
-
-	{
-		"dstein64/vim-startuptime",
-		cmd = "StartupTime",
-		config = function()
-			vim.g.startuptime_tries = 10
-		end,
 	},
 
 	{
@@ -36,12 +34,6 @@ return {
 				expr = true,
 			},
 		},
-		config = true,
-	},
-
-	{
-		"nvim-treesitter/nvim-treesitter-context",
-		event = "BufReadPre",
 		config = true,
 	},
 
@@ -208,22 +200,33 @@ return {
 				},
 			},
 		},
-		-- config = function()
-		-- 	require("neorg").setup({
-		-- 		load = {
-		-- 			["core.defaults"] = {}, -- Loads default behaviour
-		-- 			["core.norg.dirman"] = { -- Manages Neorg workspaces
-		-- 				config = {
-		-- 					workspaces = {
-		-- 						notes = "~/notes",
-		-- 					},
-		-- 				},
-		-- 			},
-		-- 		},
-		-- 	})
-		-- end,
 	},
 
+	-- {
+	-- 	"james1236/backseat.nvim",
+	-- 	--    cmd = "Backseat",
+	-- 	config = function()
+	-- 		require("backseat").setup({
+	-- 			-- Alternatively, set the env var $OPENAI_API_KEY by putting "export OPENAI_API_KEY=sk-xxxxx" in your ~/.bashrc
+	-- 			-- openai_api_key = "sk-xxxxxxxxxxxxxx", -- Get yours from platform.openai.com/account/api-keys
+	-- 			-- openai_model_id = "gpt-3.5-turbo", --gpt-4 (If you do not have access to a model, it says "The model does not exist")
+	--
+	-- 			split_threshold = 100,
+	-- 			-- additional_instruction = "Respond snarkily", -- (GPT-3 will probably deny this request, but GPT-4 complies)
+	-- 			-- highlight = {
+	-- 			--     icon = '', -- ''
+	-- 			--     group = 'Comment',
+	-- 			-- }
+	-- 		})
+	-- 	
+	-- },
+	-- {
+	-- 	"dstein64/vim-startuptime",
+	-- 	cmd = "StartupTime",
+	-- 	config = function()
+	-- 		vim.g.startuptime_tries = 10
+	-- 	end,
+	-- },
 	-- {
 	-- 	"ThePrimeagen/refactoring.nvim",
 	-- 	keys = {
@@ -240,7 +243,6 @@ return {
 	-- 	},
 	-- 	opts = {},
 	-- },
-
 	-- {
 	-- 	"folke/zen-mode.nvim",
 	-- 	cmd = { "ZenMode" },

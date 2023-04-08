@@ -1,17 +1,18 @@
 return {
 	{
 		"nyoom-engineering/oxocarbon.nvim",
-		-- lazy = false,
-		-- config = function()
-		-- 	vim.cmd.colorscheme("oxocarbon")
-		-- end,
+		lazy = false,
+    priority = 1000,
+		config = function()
+			vim.cmd.colorscheme("oxocarbon")
+		end,
 	},
 	{
 		"Yazeed1s/minimal.nvim",
-		lazy = false,
-		config = function()
-			vim.cmd.colorscheme("minimal-base16")
-		end,
+		-- lazy = false,
+		-- config = function()
+		-- 	vim.cmd.colorscheme("minimal-base16")
+		-- end,
 	},
 	{
 		"EdenEast/nightfox.nvim",

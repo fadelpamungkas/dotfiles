@@ -20,7 +20,7 @@ return {
 			-- virtual_text = false,
 			virtual_text = {
 				spacing = 4,
-				prefix = "▎", -- could be '●', '▎', 'x'
+				prefix = "⑊", -- could be '●', '▎', 'x'
 			},
 			signs = true,
 			underline = false,
@@ -46,22 +46,20 @@ return {
 		end
 
 		local opts = { noremap = true, silent = true }
-		vim.keymap.set("n", "<leader>dd", "<cmd>lua vim.diagnostic.open_float()<cr>", opts)
-		vim.keymap.set("n", "<leader>ds", "<cmd>lua vim.diagnostic.enable()<cr>", opts)
-		vim.keymap.set("n", "<leader>dh", "<cmd>lua vim.diagnostic.disable()<cr>", opts)
+		vim.keymap.set("n", "<leader>D", "<cmd>lua vim.diagnostic.open_float()<cr>", opts)
+		-- vim.keymap.set("n", "<leader>ds", "<cmd>lua vim.diagnostic.enable()<cr>", opts)
+		-- vim.keymap.set("n", "<leader>dh", "<cmd>lua vim.diagnostic.disable()<cr>", opts)
 
 		-- LSP setting
 		local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 		local on_attach = function(client, bufnr)
-			if client.name == "tsserver" then
+			if client.name == "tsserver" or client.name == "rust_analyzer" then
 				client.server_capabilities.documentFormattingProvider = false
 				client.server_capabilities.documentRangeFormattingProvider = false
 			end
-			if client.name == "rust_analyzer" then
-				client.server_capabilities.documentFormattingProvider = false
-				client.server_capabilities.documentRangeFormattingProvider = false
-			end
+
+			opts = { noremap = true, silent = true, buffer = bufnr }
 
 			vim.keymap.set("n", "gh", function()
 				vim.lsp.buf.format({
@@ -70,9 +68,7 @@ return {
 					end,
 					bufnr = bufnr,
 				})
-			end, { silent = true, buffer = bufnr })
-
-			opts = { noremap = true, silent = true, buffer = bufnr }
+			end, opts)
 			vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
 			vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", opts)
 			vim.keymap.set("n", "gd", "<cmd>TroubleToggle lsp_definitions<cr>", opts)
@@ -88,6 +84,7 @@ return {
 		mason_lspconfig.setup({
 			ensure_installed = {
 				"lua_ls",
+				"rust_analyzer",
 				"gopls",
 				"tsserver",
 				"tailwindcss",
@@ -104,13 +101,14 @@ return {
 					capabilities = capabilities,
 				})
 			end,
-		})
-
-		require("rust-tools").setup({
-			server = {
-				on_attach = on_attach,
-			},
-			capabilities = capabilities,
+			["rust_analyzer"] = function()
+				require("rust-tools").setup({
+					server = {
+						on_attach = on_attach,
+					},
+					capabilities = capabilities,
+				})
+			end,
 		})
 
 		require("flutter-tools").setup({

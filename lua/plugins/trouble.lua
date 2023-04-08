@@ -2,8 +2,7 @@ return {
 	"folke/trouble.nvim",
 	cmd = { "TroubleToggle", "Trouble" },
 	keys = {
-		{ "<leader>dq", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics (Trouble)" },
-		{ "<leader>dQ", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics (Trouble)" },
+		{ "<leader>d", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics (Trouble)" },
 	},
 	opts = {
 		position = "bottom", -- position of the list can be: bottom, top, left, right

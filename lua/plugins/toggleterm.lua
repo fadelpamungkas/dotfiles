@@ -1,7 +1,7 @@
 return {
 	"akinsho/toggleterm.nvim",
 	cmd = "ToggleTerm",
-	keys = { "<C-/>", "<leader>e", "<leader>/" },
+	keys = { "<C-t>", "<C-/>", "<leader>e" },
 	opts = function()
 		require("toggleterm").setup({
 			size = function(term)
@@ -11,7 +11,7 @@ return {
 					return vim.o.columns * 0.4
 				end
 			end,
-			open_mapping = [[<c-/>]],
+			open_mapping = [[<c-t>]],
 			hide_numbers = true,
 			shade_filetypes = {},
 			shade_terminals = true,
@@ -20,7 +20,7 @@ return {
 			insert_mappings = true,
 			persist_size = false,
 			persist_mode = false,
-			direction = "horizontal",
+			direction = "tab",
 			close_on_exit = true,
 			shell = vim.o.shell,
 			float_opts = {
@@ -62,6 +62,6 @@ return {
 			lf:toggle()
 		end
 		vim.keymap.set("n", "<leader>e", "<cmd>lua _LF_TOGGLE()<CR>")
-		vim.keymap.set("n", "<leader>/", "<cmd>lua _VTERM_TOGGLE()<CR>")
+		vim.keymap.set("n", "<c-/>", "<cmd>lua _VTERM_TOGGLE()<CR>")
 	end,
 }

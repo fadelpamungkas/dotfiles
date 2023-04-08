@@ -95,16 +95,16 @@ return {
 						end
 					end,
 				},
-				{ "b:gitsigns_head" },
-				{ "filesize", fmt = string.upper },
-				{ "encoding", fmt = string.upper },
+				-- { "b:gitsigns_head" },
+				-- { "filesize", fmt = string.upper },
+				-- { "encoding", fmt = string.upper },
 				{ "location" },
 				{ "progress" },
-				{
-					function()
-						return "▊"
-					end,
-				},
+				-- {
+				-- 	function()
+				-- 		return "▊"
+				-- 	end,
+				-- },
 			},
 			lualine_y = {},
 			lualine_z = {},

@@ -4,6 +4,10 @@ return {
 	event = { "BufReadPost", "BufNewFile" },
 	dependencies = {
 		"nvim-treesitter/nvim-treesitter-textobjects",
+		{
+			"nvim-treesitter/nvim-treesitter-context",
+			config = true,
+		},
 	},
 	opts = function()
 		require("nvim-treesitter.configs").setup({
@@ -69,6 +73,9 @@ return {
 					},
 				},
 			},
+			-- matchup = {
+			-- 	enable = true,
+			-- },
 		})
 	end,
 }

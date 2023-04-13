@@ -58,7 +58,7 @@ function M.config()
 			},
 			layout_config = {
 				bottom_pane = {
-					height = 200,
+					height = 20,
 					preview_cutoff = 120,
 					prompt_position = "top",
 				},

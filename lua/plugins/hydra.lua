@@ -1,6 +1,6 @@
 return {
 	"anuvyklack/hydra.nvim",
-	keys = { "<leader>a", "<leader>g", "<leader>t" },
+	keys = { "<leader>a", "<leader>g", "<leader>t", "<leader>x" },
 	config = function()
 		local hydra = require("hydra")
 		local cmd = require("hydra.keymap-util").cmd
@@ -278,6 +278,67 @@ return {
 				{ "n", "<Cmd>Neogit<CR>", { exit = true, desc = "Neogit" } },
 				{ "q", nil, { exit = true, nowait = true, desc = "exit" } },
 				{ "<Esc>", nil, { exit = true, nowait = true, desc = "exit" } },
+			},
+		})
+
+		local dap = require("dap")
+		local hintDap = [[
+ _n_: step over   _s_: Start/Continue   _b_: Breakpoint       _u_: Toggle UI
+ _i_: step into   _x_: Disconnect       _K_: Hover Variables  _r_: Toggle Repl
+ _o_: step out    _c_: to cursor        _E_: Evaluate         _C_: Close UI
+ ^
+ ^ ^              _X_: Quit             _q_: exit
+]]
+
+		hydra({
+			name = "Dap",
+			hint = hintDap,
+			config = {
+				buffer = bufnr,
+				color = "pink",
+				invoke_on_body = true,
+				hint = {
+					position = "bottom",
+					border = "rounded",
+				},
+				-- on_enter = function()
+				-- 	vim.cmd("mkview")
+				-- 	vim.cmd("silent! %foldopen!")
+				-- 	vim.bo.modifiable = false
+				-- 	-- gitsigns.toggle_signs(true)
+				-- 	gitsigns.toggle_linehl(true)
+				-- end,
+				-- on_exit = function()
+				-- 	local cursor_pos = vim.api.nvim_win_get_cursor(0)
+				-- 	vim.cmd("loadview")
+				-- 	vim.api.nvim_win_set_cursor(0, cursor_pos)
+				-- 	vim.cmd("normal zv")
+				-- 	-- gitsigns.toggle_signs(false)
+				-- 	gitsigns.toggle_linehl(false)
+				-- 	gitsigns.toggle_deleted(false)
+				-- end,
+			},
+			mode = { "n", "x" },
+			body = "<leader>x",
+			heads = {
+				{ "C", "<cmd>lua require('dapui').close()<cr>:DapVirtualTextForceRefresh<cr>", { silent = true } },
+				{ "u", "<cmd>lua require('dapui').toggle()<cr>", { silent = true } },
+				{ "E", "<cmd>lua require('dapui').eval()<cr>", { silent = true } },
+				{ "K", "<cmd>lua require('dap.ui.widgets').hover()<cr>", { silent = true } },
+				{ "X", dap.close, { silent = true } },
+				{ "b", dap.toggle_breakpoint, { silent = true } },
+				{ "c", dap.run_to_cursor, { silent = true } },
+				{ "i", dap.step_into, { silent = true } },
+				{ "n", dap.step_over, { silent = true } },
+				{ "o", dap.step_out, { silent = true } },
+				{ "r", dap.repl.toggle, { silent = true } },
+				{ "s", dap.continue, { silent = true } },
+				{
+					"x",
+					"<cmd>lua require'dap'.disconnect({ terminateDebuggee = false })<cr>",
+					{ exit = true, silent = true },
+				},
+				{ "q", nil, { exit = true, nowait = true } },
 			},
 		})
 	end,

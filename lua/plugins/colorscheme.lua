@@ -1,18 +1,9 @@
 return {
 	{
 		"nyoom-engineering/oxocarbon.nvim",
-		lazy = false,
-    priority = 1000,
-		config = function()
-			vim.cmd.colorscheme("oxocarbon")
-		end,
 	},
 	{
 		"Yazeed1s/minimal.nvim",
-		-- lazy = false,
-		-- config = function()
-		-- 	vim.cmd.colorscheme("minimal-base16")
-		-- end,
 	},
 	{
 		"EdenEast/nightfox.nvim",
@@ -81,11 +72,32 @@ return {
 			groups = {},
 		},
 	},
-	-- { "sainnhe/gruvbox-material", event = "VeryLazy" },
-	-- { "fenetikm/falcon", event = "VeryLazy" },
-	-- { "kvrohit/rasmus.nvim", event = "VeryLazy" },
-	-- { "kvrohit/mellow.nvim", event = "VeryLazy" },
-	-- { "davidosomething/vim-colors-meh", event = "VeryLazy" },
+	{
+		"sainnhe/gruvbox-material",
+		-- priority = 1000,
+		-- lazy = false,
+		config = function()
+			vim.g.gruvbox_material_background = "hard"
+			-- vim.cmd.colorscheme("gruvbox-material")
+		end,
+	},
+	{
+		"sainnhe/sonokai",
+		-- lazy = false,
+		-- priority = 1000,
+		-- config = function()
+		-- 	vim.g.sonokai_style = "atlantis"
+		-- 	vim.cmd.colorscheme("sonokai")
+		-- 	vim.cmd.colorscheme("falcon")
+		-- end,
+	},
+	-- { 'sainnhe/everforest', priority = 1000 },
+	{
+		"fenetikm/falcon",
+	},
+	-- { "kvrohit/rasmus.nvim", priority = 1000 },
+	-- { "kvrohit/mellow.nvim", priority = 1000 },
+	-- { "davidosomething/vim-colors-meh", priority = 1000 },
 	-- {
 	-- 	"catppuccin/nvim",
 	-- 	name = "catppuccin",
@@ -143,7 +155,7 @@ return {
 	-- {
 	-- 	"rose-pine/neovim",
 	-- 	as = "rose-pine",
-	-- 	tag = "v1.*",
+	-- 	-- tag = "v1.*",
 	-- },
 	-- { "aktersnurra/no-clown-fiesta.nvim", event = "VeryLazy" },
 	-- { "VonHeikemen/little-wonder", event = "VeryLazy" },
@@ -155,11 +167,9 @@ return {
 	--  { 'vimoxide/vim-cinnabar' },
 	--  { 'pbrisbin/vim-colors-off' },
 	--  { 'andreypopp/vim-colors-plain' },
-	--  {
-	--   'olivercederborg/poimandres.nvim',
-	--   config = function
-	--     require('poimandres').setup {}
-	--   end
+	-- {
+	-- 	"olivercederborg/poimandres.nvim",
+	-- 	config = true,
 	-- },
 	--  { 'Mofiqul/adwaita.nvim' },
 	--  { 'ldelossa/vimdark' },
@@ -177,7 +187,6 @@ return {
 	--   'He4eT/desolate.nvim',
 	--   requires = { 'rktjmp/lush.nvim' },
 	--},
-	--  { 'kvrohit/rasmus.nvim' },
 	--  {
 	--   'meliora-theme/neovim',
 	--   requires = { 'rktjmp/lush.nvim' },
@@ -205,42 +214,87 @@ return {
 	--     )
 	--   end,
 	-- },
-	--  { 'wuelnerdotexe/vim-enfocado' },
-	--  { 'frenzyexists/aquarium-vim' },
-	--  { 'bluz71/vim-moonfly-colors' },
-	--  { 'ishan9299/nvim-solarized-lua' },
-	--  { 'sainnhe/everforest' },
-	-- {
-	-- 	"rebelot/kanagawa.nvim",
-	-- 	event = "VeryLazy",
-	-- 	config = function()
-	-- 		require("kanagawa").setup({
-	-- 			compile = false, -- enable compiling the colorscheme
-	-- 			undercurl = false, -- enable undercurls
-	-- 			commentStyle = { italic = true },
-	-- 			functionStyle = {},
-	-- 			keywordStyle = {},
-	-- 			statementStyle = {},
-	-- 			typeStyle = {},
-	-- 			transparent = false, -- do not set background color
-	-- 			dimInactive = false, -- dim inactive window `:h hl-NormalNC`
-	-- 			terminalColors = true, -- define vim.g.terminal_color_{0,17}
-	-- 			colors = { -- add/modify theme and palette colors
-	-- 				palette = {},
-	-- 				theme = { wave = {}, lotus = {}, dragon = {}, all = {} },
-	-- 			},
-	-- 			overrides = function(colors) -- add/modify highlights
-	-- 				return {}
-	-- 			end,
-	-- 			theme = "wave", -- Load "wave" theme when 'background' option is not set
-	-- 			background = { -- map the value of 'background' option to a theme
-	-- 				dark = "wave", -- try "dragon" !
-	-- 				light = "lotus",
-	-- 			},
-	-- 		})
-	-- 	end,
-	-- },
-	--  { 'windwp/wind-colors' },
+	-- { 'wuelnerdotexe/vim-enfocado' },
+	-- { 'frenzyexists/aquarium-vim' },
+	-- { "bluz71/vim-moonfly-colors", priority = 1000 },
+	{
+		"bluz71/vim-nightfly-colors",
+	},
+	-- { "ishan9299/nvim-solarized-lua" },
+	{
+		"rebelot/kanagawa.nvim",
+		lazy = false,
+		priority = 1000,
+		opts = {
+			compile = true, -- enable compiling the colorscheme
+			undercurl = false, -- enable undercurls
+			commentStyle = { italic = false },
+			functionStyle = {},
+			keywordStyle = { italic = false },
+			statementStyle = { bold = false },
+			typeStyle = {},
+			transparent = false, -- do not set background color
+			dimInactive = false, -- dim inactive window `:h hl-NormalNC`
+			terminalColors = true, -- define vim.g.terminal_color_{0,17}
+			colors = { -- add/modify theme and palette colors
+				palette = {
+					-- sumiInk0 = "#000000",
+					-- fujiWhite = "#FFFFFF",
+				},
+				theme = {
+					wave = {},
+					lotus = {},
+					dragon = {
+						ui = {
+							bg_gutter = "none",
+						},
+					},
+					all = {
+						-- ui = {
+						-- 	bg_gutter = "none",
+						-- },
+						-- syn = {
+						-- 	identifier = "none",
+						-- },
+					},
+				},
+			},
+			overrides = function(colors) -- add/modify highlights
+				local theme = colors.theme
+				return {
+					-- Assign a static color to strings
+					-- NormalFloat = { fg = theme.ui.float.fg, bg = theme.ui.float.bg },
+					TreesitterContext = { link = "Normal" },
+					-- theme colors will update dynamically when you change theme!
+					-- SomePluginHl = { fg = colors.theme.syn.type, bold = true },
+					-- NormalFloat = { bg = "none" },
+					-- FloatBorder = { bg = "none" },
+					-- FloatTitle = { bg = "none" },
+
+					-- Save an hlgroup with dark background and dimmed foreground
+					-- so that you can use it where your still want darker windows.
+					-- E.g.: autocmd TermOpen * setlocal winhighlight=Normal:NormalDark
+					NormalDark = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
+
+					-- Popular plugins that open floats will link to NormalFloat by default;
+					-- set their background accordingly if you wish to keep them dark and borderless
+					-- LazyNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
+					-- MasonNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
+
+					Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1 },
+					PmenuSel = { fg = "NONE", bg = theme.ui.bg_p2 },
+					PmenuSbar = { bg = theme.ui.bg_m1 },
+					PmenuThumb = { bg = theme.ui.bg_p2 },
+				}
+			end,
+			theme = "dragon", -- Load "wave" theme when 'background' option is not set
+			background = { -- map the value of 'background' option to a theme
+				dark = "dragon", -- try "dragon" !
+				light = "lotus",
+			},
+		},
+	},
+	-- { 'windwp/wind-colors' },
 	-- { "lifepillar/gruvbox8", event = "VeryLazy" },
-	--  'ellisonleao/gruvbox.nvim',
+	-- { 'ellisonleao/gruvbox.nvim' },
 }

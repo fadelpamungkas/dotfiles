@@ -20,7 +20,7 @@ return {
 			-- virtual_text = false,
 			virtual_text = {
 				spacing = 4,
-				prefix = "⑊", -- could be '●', '▎', 'x'
+				prefix = "◼︎", -- could be '●', '▎', 'x'
 			},
 			signs = true,
 			underline = false,
@@ -77,7 +77,7 @@ return {
 			vim.keymap.set("n", "gt", "<cmd>TroubleToggle lsp_type_definitions<cr>", opts)
 			vim.keymap.set("n", "gK", "<cmd>lua vim.lsp.buf.signature_help()<cr>", opts)
 			-- vim.keymap.set("n", "gR", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
-			vim.keymap.set("n", "gA", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
+			vim.keymap.set("n", "ga", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
 			vim.keymap.set("n", "<leader>cq", "<cmd>TroubleToggle quickfix<cr>", opts)
 		end
 
@@ -102,11 +102,17 @@ return {
 				})
 			end,
 			["rust_analyzer"] = function()
+				local extension_path = vim.env.HOME .. "/.local/share/nvim/mason/packages/codelldb/extension/"
+				local codelldb_path = extension_path .. "adapter/codelldb"
+				local liblldb_path = extension_path .. "lldb/lib/liblldb.so"
 				require("rust-tools").setup({
 					server = {
 						on_attach = on_attach,
 					},
 					capabilities = capabilities,
+					dap = {
+						adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
+					},
 				})
 			end,
 		})

@@ -43,6 +43,9 @@ return {
 				["<c-n>"] = cmp.mapping(function(fallback)
 					if cmp.visible() == false then
 						cmp.complete()
+						if cmp.visible() then
+							cmp.select_next_item()
+						end
 					elseif cmp.visible() then
 						cmp.select_next_item()
 					else

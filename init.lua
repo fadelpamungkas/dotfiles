@@ -97,3 +97,5 @@ vim.api.nvim_create_autocmd("User", {
 		require("commands")
 	end,
 })
+
+vim.cmd.colorscheme("kanagawa-dragon")

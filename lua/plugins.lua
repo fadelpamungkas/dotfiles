@@ -8,6 +8,11 @@ return {
 
 	{
 		"simrat39/rust-tools.nvim",
+		dependencies = {
+			"neovim/nvim-lspconfig",
+			"nvim-lua/plenary.nvim",
+			"mfussenegger/nvim-dap",
+		},
 		config = true,
 		ft = "rust",
 	},
@@ -149,7 +154,7 @@ return {
 				},
 				suggestion = {
 					enabled = true,
-					auto_trigger = false,
+					auto_trigger = true,
 					debounce = 75,
 					keymap = {
 						accept = "<C-;>",
@@ -161,8 +166,8 @@ return {
 					},
 				},
 				filetypes = {
-					yaml = false,
-					markdown = false,
+					-- yaml = false,
+					-- markdown = false,
 					help = false,
 					gitcommit = false,
 					gitrebase = false,
@@ -218,7 +223,6 @@ return {
 	-- 			--     group = 'Comment',
 	-- 			-- }
 	-- 		})
-	-- 	
 	-- },
 	-- {
 	-- 	"dstein64/vim-startuptime",

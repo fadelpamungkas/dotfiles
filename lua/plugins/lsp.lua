@@ -8,7 +8,14 @@ return {
 		},
 		{
 			"williamboman/mason.nvim",
-			config = true,
+			cmd = "Mason",
+			build = ":MasonUpdate", -- :MasonUpdate updates registry contents
+			opts = {
+				ui = {
+					width = 1,
+					height = 1,
+				},
+			},
 		},
 	},
 	config = function()
@@ -63,6 +70,7 @@ return {
 
 			vim.keymap.set("n", "gh", function()
 				vim.lsp.buf.format({
+					async = true,
 					filter = function(current)
 						return current.name == "null-ls"
 					end,
@@ -102,33 +110,41 @@ return {
 				})
 			end,
 			["rust_analyzer"] = function()
-				local extension_path = vim.env.HOME .. "/.local/share/nvim/mason/packages/codelldb/extension/"
-				local codelldb_path = extension_path .. "adapter/codelldb"
-				local liblldb_path = extension_path .. "lldb/lib/liblldb.so"
 				require("rust-tools").setup({
 					server = {
 						on_attach = on_attach,
 					},
 					capabilities = capabilities,
-					dap = {
-						adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
+					tools = {
+						inlay_hints = {
+							auto = true,
+							only_current_line = false,
+							show_parameter_hints = true,
+							parameter_hints_prefix = "<- ",
+							other_hints_prefix = "",
+							max_len_align = false,
+							max_len_align_padding = 1,
+							right_align = false,
+							right_align_padding = 7,
+							highlight = "Comment",
+						},
 					},
 				})
 			end,
 		})
 
-		require("flutter-tools").setup({
-			widget_guides = { enabled = true },
-			dev_log = { enabled = true, open_cmd = "tabedit" },
-			lsp = {
-				color = {
-					enabled = false,
-					background = false,
-					virtual_text = false,
-				},
-				on_attach = on_attach,
-				capabilities = capabilities,
-			},
-		})
+		-- require("flutter-tools").setup({
+		-- 	widget_guides = { enabled = true },
+		-- 	dev_log = { enabled = true, open_cmd = "tabedit" },
+		-- 	lsp = {
+		-- 		color = {
+		-- 			enabled = false,
+		-- 			background = false,
+		-- 			virtual_text = false,
+		-- 		},
+		-- 		on_attach = on_attach,
+		-- 		capabilities = capabilities,
+		-- 	},
+		-- })
 	end,
 }

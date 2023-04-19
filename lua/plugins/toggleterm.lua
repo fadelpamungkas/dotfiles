@@ -57,7 +57,7 @@ return {
 			vterm:toggle()
 		end
 
-		local lf = Terminal:new({ direction = "tab", cmd = "lf", hidden = true })
+		local lf = Terminal:new({ direction = "tab", cmd = "lf" })
 		function _LF_TOGGLE()
 			lf:toggle()
 		end

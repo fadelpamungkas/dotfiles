@@ -22,9 +22,9 @@ return {
 		map["<C-f>"] = { "scroll", { "vim.api.nvim_win_get_height(0)", "true", "100" } }
 		map["<C-y>"] = { "scroll", { "-0.10", "false", "50" } }
 		map["<C-e>"] = { "scroll", { "0.10", "false", "50" } }
-		map["zt"] = { "zt", { "150" } }
-		map["zz"] = { "zz", { "150" } }
-		map["zb"] = { "zb", { "150" } }
+		map["zt"] = { "zt", { "100" } }
+		map["zz"] = { "zz", { "100" } }
+		map["zb"] = { "zb", { "100" } }
 
 		require("neoscroll.config").set_mappings(map)
 	end,

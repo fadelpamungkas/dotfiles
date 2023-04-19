@@ -1,31 +1,32 @@
-local M = {
+return {
 	"TimUntersberger/neogit",
 	cmd = "Neogit",
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		"sindrets/diffview.nvim",
 	},
-}
-
-function M.config()
-	-- vim.api.nvim_set_keymap('n', '<leader>g', '<cmd>Neogit<CR>', { noremap = true })
-	require("neogit").setup({
+	opts = {
 		disable_signs = false,
 		disable_hint = true,
 		disable_context_highlighting = false,
 		disable_commit_confirmation = true,
 		disable_insert_on_commit = false,
-		-- Neogit refreshes its internal state after specific events, which can be expensive depending on the repository size.
-		-- Disabling `auto_refresh` will make it so you have to manually refresh the status after you open it.
 		auto_refresh = true,
 		disable_builtin_notifications = false,
 		use_magit_keybindings = false,
+		sort_branches = "-committerdate",
+		console_timeout = 2000,
+		auto_show_console = true,
+		remember_settings = true,
+		use_per_project_settings = true,
+		ignored_settings = {},
 		commit_popup = {
 			kind = "split",
 		},
-		-- Change the default way of opening neogit
+		preview_buffer = {
+			kind = "split",
+		},
 		kind = "tab",
-		-- customize displayed signs
 		signs = {
 			-- { CLOSED, OPENED }
 			section = { ">", "v" },
@@ -33,18 +34,6 @@ function M.config()
 			hunk = { ">", "v" },
 		},
 		integrations = {
-			-- Neogit only provides inline diffs. If you want a more traditional way to look at diffs, you can use `sindrets/diffview.nvim`.
-			-- The diffview integration enables the diff popup, which is a wrapper around `sindrets/diffview.nvim`.
-			--
-			-- Requires you to have `sindrets/diffview.nvim` installed.
-			-- use {
-			--   'TimUntersberger/neogit',
-			--   requires = {
-			--     'nvim-lua/plenary.nvim',
-			--     'sindrets/diffview.nvim'
-			--   }
-			-- }
-			--
 			diffview = true,
 		},
 		-- Setting any section to `false` will make the section not render at all
@@ -81,7 +70,5 @@ function M.config()
 				-- ["s"] = "",
 			},
 		},
-	})
-end
-
-return M
+	},
+}

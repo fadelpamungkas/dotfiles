@@ -4,92 +4,93 @@ return {
 	},
 	{
 		"Yazeed1s/minimal.nvim",
+		config = function()
+			vim.g.minimal_transparent_background = true
+		end,
 	},
 	{
 		"EdenEast/nightfox.nvim",
 		opts = {
 			options = {
-				-- Compiled file's destination location
-				compile_path = vim.fn.stdpath("cache") .. "/nightfox",
-				compile_file_suffix = "_compiled", -- Compiled file suffix
-				transparent = false, -- Disable setting background
-				terminal_colors = true, -- Set terminal colors (vim.g.terminal_color_*) used in `:terminal`
-				dim_inactive = false, -- Non focused panes set to alternative background
-				styles = { -- Style to be applied to different syntax groups
-					comments = "italic", -- Value is any valid attr-list value `:help attr-list`
-					conditionals = "NONE",
-					constants = "NONE",
-					functions = "NONE",
-					keywords = "NONE",
-					numbers = "NONE",
-					operators = "NONE",
-					strings = "NONE",
-					types = "NONE",
-					variables = "NONE",
-				},
-				inverse = { -- Inverse highlight for different types
-					match_paren = false,
-					visual = false,
-					search = false,
-				},
-				modules = { -- List of various plugins and additional options
-					-- ...
-				},
+				-- 		-- Compiled file's destination location
+				-- 		compile_path = vim.fn.stdpath("cache") .. "/nightfox",
+				-- 		compile_file_suffix = "_compiled", -- Compiled file suffix
+				transparent = true, -- Disable setting background
+				-- 		terminal_colors = true, -- Set terminal colors (vim.g.terminal_color_*) used in `:terminal`
+				-- 		dim_inactive = false, -- Non focused panes set to alternative background
+				-- 		styles = { -- Style to be applied to different syntax groups
+				-- 			comments = "italic", -- Value is any valid attr-list value `:help attr-list`
+				-- 			conditionals = "NONE",
+				-- 			constants = "NONE",
+				-- 			functions = "NONE",
+				-- 			keywords = "NONE",
+				-- 			numbers = "NONE",
+				-- 			operators = "NONE",
+				-- 			strings = "NONE",
+				-- 			types = "NONE",
+				-- 			variables = "NONE",
+				-- 		},
+				-- 		inverse = { -- Inverse highlight for different types
+				-- 			match_paren = false,
+				-- 			visual = false,
+				-- 			search = false,
+				-- 		},
+				-- 		modules = { -- List of various plugins and additional options
+				-- 			-- ...
+				-- 		},
+				-- 	},
+				-- 	palettes = {
+				-- 		nightfox = {
+				-- 			-- A specific style's value will be used over the `all`'s value
+				-- 			-- red = "#c94f6d",
+				-- 			-- comment = "#60728a",
+				-- 		},
+				-- 	},
+				-- 	specs = {
+				-- 		nightfox = {
+				-- 			syntax = {
+				-- 				bracket = "white.dim",
+				-- 				builtin0 = "blue",
+				-- 				builtin1 = "white.dim",
+				-- 				builtin2 = "yellow",
+				-- 				-- comment = "",
+				-- 				conditional = "blue",
+				-- 				-- const = "",
+				-- 				-- dep = "",
+				-- 				field = "white.dim",
+				-- 				func = "white",
+				-- 				ident = "cyan",
+				-- 				keyword = "blue",
+				-- 				-- number = "",
+				-- 				-- operator = "",
+				-- 				preproc = "red",
+				-- 				-- regex = "",
+				-- 				-- statement = "",
+				-- 				string = "green",
+				-- 				type = "white.dim",
+				-- 				variable = "white.dim",
+				-- 			},
+				-- 		},
 			},
-			palettes = {
-				nightfox = {
-					-- A specific style's value will be used over the `all`'s value
-					-- red = "#c94f6d",
-					-- comment = "#60728a",
-				},
-			},
-			specs = {
-				nightfox = {
-					syntax = {
-						bracket = "white.dim",
-						builtin0 = "blue",
-						builtin1 = "white.dim",
-						builtin2 = "yellow",
-						-- comment = "",
-						conditional = "blue",
-						-- const = "",
-						-- dep = "",
-						field = "white.dim",
-						func = "white",
-						ident = "cyan",
-						keyword = "blue",
-						-- number = "",
-						-- operator = "",
-						preproc = "red",
-						-- regex = "",
-						-- statement = "",
-						string = "green",
-						type = "white.dim",
-						variable = "white.dim",
-					},
-				},
-			},
-			groups = {},
+			-- 	groups = {},
 		},
 	},
 	{
 		"sainnhe/gruvbox-material",
-		-- priority = 1000,
-		-- lazy = false,
 		config = function()
 			vim.g.gruvbox_material_background = "hard"
-			-- vim.cmd.colorscheme("gruvbox-material")
+			-- vim.g.gruvbox_material_transparent_background = 1
 		end,
 	},
 	{
 		"sainnhe/sonokai",
-		-- lazy = false,
-		-- priority = 1000,
-		-- config = function()
-		-- 	vim.g.sonokai_style = "atlantis"
-		-- 	vim.cmd.colorscheme("sonokai")
-		-- 	vim.cmd.colorscheme("falcon")
-		-- end,
+		config = function()
+			-- vim.g.sonokai_style = "shusia"
+			vim.g.sonokai_transparent_background = 1
+			vim.g.sonokai_diagnostic_text_highlight = 1
+			vim.g.sonokai_diagnostic_line_highlight = 1
+			vim.g.sonokai_diagnostic_virtual_text = "colored"
+		end,
 	},
 	-- { 'sainnhe/everforest', priority = 1000 },
 	{
@@ -101,7 +102,8 @@ return {
 	-- {
 	-- 	"catppuccin/nvim",
 	-- 	name = "catppuccin",
-	-- 	event = "VeryLazy",
+	-- 	-- lazy = false,
+	-- 	-- priority = 1000,
 	-- 	config = function()
 	-- 		require("catppuccin").setup({
 	-- 			flavour = "mocha", -- latte, frappe, macchiato, mocha
@@ -122,11 +124,11 @@ return {
 	-- 				properties = {},
 	-- 				types = {},
 	-- 			},
-	-- 			-- color_overrides = {
-	-- 			-- 	mocha = {
-	-- 			-- 		base = "#000000",
-	-- 			-- 	},
-	-- 			-- },
+	-- 			color_overrides = {
+	-- 				mocha = {
+	-- 					base = "#000000",
+	-- 				},
+	-- 			},
 	-- 			-- highlight_overrides = {
 	-- 			-- 	mocha = function(C)
 	-- 			-- 		return {
@@ -154,8 +156,17 @@ return {
 	-- },
 	-- {
 	-- 	"rose-pine/neovim",
-	-- 	as = "rose-pine",
+	-- 	name = "rose-pine",
 	-- 	-- tag = "v1.*",
+	-- 	opts = {
+	-- 		variant = "main",
+	-- 		dark_variant = "main",
+	-- 		bold_vert_split = false,
+	-- 		dim_nc_background = false,
+	-- 		disable_background = true,
+	-- 		disable_float_background = false,
+	-- 		disable_italics = true,
+	-- 	},
 	-- },
 	-- { "aktersnurra/no-clown-fiesta.nvim", event = "VeryLazy" },
 	-- { "VonHeikemen/little-wonder", event = "VeryLazy" },
@@ -216,14 +227,13 @@ return {
 	-- },
 	-- { 'wuelnerdotexe/vim-enfocado' },
 	-- { 'frenzyexists/aquarium-vim' },
-	-- { "bluz71/vim-moonfly-colors", priority = 1000 },
+	-- { "bluz71/vim-moonfly-colors" },
 	{
 		"bluz71/vim-nightfly-colors",
 	},
 	-- { "ishan9299/nvim-solarized-lua" },
 	{
 		"rebelot/kanagawa.nvim",
-		lazy = false,
 		priority = 1000,
 		opts = {
 			compile = true, -- enable compiling the colorscheme
@@ -233,7 +243,7 @@ return {
 			keywordStyle = { italic = false },
 			statementStyle = { bold = false },
 			typeStyle = {},
-			transparent = false, -- do not set background color
+			transparent = true, -- do not set background color
 			dimInactive = false, -- dim inactive window `:h hl-NormalNC`
 			terminalColors = true, -- define vim.g.terminal_color_{0,17}
 			colors = { -- add/modify theme and palette colors
@@ -244,15 +254,11 @@ return {
 				theme = {
 					wave = {},
 					lotus = {},
-					dragon = {
+					dragon = {},
+					all = {
 						ui = {
 							bg_gutter = "none",
 						},
-					},
-					all = {
-						-- ui = {
-						-- 	bg_gutter = "none",
-						-- },
 						-- syn = {
 						-- 	identifier = "none",
 						-- },
@@ -260,6 +266,7 @@ return {
 				},
 			},
 			overrides = function(colors) -- add/modify highlights
+				local wave_colors = require("kanagawa.colors").setup({ theme = "wave" })
 				local theme = colors.theme
 				return {
 					-- Assign a static color to strings
@@ -267,9 +274,9 @@ return {
 					TreesitterContext = { link = "Normal" },
 					-- theme colors will update dynamically when you change theme!
 					-- SomePluginHl = { fg = colors.theme.syn.type, bold = true },
-					-- NormalFloat = { bg = "none" },
-					-- FloatBorder = { bg = "none" },
-					-- FloatTitle = { bg = "none" },
+					NormalFloat = { bg = "none" },
+					FloatBorder = { bg = "none" },
+					FloatTitle = { bg = "none" },
 
 					-- Save an hlgroup with dark background and dimmed foreground
 					-- so that you can use it where your still want darker windows.
@@ -297,4 +304,34 @@ return {
 	-- { 'windwp/wind-colors' },
 	-- { "lifepillar/gruvbox8", event = "VeryLazy" },
 	-- { 'ellisonleao/gruvbox.nvim' },
+	-- {
+	-- 	"folke/tokyonight.nvim",
+	-- 	lazy = false,
+	-- 	priority = 1000,
+	-- 	-- cond = vim.fn.hostname() == 'alpha',
+	-- 	config = function()
+	-- 		require("tokyonight").setup({
+	-- 			style = "night",
+	-- 		})
+	-- 	end,
+	-- },
+	{
+		"loctvl842/monokai-pro.nvim",
+		opts = {
+			transparent_background = true,
+			terminal_colors = true,
+			devicons = false, -- highlight the icons of `nvim-web-devicons`
+			styles = {
+				comment = { italic = false },
+				keyword = { italic = false }, -- any other keyword
+				type = { italic = false }, -- (preferred) int, long, char, etc
+				storageclass = { italic = false }, -- static, register, volatile, etc
+				structure = { italic = false }, -- struct, union, enum, etc
+				parameter = { italic = false }, -- parameter pass in function
+				annotation = { italic = false },
+				tag_attribute = { italic = false }, -- attribute of tag in reactjs
+			},
+			filter = "octagon", -- classic | octagon | pro | machine | ristretto | spectrum
+		},
+	},
 }

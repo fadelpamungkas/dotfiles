@@ -3,12 +3,12 @@ return {
 	lazy = false,
 	opts = {
 		layout = {
-			{ type = "padding", val = 5 },
+			{ type = "padding", val = 3 },
 			{
 				type = "text",
 				val = {
-					"Preconfigured neovim",
-					"v" .. vim.version().major .. "." .. vim.version().minor .. "." .. vim.version().patch,
+					"⎮ Preconfigured",
+					"⎮ Neovim v" .. vim.version().major .. "." .. vim.version().minor .. "." .. vim.version().patch,
 				},
 				opts = {
 					-- position = "center",
@@ -17,7 +17,7 @@ return {
 			},
 		},
 		opts = {
-			margin = 3,
+			margin = 1,
 		},
 	},
 }

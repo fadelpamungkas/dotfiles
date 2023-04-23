@@ -7,13 +7,13 @@ return {
 		opts = {
 			load = {
 				["core.defaults"] = {},
-				["core.norg.concealer"] = {},
-				["core.norg.completion"] = {
+				["core.concealer"] = {},
+				["core.completion"] = {
 					config = { engine = "nvim-cmp" },
 				},
 				["core.integrations.nvim-cmp"] = {},
 
-				["core.norg.dirman"] = { -- Manages Neorg workspaces
+				["core.dirman"] = { -- Manages Neorg workspaces
 					config = {
 						workspaces = {
 							notes = "~/notes",

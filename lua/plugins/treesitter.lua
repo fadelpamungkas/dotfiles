@@ -3,11 +3,14 @@ return {
 	build = ":TSUpdate",
 	event = { "BufReadPost", "BufNewFile" },
 	dependencies = {
-		"nvim-treesitter/nvim-treesitter-textobjects",
 		{
-			"nvim-treesitter/nvim-treesitter-context",
-			config = true,
+			"andymass/vim-matchup",
+			config = function()
+				vim.cmd([[hi MatchWord guibg=NONE]])
+			end,
 		},
+		{ "nvim-treesitter/nvim-treesitter-textobjects" },
+		{ "nvim-treesitter/nvim-treesitter-context", config = true },
 	},
 	config = function()
 		require("nvim-treesitter.configs").setup({
@@ -38,12 +41,14 @@ return {
 					lookahead = true, -- automatically jump forward to textobj, similar to targets.vim
 					keymaps = {
 						-- you can use the capture groups defined in textobjects.scm
-						["aa"] = "@parameter.outer",
-						["ia"] = "@parameter.inner",
+						["aP"] = "@parameter.outer",
+						["iP"] = "@parameter.inner",
 						["af"] = "@function.outer",
 						["if"] = "@function.inner",
 						["ac"] = "@class.outer",
 						["ic"] = "@class.inner",
+						["aB"] = "@block.outer",
+						["iB"] = "@block.inner",
 					},
 					selection_modes = {
 						["@parameter.outer"] = "v", -- charwise
@@ -73,9 +78,10 @@ return {
 					},
 				},
 			},
-			-- matchup = {
-			-- 	enable = true,
-			-- },
+			matchup = {
+				enable = true,
+				disable_virtual_text = true,
+			},
 		})
 	end,
 }

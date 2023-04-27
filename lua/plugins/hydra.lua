@@ -52,9 +52,6 @@ return {
 			},
 		})
 
-		-- _c_ Virtual Context
-		-- _t_ Typebreak
-		-- _l_ Eyeliner
 		local hintOpt = [[
   ^ ^        Activate
   ^
@@ -72,8 +69,6 @@ return {
        ^^^^                _<Esc>_ / _q_
 ]]
 
-		-- _e_ Enable Diagnostic
-		-- _d_ Disable Diagnostic
 		hydra({
 			name = "Activate",
 			hint = hintOpt,
@@ -88,14 +83,8 @@ return {
 			mode = { "n", "x" },
 			body = "<Leader>a",
 			heads = {
-				-- { 'e', cmd 'lua vim.diagnostic.enable()', { exit = true, desc = 'Enable Diagnostic' } },
-				-- { 'd', cmd 'lua vim.diagnostic.disable()', { exit = true, desc = 'Disable Diagnostic' } },
-
 				{ "c", cmd("ColorizerToggle"), { exit = true, desc = "Colorizer" } },
 				{ "o", cmd("SymbolsOutline"), { exit = true, desc = "Symbol" } },
-				-- { "l", cmd("EyelinerToggle"), { exit = true, desc = "Inline Jump" } },
-				-- { "c", cmd("NvimContextVtToggle"), { exit = true, desc = "Virtual Context" } },
-				-- { "t", require("typebreak").start, { exit = true, desc = "Typebreak" } },
 				{
 					"l",
 					function()
@@ -168,12 +157,6 @@ return {
 					function()
 						if vim.o.wrap ~= true then
 							vim.o.wrap = true
-							-- Dealing with word wrap:
-							-- If cursor is inside very long line in the file than wraps
-							-- around several rows on the screen, then 'j' key moves you to
-							-- the next line in the file, but not to the next row on the
-							-- screen under your previous position as in other editors. These
-							-- bindings fixes this.
 							vim.keymap.set("n", "k", function()
 								return vim.v.count > 0 and "k" or "gk"
 							end, { expr = true, desc = "k or gk" })
@@ -301,22 +284,6 @@ return {
 					position = "bottom",
 					border = "rounded",
 				},
-				-- on_enter = function()
-				-- 	vim.cmd("mkview")
-				-- 	vim.cmd("silent! %foldopen!")
-				-- 	vim.bo.modifiable = false
-				-- 	-- gitsigns.toggle_signs(true)
-				-- 	gitsigns.toggle_linehl(true)
-				-- end,
-				-- on_exit = function()
-				-- 	local cursor_pos = vim.api.nvim_win_get_cursor(0)
-				-- 	vim.cmd("loadview")
-				-- 	vim.api.nvim_win_set_cursor(0, cursor_pos)
-				-- 	vim.cmd("normal zv")
-				-- 	-- gitsigns.toggle_signs(false)
-				-- 	gitsigns.toggle_linehl(false)
-				-- 	gitsigns.toggle_deleted(false)
-				-- end,
 			},
 			mode = { "n", "x" },
 			body = "<leader>x",

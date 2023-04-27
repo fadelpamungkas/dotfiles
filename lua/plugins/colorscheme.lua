@@ -41,43 +41,34 @@ return {
 	-- 	priority = 1000,
 	-- 	branch = "v3",
 	-- 	dependencies = "rktjmp/lush.nvim",
+	-- },
+	-- {
+	-- 	"bluz71/vim-nightfly-colors",
+	-- 	priority = 1000,
 	-- 	config = function()
-	-- 		vim.g.falcon_inactive = 0
-	-- 		vim.g.falcon_background = 1
-	-- 		vim.g.falcon_settings = {
-	-- 			variation = "modern",
+	-- 		-- Lua initialization file
+	-- 		vim.g.nightflyItalics = false
+	-- 		vim.g.nightflyWinSeparator = 2
+	-- 		vim.opt.fillchars = {
+	-- 			horiz = "━",
+	-- 			horizup = "┻",
+	-- 			horizdown = "┳",
+	-- 			vert = "┃",
+	-- 			vertleft = "┫",
+	-- 			vertright = "┣",
+	-- 			verthoriz = "╋",
 	-- 		}
-	-- 		package.loaded["falcon"] = nil
-	-- 		require("lush")(require("falcon").setup())
+	--
+	-- 		-- local custom_highlight = vim.api.nvim_create_augroup("CustomHighlight", {})
+	-- 		-- vim.api.nvim_create_autocmd("ColorScheme", {
+	-- 		-- 	pattern = "nightfly",
+	-- 		-- 	callback = function()
+	-- 		-- 		vim.api.nvim_set_hl(0, "Function", { fg = "#82aaff", bold = true })
+	-- 		-- 	end,
+	-- 		-- 	group = custom_highlight,
+	-- 		-- })
 	-- 	end,
 	-- },
-	{
-		"bluz71/vim-nightfly-colors",
-		priority = 1000,
-		config = function()
-			-- Lua initialization file
-			vim.g.nightflyItalics = false
-			vim.g.nightflyWinSeparator = 2
-			vim.opt.fillchars = {
-				horiz = "━",
-				horizup = "┻",
-				horizdown = "┳",
-				vert = "┃",
-				vertleft = "┫",
-				vertright = "┣",
-				verthoriz = "╋",
-			}
-
-			-- local custom_highlight = vim.api.nvim_create_augroup("CustomHighlight", {})
-			-- vim.api.nvim_create_autocmd("ColorScheme", {
-			-- 	pattern = "nightfly",
-			-- 	callback = function()
-			-- 		vim.api.nvim_set_hl(0, "Function", { fg = "#82aaff", bold = true })
-			-- 	end,
-			-- 	group = custom_highlight,
-			-- })
-		end,
-	},
 	{
 		"rebelot/kanagawa.nvim",
 		priority = 1000,
@@ -120,6 +111,7 @@ return {
 			},
 		},
 	},
+	-- { "pbrisbin/vim-colors-off" },
 	-- {
 	-- 	"loctvl842/monokai-pro.nvim",
 	-- 	priority = 1000,
@@ -145,8 +137,8 @@ return {
 	-- 	priority = 1000,
 	-- },
 	-- { 'sainnhe/everforest', priority = 1000 },
-	-- { "kvrohit/rasmus.nvim", priority = 1000 },
-	-- { "kvrohit/mellow.nvim", priority = 1000 },
+	-- { "kvrohit/rasmus.nvim" },
+	-- { "kvrohit/mellow.nvim" },
 	-- { "davidosomething/vim-colors-meh", priority = 1000 },
 	-- {
 	-- 	"catppuccin/nvim",
@@ -225,7 +217,6 @@ return {
 	-- 	event = "VeryLazy",
 	-- },
 	--  { 'vimoxide/vim-cinnabar' },
-	--  { 'pbrisbin/vim-colors-off' },
 	--  { 'andreypopp/vim-colors-plain' },
 	-- {
 	-- 	"olivercederborg/poimandres.nvim",
@@ -264,8 +255,7 @@ return {
 	-- 		})
 	-- 	end,
 	-- },
-	--
-	-- { "RRethy/nvim-base16", event = "VeryLazy" },
+	-- { "RRethy/nvim-base16" },
 	--  {
 	--   'rockerBOO/boo-colorscheme-nvim',
 	--   config = function()

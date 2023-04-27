@@ -88,10 +88,10 @@ return {
 				{
 					"l",
 					function()
-						if vim.o.laststatus == 2 then
+						if vim.o.laststatus > 2 then
 							vim.o.laststatus = 0
 						else
-							vim.o.laststatus = 2
+							vim.o.laststatus = vim.o.laststatus + 1
 						end
 					end,
 					{ desc = "laststatus" },

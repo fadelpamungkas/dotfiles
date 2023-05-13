@@ -1,74 +1,9 @@
 return {
-	-- {
-	-- 	"nyoom-engineering/oxocarbon.nvim",
-	-- 	priority = 1000,
-	-- },
-	-- {
-	-- 	"Yazeed1s/minimal.nvim",
-	-- 	priority = 1000,
-	-- 	config = function()
-	-- 		vim.g.minimal_transparent_background = true
-	-- 	end,
-	-- },
-	-- {
-	-- 	"EdenEast/nightfox.nvim",
-	-- 	priority = 1000,
-	-- 	opts = {
-	-- 		options = {
-	-- 			transparent = true, -- Disable setting background
-	-- 		},
-	-- 	},
-	-- },
-	-- {
-	-- 	"sainnhe/gruvbox-material",
-	-- 	priority = 1000,
-	-- 	config = function()
-	-- 		vim.g.gruvbox_material_background = "hard"
-	-- 	end,
-	-- },
-	-- {
-	-- 	"sainnhe/sonokai",
-	-- 	priority = 1000,
-	-- 	config = function()
-	-- 		vim.g.sonokai_transparent_background = 1
-	-- 		vim.g.sonokai_diagnostic_text_highlight = 1
-	-- 		vim.g.sonokai_diagnostic_line_highlight = 1
-	-- 		vim.g.sonokai_diagnostic_virtual_text = "colored"
-	-- 	end,
-	-- },
-	-- {
-	-- 	"fenetikm/falcon",
-	-- 	priority = 1000,
-	-- 	branch = "v3",
-	-- 	dependencies = "rktjmp/lush.nvim",
-	-- },
-	-- {
-	-- 	"bluz71/vim-nightfly-colors",
-	-- 	priority = 1000,
-	-- 	config = function()
-	-- 		-- Lua initialization file
-	-- 		vim.g.nightflyItalics = false
-	-- 		vim.g.nightflyWinSeparator = 2
-	-- 		vim.opt.fillchars = {
-	-- 			horiz = "━",
-	-- 			horizup = "┻",
-	-- 			horizdown = "┳",
-	-- 			vert = "┃",
-	-- 			vertleft = "┫",
-	-- 			vertright = "┣",
-	-- 			verthoriz = "╋",
-	-- 		}
-	--
-	-- 		-- local custom_highlight = vim.api.nvim_create_augroup("CustomHighlight", {})
-	-- 		-- vim.api.nvim_create_autocmd("ColorScheme", {
-	-- 		-- 	pattern = "nightfly",
-	-- 		-- 	callback = function()
-	-- 		-- 		vim.api.nvim_set_hl(0, "Function", { fg = "#82aaff", bold = true })
-	-- 		-- 	end,
-	-- 		-- 	group = custom_highlight,
-	-- 		-- })
-	-- 	end,
-	-- },
+  {
+    dir = "~/.config/nvim/falcon2",
+    priority = 1000,
+		dependencies = "rktjmp/lush.nvim",
+  },
 	{
 		"rebelot/kanagawa.nvim",
 		priority = 1000,
@@ -111,7 +46,135 @@ return {
 			},
 		},
 	},
-	-- { "pbrisbin/vim-colors-off" },
+	{
+		"sainnhe/gruvbox-material",
+		priority = 1000,
+		config = function()
+			vim.g.gruvbox_material_background = "hard"
+		end,
+	},
+	-- {
+	-- 	"sainnhe/sonokai",
+	-- 	priority = 1000,
+	-- 	config = function()
+	-- 		vim.g.sonokai_transparent_background = 1
+	-- 		vim.g.sonokai_diagnostic_text_highlight = 1
+	-- 		vim.g.sonokai_diagnostic_line_highlight = 1
+	-- 		vim.g.sonokai_diagnostic_virtual_text = "colored"
+	-- 	end,
+	-- },
+	{
+		"nyoom-engineering/oxocarbon.nvim",
+		priority = 1000,
+	},
+	-- {
+	-- 	"Yazeed1s/minimal.nvim",
+	-- 	priority = 1000,
+	-- 	config = function()
+	-- 		vim.g.minimal_transparent_background = true
+	-- 	end,
+	-- },
+	-- {
+	-- 	"EdenEast/nightfox.nvim",
+	-- 	priority = 1000,
+	-- 	opts = {
+	-- 		options = {
+	-- 			-- Compiled file's destination location
+	-- 			compile_path = vim.fn.stdpath("cache") .. "/nightfox",
+	-- 			compile_file_suffix = "_compiled", -- Compiled file suffix
+	-- 			transparent = true, -- Disable setting background
+	-- 			terminal_colors = true, -- Set terminal colors (vim.g.terminal_color_*) used in `:terminal`
+	-- 			dim_inactive = false, -- Non focused panes set to alternative background
+	-- 			styles = { -- Style to be applied to different syntax groups
+	-- 				comments = "italic", -- Value is any valid attr-list value `:help attr-list`
+	-- 				conditionals = "NONE",
+	-- 				constants = "NONE",
+	-- 				functions = "NONE",
+	-- 				keywords = "NONE",
+	-- 				numbers = "NONE",
+	-- 				operators = "NONE",
+	-- 				strings = "NONE",
+	-- 				types = "NONE",
+	-- 				variables = "NONE",
+	-- 			},
+	-- 			inverse = { -- Inverse highlight for different types
+	-- 				match_paren = false,
+	-- 				visual = false,
+	-- 				search = false,
+	-- 			},
+	-- 			modules = { -- List of various plugins and additional options
+	-- 				-- ...
+	-- 			},
+	-- 		},
+	-- 		-- palettes = {
+	-- 		-- 	nightfox = {
+	-- 		-- 		-- A specific style's value will be used over the `all`'s value
+	-- 		-- 		-- red = "#c94f6d",
+	-- 		-- 		-- comment = "#60728a",
+	-- 		-- 	},
+	-- 		-- },
+	-- 		-- specs = {
+	-- 		-- 	nightfox = {
+	-- 		-- 		syntax = {
+	-- 		-- 			bracket = "white.dim",
+	-- 		-- 			builtin0 = "red",
+	-- 		-- 			builtin1 = "white.dim",
+	-- 		-- 			builtin2 = "yellow",
+	-- 		-- 			-- comment = "",
+	-- 		-- 			conditional = "blue",
+	-- 		-- 			-- const = "",
+	-- 		-- 			-- dep = "",
+	-- 		-- 			field = "white.dim",
+	-- 		-- 			func = "blue.dim",
+	-- 		-- 			ident = "cyan",
+	-- 		-- 			keyword = "blue",
+	-- 		-- 			-- number = "",
+	-- 		-- 			-- operator = "",
+	-- 		-- 			preproc = "red",
+	-- 		-- 			-- regex = "",
+	-- 		-- 			-- statement = "",
+	-- 		-- 			string = "green",
+	-- 		-- 			type = "white.dim",
+	-- 		-- 			variable = "white.dim",
+	-- 		-- 		},
+	-- 		-- 	},
+	-- 		-- },
+	-- 		-- groups = {},
+	-- 	},
+	-- },
+	-- {
+	-- 	"fenetikm/falcon",
+	-- 	priority = 1000,
+	-- 	branch = "v3",
+	-- 	dependencies = "rktjmp/lush.nvim",
+	-- },
+	-- {
+	-- 	"bluz71/vim-nightfly-colors",
+	-- 	priority = 1000,
+	-- 	config = function()
+	-- 		-- Lua initialization file
+	-- 		vim.g.nightflyItalics = false
+	-- 		vim.g.nightflyWinSeparator = 2
+	-- 		vim.opt.fillchars = {
+	-- 			horiz = "━",
+	-- 			horizup = "┻",
+	-- 			horizdown = "┳",
+	-- 			vert = "┃",
+	-- 			vertleft = "┫",
+	-- 			vertright = "┣",
+	-- 			verthoriz = "╋",
+	-- 		}
+	--
+	-- 		-- local custom_highlight = vim.api.nvim_create_augroup("CustomHighlight", {})
+	-- 		-- vim.api.nvim_create_autocmd("ColorScheme", {
+	-- 		-- 	pattern = "nightfly",
+	-- 		-- 	callback = function()
+	-- 		-- 		vim.api.nvim_set_hl(0, "Function", { fg = "#82aaff", bold = true })
+	-- 		-- 	end,
+	-- 		-- 	group = custom_highlight,
+	-- 		-- })
+	-- 	end,
+	-- },
 	-- {
 	-- 	"loctvl842/monokai-pro.nvim",
 	-- 	priority = 1000,
@@ -132,6 +195,7 @@ return {
 	-- 		filter = "octagon", -- classic | octagon | pro | machine | ristretto | spectrum
 	-- 	},
 	-- },
+	-- { "pbrisbin/vim-colors-off" },
 	-- {
 	-- 	"ishan9299/nvim-solarized-lua",
 	-- 	priority = 1000,
@@ -209,12 +273,14 @@ return {
 	-- 		disable_italics = true,
 	-- 	},
 	-- },
-	-- { "aktersnurra/no-clown-fiesta.nvim", event = "VeryLazy" },
+	-- { "aktersnurra/no-clown-fiesta.nvim" },
 	-- { "VonHeikemen/little-wonder", event = "VeryLazy" },
 	-- {
 	-- 	"mcchrish/zenbones.nvim",
 	-- 	dependencies = "rktjmp/lush.nvim",
-	-- 	event = "VeryLazy",
+	-- 	config = function()
+	-- 		vim.g.zenwritten_transparent_background = true
+	-- 	end,
 	-- },
 	--  { 'vimoxide/vim-cinnabar' },
 	--  { 'andreypopp/vim-colors-plain' },
@@ -233,7 +299,7 @@ return {
 	--   requires = { "rktjmp/lush.nvim" }
 	-- },
 	--  'cocopon/iceberg.vim',
-	--  'kyazdani42/blue-moon',
+	-- "kyazdani42/blue-moon",
 	--  {
 	--   'He4eT/desolate.nvim',
 	--   requires = { 'rktjmp/lush.nvim' },
@@ -249,9 +315,12 @@ return {
 	-- },
 	-- {
 	-- 	"projekt0n/github-nvim-theme",
+	-- 	branch = "0.0.x",
 	-- 	config = function()
 	-- 		require("github-theme").setup({
-	-- 			-- ...
+	-- 			options = {
+	-- 				transparent = true,
+	-- 			},
 	-- 		})
 	-- 	end,
 	-- },

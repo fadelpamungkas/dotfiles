@@ -12,7 +12,7 @@ return {
 				},
 				opts = {
 					-- position = "center",
-					hl = "Function",
+					hl = "Constant",
 				},
 			},
 		},

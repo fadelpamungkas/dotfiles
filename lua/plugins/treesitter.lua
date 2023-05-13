@@ -3,12 +3,7 @@ return {
 	build = ":TSUpdate",
 	event = { "BufReadPost", "BufNewFile" },
 	dependencies = {
-		{
-			"andymass/vim-matchup",
-			config = function()
-				vim.cmd([[hi MatchWord guibg=NONE]])
-			end,
-		},
+		{ "andymass/vim-matchup" },
 		{ "nvim-treesitter/nvim-treesitter-textobjects" },
 		{ "nvim-treesitter/nvim-treesitter-context", config = true },
 	},

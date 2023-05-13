@@ -11,9 +11,9 @@ return {
 		local cmp = require("cmp")
 
 		cmp.setup({
-			completion = {
-				autocomplete = true,
-			},
+			-- completion = {
+			-- 	autocomplete = true,
+			-- },
 			view = {
 				entries = "custom", -- can be "custom", "wildmenu" or "native"
 				selection_order = "near_cursor",
@@ -37,6 +37,10 @@ return {
 				["<c-d>"] = cmp.mapping.scroll_docs(-4),
 				["<c-f>"] = cmp.mapping.scroll_docs(4),
 				["<C-Space>"] = cmp.mapping.close(),
+				["<c-s>"] = cmp.mapping.confirm({
+					behavior = cmp.ConfirmBehavior.replace,
+					select = true,
+				}),
 				["<CR>"] = cmp.mapping.confirm({
 					behavior = cmp.ConfirmBehavior.replace,
 					select = true,
@@ -58,12 +62,13 @@ return {
 					end
 				end, { "i", "s" }),
 			}),
-			sources = {
+			sources = cmp.config.sources({
 				{ name = "nvim_lsp" },
-				{ name = "luasnip" },
+				{ name = "luasnip", keyword_length = 2 },
+			}, {
 				{ name = "buffer" },
 				{ name = "path" },
-			},
+			}),
 		})
 
 		cmp.setup.cmdline({ "/", "?" }, {

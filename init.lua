@@ -17,7 +17,8 @@ if g.neovide ~= nil then
 	g.neovide_cursor_trail_size = 0
 	g.neovide_scale_factor = 1
 	g.neovide_transparency = 1
-	g.transparency = 0.5 -- g.neovide_background_color = "#0f1117"
+	g.transparency = 0.5
+	-- g.neovide_background_color = "#0f1117"
 	vim.keymap.set("n", "<F9>", ":let g:neovide_fullscreen = !g:neovide_fullscreen<CR>")
 end
 
@@ -98,4 +99,12 @@ vim.api.nvim_create_autocmd("User", {
 	end,
 })
 
-vim.cmd.colorscheme("nightfly")
+-- vim.g.falcon_inactive = 0
+-- vim.g.falcon_background = 1
+-- vim.g.falcon_settings = {
+-- 	variation = "modern",
+-- }
+-- package.loaded["falcon"] = nil
+-- require("lush")(require("falcon").setup())
+
+vim.cmd.colorscheme("falcon2")

@@ -7,6 +7,18 @@ return {
 	},
 
 	{
+		"williamboman/mason.nvim",
+		cmd = "Mason",
+		build = ":MasonUpdate", -- :MasonUpdate updates registry contents
+		opts = {
+			ui = {
+				width = 1,
+				height = 1,
+			},
+		},
+	},
+
+	{
 		"mbbill/undotree",
 		cmd = "UndotreeToggle",
 		keys = { { "<leader>u", "<cmd>UndotreeToggle<CR>" } },
@@ -14,12 +26,34 @@ return {
 
 	{
 		"simrat39/rust-tools.nvim",
-		dependencies = {
-			"neovim/nvim-lspconfig",
-			"nvim-lua/plenary.nvim",
-			"mfussenegger/nvim-dap",
-		},
+		-- dependencies = {
+		-- 	"neovim/nvim-lspconfig",
+		-- 	"nvim-lua/plenary.nvim",
+		-- 	"mfussenegger/nvim-dap",
+		-- },
 		ft = "rust",
+		config = function()
+			require("rust-tools").setup({
+				-- server = {
+				-- 	on_attach = on_attach,
+				-- },
+				-- capabilities = capabilities,
+				tools = {
+					inlay_hints = {
+						auto = true,
+						only_current_line = false,
+						show_parameter_hints = true,
+						parameter_hints_prefix = "<- ",
+						other_hints_prefix = "",
+						max_len_align = false,
+						max_len_align_padding = 1,
+						right_align = false,
+						right_align_padding = 7,
+						highlight = "Comment",
+					},
+				},
+			})
+		end,
 	},
 
 	-- {

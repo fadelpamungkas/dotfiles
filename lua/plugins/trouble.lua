@@ -6,7 +6,7 @@ return {
 	},
 	opts = {
 		position = "bottom", -- position of the list can be: bottom, top, left, right
-		height = 20, -- height of the trouble list when position is top or bottom
+		height = 10, -- height of the trouble list when position is top or bottom
 		width = 50, -- width of the list when position is left or right
 		mode = "document_diagnostics", -- "workspace_diagnostics", "document_diagnostics", "quickfix", "lsp_references", "loclist"
 		group = true, -- group results by file

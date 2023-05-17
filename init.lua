@@ -46,7 +46,7 @@ opt.splitbelow = true -- Open new split below
 opt.splitright = true -- Open new split to the right
 opt.completeopt = { "menu", "menuone", "noselect" }
 opt.scrolloff = 2 -- Columns of context
-opt.signcolumn = "auto" -- always show signcolumns
+opt.signcolumn = "yes" -- always show signcolumns
 opt.cmdheight = 1 -- v0.8.0
 opt.laststatus = 3
 
@@ -63,9 +63,9 @@ map("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 map("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 
 map("n", "<c-s>", [[:%s/\<<c-r><c-w>\>/<c-r><c-w>/gI<left><left><left>]])
-map("n", "<Right>", "<cmd>:vertical resize +2<CR>")
-map("n", "<Left>", "<cmd>:vertical resize -2<CR>")
-map("n", "<Up>", "<cmd>resize +2<CR>")
+map("n", "<Right>", "<cmd>:vertical resize +1<CR>")
+map("n", "<Left>", "<cmd>:vertical resize -1<CR>")
+map("n", "<Up>", "<cmd>resize +1<CR>")
 map("n", "<Down>", "<cmd>resize -1<CR>")
 map("n", "<c-j>", "<c-w>j")
 map("n", "<c-k>", "<c-w>k")
@@ -107,4 +107,4 @@ vim.api.nvim_create_autocmd("User", {
 -- package.loaded["falcon"] = nil
 -- require("lush")(require("falcon").setup())
 
-vim.cmd.colorscheme("falcon2")
+vim.cmd.colorscheme("kanagawa")

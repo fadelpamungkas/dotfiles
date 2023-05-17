@@ -8,9 +8,9 @@ return {
 		local hint = [[
                  _f_: files       _m_: marks
    🭇🬭🬭🬭🬭🬭🬭🬭🬭🬼    _o_: old files   _g_: live grep
-  🭉🭁🭠🭘    🭣🭕🭌🬾   _p_: projects    _/_: search in file
+  🭉🭁🭠🭘    🭣🭕🭌🬾
   🭅█ ▁     █🭐
-  ██🬿      🭊██   _r_: resume      _u_: undotree
+  ██🬿      🭊██   _r_: resume      _/_: search in file
  🭋█🬝🮄🮄🮄🮄🮄🮄🮄🮄🬆█🭀  _h_: vim help    _c_: colorscheme
  🭤🭒🬺🬹🬱🬭🬭🬭🬭🬵🬹🬹🭝🭙  _k_: keymaps     _;_: commands history 
                  _O_: options     _?_: search history
@@ -40,12 +40,10 @@ return {
 				{ "k", cmd("Telescope keymaps") },
 				{ "O", cmd("Telescope vim_options") },
 				{ "r", cmd("Telescope resume") },
-				{ "p", cmd("Telescope projects"), { desc = "projects" } },
 				{ "/", cmd("Telescope current_buffer_fuzzy_find"), { desc = "search in file" } },
 				{ "?", cmd("Telescope search_history"), { desc = "search history" } },
 				{ ";", cmd("Telescope command_history"), { desc = "command-line history" } },
 				{ "c", cmd("Telescope colorscheme"), { desc = "colorscheme" } },
-				{ "u", cmd("silent! %foldopen! | UndotreeToggle"), { desc = "undotree" } },
 				{ "<Enter>", cmd("Telescope"), { exit = true, desc = "list all pickers" } },
 				{ "<Esc>", nil, { exit = true, nowait = true } },
 				{ "q", nil, { exit = true, nowait = true } },
@@ -57,6 +55,7 @@ return {
   ^
   _c_ Colorizer
   _o_ Symbols Outline
+  _u_ Undotree
 
   _l_ laststatus
   _h_ cmdheight
@@ -85,6 +84,7 @@ return {
 			heads = {
 				{ "c", cmd("ColorizerToggle"), { exit = true, desc = "Colorizer" } },
 				{ "o", cmd("SymbolsOutline"), { exit = true, desc = "Symbol" } },
+				{ "u", cmd("silent! %foldopen! | UndotreeToggle"), { exit = true, desc = "undotree" } },
 				{
 					"l",
 					function()

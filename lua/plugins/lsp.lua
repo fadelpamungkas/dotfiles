@@ -3,28 +3,14 @@ return {
 	event = { "BufReadPre", "BufNewFile" },
 	dependencies = {
 		{ "hrsh7th/cmp-nvim-lsp" },
-		{
-			"williamboman/mason-lspconfig.nvim",
-		},
-		{
-			"williamboman/mason.nvim",
-			cmd = "Mason",
-			build = ":MasonUpdate", -- :MasonUpdate updates registry contents
-			opts = {
-				ui = {
-					width = 1,
-					height = 1,
-				},
-			},
-		},
+		{ "williamboman/mason-lspconfig.nvim" },
+		{ "folke/neodev.nvim" },
 	},
 	config = function()
-		local mason_lspconfig = require("mason-lspconfig")
-		local lspconfig = require("lspconfig")
+		require("neodev").setup()
 
 		-- Diagnostic
 		vim.diagnostic.config({
-			-- virtual_text = false,
 			virtual_text = {
 				spacing = 4,
 				prefix = "◼︎", -- could be '●', '▎', 'x'
@@ -45,106 +31,76 @@ return {
 		for type, _ in pairs(signs) do
 			local hl = "DiagnosticSign" .. type
 			vim.fn.sign_define(hl, {
-				-- text = icon,
 				texthl = hl,
 				numhl = hl,
 				linehl = hl,
 			})
 		end
 
-		local opts = { noremap = true, silent = true }
-		vim.keymap.set("n", "<leader>D", "<cmd>lua vim.diagnostic.open_float()<cr>", opts)
-		-- vim.keymap.set("n", "<leader>ds", "<cmd>lua vim.diagnostic.enable()<cr>", opts)
-		-- vim.keymap.set("n", "<leader>dh", "<cmd>lua vim.diagnostic.disable()<cr>", opts)
+		vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
+		vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
+		vim.keymap.set("n", "<leader>D", vim.diagnostic.open_float)
 
 		-- LSP setting
-		local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+		vim.api.nvim_create_autocmd("LspAttach", {
+			callback = function(args)
+				local bufnr = args.buf
+				local client = vim.lsp.get_client_by_id(args.data.client_id)
 
-		local on_attach = function(client, bufnr)
-			if client.name == "tsserver" or client.name == "rust_analyzer" then
-				client.server_capabilities.documentFormattingProvider = false
-				client.server_capabilities.documentRangeFormattingProvider = false
-			end
+				if client.name == "tsserver" or client.name == "rust_analyzer" then
+					client.server_capabilities.documentFormattingProvider = false
+					client.server_capabilities.documentRangeFormattingProvider = false
+				end
 
-			opts = { noremap = true, silent = true, buffer = bufnr }
+				local opts = { noremap = true, silent = true, buffer = bufnr }
 
-			vim.keymap.set("n", "gh", function()
-				vim.lsp.buf.format({
-					async = true,
-					filter = function(current)
-						return current.name == "null-ls"
-					end,
-					bufnr = bufnr,
-				})
-			end, opts)
-			vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
-			vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", opts)
-			vim.keymap.set("n", "gd", "<cmd>TroubleToggle lsp_definitions<cr>", opts)
-			vim.keymap.set("n", "gi", "<cmd>TroubleToggle lsp_implementations<cr>", opts)
-			vim.keymap.set("n", "gr", "<cmd>TroubleToggle lsp_references<cr>", opts)
-			vim.keymap.set("n", "gt", "<cmd>TroubleToggle lsp_type_definitions<cr>", opts)
-			vim.keymap.set("n", "gK", "<cmd>lua vim.lsp.buf.signature_help()<cr>", opts)
-			-- vim.keymap.set("n", "gR", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
-			vim.keymap.set("n", "ga", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
-			vim.keymap.set("n", "<leader>cq", "<cmd>TroubleToggle quickfix<cr>", opts)
-		end
+				vim.keymap.set("n", "gh", function()
+					vim.lsp.buf.format({
+						async = true,
+						filter = function(c)
+							return c.name == "null-ls"
+						end,
+						bufnr = bufnr,
+					})
+				end, opts)
+				vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
+				vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", opts)
+				vim.keymap.set("n", "gd", "<cmd>TroubleToggle lsp_definitions<cr>", opts)
+				vim.keymap.set("n", "gi", "<cmd>TroubleToggle lsp_implementations<cr>", opts)
+				vim.keymap.set("n", "gr", "<cmd>TroubleToggle lsp_references<cr>", opts)
+				vim.keymap.set("n", "gt", "<cmd>TroubleToggle lsp_type_definitions<cr>", opts)
+				vim.keymap.set("n", "gK", "<cmd>lua vim.lsp.buf.signature_help()<cr>", opts)
+				vim.keymap.set({ "n", "x" }, "ga", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
+			end,
+		})
+
+		local lspconfig = require("lspconfig")
+		local lsp_defaults = lspconfig.util.default_config
+		local mason_lspconfig = require("mason-lspconfig")
+
+		lsp_defaults.capabilities =
+			vim.tbl_deep_extend("force", lsp_defaults.capabilities, require("cmp_nvim_lsp").default_capabilities())
+
+		local servers = {
+			lua_ls = {},
+			-- clangd = {},
+			gopls = {},
+			pyright = {},
+			-- rust_analyzer = {},
+			tsserver = {},
+			tailwindcss = {},
+		}
 
 		mason_lspconfig.setup({
-			ensure_installed = {
-				"lua_ls",
-				"rust_analyzer",
-				"gopls",
-				"tsserver",
-				"tailwindcss",
-				"pyright",
-				"jsonls",
-				"yamlls",
-			},
+			ensure_installed = vim.tbl_keys(servers),
 		})
 
 		mason_lspconfig.setup_handlers({
-			function(server_name) -- Default handler (optional)
+			function(server_name)
 				lspconfig[server_name].setup({
-					on_attach = on_attach,
-					capabilities = capabilities,
-				})
-			end,
-			["rust_analyzer"] = function()
-				require("rust-tools").setup({
-					server = {
-						on_attach = on_attach,
-					},
-					capabilities = capabilities,
-					tools = {
-						inlay_hints = {
-							auto = true,
-							only_current_line = false,
-							show_parameter_hints = true,
-							parameter_hints_prefix = "<- ",
-							other_hints_prefix = "",
-							max_len_align = false,
-							max_len_align_padding = 1,
-							right_align = false,
-							right_align_padding = 7,
-							highlight = "Comment",
-						},
-					},
+					settings = servers[server_name],
 				})
 			end,
 		})
-
-		-- require("flutter-tools").setup({
-		-- 	widget_guides = { enabled = true },
-		-- 	dev_log = { enabled = true, open_cmd = "tabedit" },
-		-- 	lsp = {
-		-- 		color = {
-		-- 			enabled = false,
-		-- 			background = false,
-		-- 			virtual_text = false,
-		-- 		},
-		-- 		on_attach = on_attach,
-		-- 		capabilities = capabilities,
-		-- 	},
-		-- })
 	end,
 }

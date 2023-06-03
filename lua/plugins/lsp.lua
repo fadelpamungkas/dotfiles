@@ -12,30 +12,17 @@ return {
 		-- Diagnostic
 		vim.diagnostic.config({
 			virtual_text = {
-				spacing = 4,
 				prefix = "◼︎", -- could be '●', '▎', 'x'
 			},
-			signs = true,
 			underline = false,
-			update_in_insert = false,
 			severity_sort = true,
-			float = {
-				focusable = false,
-				style = "minimal",
-				source = "always",
-				prefix = "",
-			},
 		})
 
-		local signs = { Error = "E", Warn = "W", Hint = "H", Info = "I" }
-		for type, _ in pairs(signs) do
-			local hl = "DiagnosticSign" .. type
-			vim.fn.sign_define(hl, {
-				texthl = hl,
-				numhl = hl,
-				linehl = hl,
-			})
-		end
+		-- local signs = { Error = "E", Warn = "W", Hint = "H", Info = "I" }
+		-- for type, _ in pairs(signs) do
+		-- 	local hl = "DiagnosticSign" .. type
+		-- 	vim.fn.sign_define(hl, { texthl = hl, numhl = hl, linehl = hl })
+		-- end
 
 		vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 		vim.keymap.set("n", "]d", vim.diagnostic.goto_next)

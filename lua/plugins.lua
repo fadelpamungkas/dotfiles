@@ -1,4 +1,6 @@
 return {
+	{ "nvim-lua/plenary.nvim" },
+
 	{
 		"toppair/peek.nvim",
 		run = "deno task --quiet build:fast",
@@ -9,35 +11,20 @@ return {
 	{
 		"williamboman/mason.nvim",
 		cmd = "Mason",
-		build = ":MasonUpdate", -- :MasonUpdate updates registry contents
-		opts = {
-			ui = {
-				width = 1,
-				height = 1,
-			},
-		},
+		build = ":MasonUpdate",
+		opts = { ui = { width = 1, height = 1 } },
 	},
 
 	{
 		"mbbill/undotree",
 		cmd = "UndotreeToggle",
-		keys = { { "<leader>u", "<cmd>UndotreeToggle<CR>" } },
 	},
 
 	{
 		"simrat39/rust-tools.nvim",
-		-- dependencies = {
-		-- 	"neovim/nvim-lspconfig",
-		-- 	"nvim-lua/plenary.nvim",
-		-- 	"mfussenegger/nvim-dap",
-		-- },
 		ft = "rust",
 		config = function()
 			require("rust-tools").setup({
-				-- server = {
-				-- 	on_attach = on_attach,
-				-- },
-				-- capabilities = capabilities,
 				tools = {
 					inlay_hints = {
 						auto = true,
@@ -56,12 +43,6 @@ return {
 		end,
 	},
 
-	-- {
-	-- 	"akinsho/flutter-tools.nvim",
-	-- 	dependencies = { "nvim-lua/plenary.nvim" },
-	-- 	ft = "dart",
-	-- },
-
 	{
 		"smjonas/inc-rename.nvim",
 		cmd = "IncRename",
@@ -73,7 +54,6 @@ return {
 					return ":IncRename " .. vim.fn.expand("<cword>")
 				end,
 				mode = { "n", "x", "o" },
-				desc = "Rename",
 				expr = true,
 			},
 		},

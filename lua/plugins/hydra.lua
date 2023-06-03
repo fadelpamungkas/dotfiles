@@ -6,16 +6,15 @@ return {
 		local cmd = require("hydra.keymap-util").cmd
 
 		local hint = [[
-                 _f_: files       _m_: marks
-   🭇🬭🬭🬭🬭🬭🬭🬭🬭🬼    _o_: old files   _g_: live grep
-  🭉🭁🭠🭘    🭣🭕🭌🬾
-  🭅█ ▁     █🭐
-  ██🬿      🭊██   _r_: resume      _/_: search in file
- 🭋█🬝🮄🮄🮄🮄🮄🮄🮄🮄🬆█🭀  _h_: vim help    _c_: colorscheme
- 🭤🭒🬺🬹🬱🬭🬭🬭🬭🬵🬹🬹🭝🭙  _k_: keymaps     _;_: commands history 
-                 _O_: options     _?_: search history
- ^
-                 _<Enter>_: Telescope           _<Esc>_ / _q_
+                 
+   🭇🬭🬭🬭🬭🬭🬭🬭🬭🬼    _j_: jumplist    _m_: marks
+  🭉🭁🭠🭘    🭣🭕🭌🬾   _r_: resume      _R_: registers
+  🭅█ ▁     █🭐   _h_: vim help    _c_: colorscheme
+  ██🬿      🭊██   _k_: keymaps     _;_: commands history 
+ 🭋█🬝🮄🮄🮄🮄🮄🮄🮄🮄🬆█🭀  _o_: options     _?_: search history
+ 🭤🭒🬺🬹🬱🬭🬭🬭🬭🬵🬹🬹🭝🭙  
+                 _t_: Telescope           _<Esc>_ / _q_ 
+
 ]]
 
 		hydra({
@@ -32,19 +31,17 @@ return {
 			mode = "n",
 			body = "<Leader>t",
 			heads = {
-				{ "f", cmd("Telescope find_files") },
-				{ "g", cmd("Telescope live_grep") },
-				{ "o", cmd("Telescope oldfiles"), { desc = "recently opened files" } },
-				{ "h", cmd("Telescope help_tags"), { desc = "vim help" } },
-				{ "m", cmd("Telescope marks"), { desc = "marks" } },
-				{ "k", cmd("Telescope keymaps") },
-				{ "O", cmd("Telescope vim_options") },
+				{ "j", cmd("Telescope jumplist") },
+				{ "m", cmd("Telescope marks") },
 				{ "r", cmd("Telescope resume") },
-				{ "/", cmd("Telescope current_buffer_fuzzy_find"), { desc = "search in file" } },
-				{ "?", cmd("Telescope search_history"), { desc = "search history" } },
-				{ ";", cmd("Telescope command_history"), { desc = "command-line history" } },
-				{ "c", cmd("Telescope colorscheme"), { desc = "colorscheme" } },
-				{ "<Enter>", cmd("Telescope"), { exit = true, desc = "list all pickers" } },
+				{ "h", cmd("Telescope help_tags") },
+				{ "k", cmd("Telescope keymaps") },
+				{ "o", cmd("Telescope vim_options") },
+				{ "R", cmd("Telescope registers") },
+				{ "c", cmd("Telescope colorscheme") },
+				{ "?", cmd("Telescope search_history") },
+				{ ";", cmd("Telescope command_history") },
+				{ "t", cmd("Telescope"), { exit = true } },
 				{ "<Esc>", nil, { exit = true, nowait = true } },
 				{ "q", nil, { exit = true, nowait = true } },
 			},
@@ -110,10 +107,10 @@ return {
 				{
 					"s",
 					function()
-						if vim.o.signcolumn == "auto" then
+						if vim.o.signcolumn == "yes" then
 							vim.o.signcolumn = "no"
 						else
-							vim.o.signcolumn = "auto"
+							vim.o.signcolumn = "yes"
 						end
 					end,
 					{ desc = "signcolumn" },

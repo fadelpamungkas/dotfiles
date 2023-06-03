@@ -7,8 +7,6 @@ return {
 		{ "<leader>s", "<cmd>Telescope current_buffer_fuzzy_find<CR>" },
 		{ "<leader>S", "<cmd>Telescope live_grep<CR>" },
 		{ "<leader>b", "<cmd>Telescope buffers<CR>" },
-		{ "<leader>R", "<cmd>Telescope registers<CR>" },
-		{ "<leader>c", "<cmd>Telescope command_history<CR>" },
 		{
 			"<leader>m",
 			function()

@@ -15,21 +15,8 @@ return {
 		vim.keymap.set("n", "<leader>cd", crates.show_dependencies_popup, opts)
 
 		return {
-			smart_insert = true,
-			insert_closing_quote = true,
-			avoid_prerelease = true,
-			autoload = true,
-			autoupdate = true,
-			autoupdate_throttle = 250,
-			loading_indicator = true,
-			date_format = "%Y-%m-%d",
-			thousands_separator = ".",
-			notification_title = "Crates",
-			curl_args = { "-sL", "--retry", "1" },
-			disable_invalid_feature_diagnostic = false,
 			null_ls = {
 				enabled = true,
-				name = "Crates",
 			},
 			text = {
 				loading = "  Loading...",
@@ -44,15 +31,7 @@ return {
 				autofocus = true,
 				show_version_date = true,
 				keys = {
-					hide = { "q", "<esc>" },
-					open_url = { "<cr>" },
-					select = { "<cr>" },
-					select_alt = { "s" },
 					toggle_feature = { "t", "<cr>" },
-					copy_value = { "yy" },
-					goto_item = { "gd", "K", "<C-LeftMouse>" },
-					jump_forward = { "<c-i>" },
-					jump_back = { "<c-o>", "<C-RightMouse>" },
 				},
 				text = {
 					title = "# %s",

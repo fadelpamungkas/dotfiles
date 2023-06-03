@@ -3,7 +3,6 @@ return {
 	build = ":TSUpdate",
 	event = { "BufReadPost", "BufNewFile" },
 	dependencies = {
-		{ "andymass/vim-matchup" },
 		{ "nvim-treesitter/nvim-treesitter-textobjects" },
 		{ "nvim-treesitter/nvim-treesitter-context", config = true },
 	},
@@ -35,15 +34,18 @@ return {
 					enable = true,
 					lookahead = true, -- automatically jump forward to textobj, similar to targets.vim
 					keymaps = {
-						-- you can use the capture groups defined in textobjects.scm
 						["aP"] = "@parameter.outer",
 						["iP"] = "@parameter.inner",
 						["af"] = "@function.outer",
 						["if"] = "@function.inner",
-						["ac"] = "@class.outer",
-						["ic"] = "@class.inner",
+						["aC"] = "@class.outer",
+						["iC"] = "@class.inner",
 						["aB"] = "@block.outer",
 						["iB"] = "@block.inner",
+						["ac"] = "@conditional.outer",
+						["ic"] = "@conditional.inner",
+						["al"] = "@loop.outer",
+						["il"] = "@loop.inner",
 					},
 					selection_modes = {
 						["@parameter.outer"] = "v", -- charwise
@@ -54,28 +56,20 @@ return {
 				},
 				move = {
 					enable = true,
-					set_jumps = true, -- whether to set jumps in the jumplist
+					set_jumps = false, -- whether to set jumps in the jumplist
 					goto_next_start = {
-						["]m"] = "@function.outer",
-						["]]"] = "@class.outer",
+						["]]"] = "@function.outer",
 					},
 					goto_next_end = {
-						["]n"] = "@function.outer",
-						["]["] = "@class.outer",
+						["]["] = "@function.outer",
 					},
 					goto_previous_start = {
-						["[m"] = "@function.outer",
-						["[["] = "@class.outer",
+						["[["] = "@function.outer",
 					},
 					goto_previous_end = {
-						["[n"] = "@function.outer",
-						["[]"] = "@class.outer",
+						["[]"] = "@function.outer",
 					},
 				},
-			},
-			matchup = {
-				enable = true,
-				disable_virtual_text = true,
 			},
 		})
 	end,

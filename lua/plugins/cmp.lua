@@ -34,10 +34,11 @@ return {
 				end,
 			},
 			mapping = cmp.mapping.preset.insert({
-				["<c-d>"] = cmp.mapping.scroll_docs(-4),
+				["<c-b>"] = cmp.mapping.scroll_docs(-4),
 				["<c-f>"] = cmp.mapping.scroll_docs(4),
+				["<C-e>"] = cmp.mapping.abort(),
 				["<C-Space>"] = cmp.mapping.close(),
-				["<c-s>"] = cmp.mapping.confirm({
+				["<c-y>"] = cmp.mapping.confirm({
 					behavior = cmp.ConfirmBehavior.replace,
 					select = true,
 				}),

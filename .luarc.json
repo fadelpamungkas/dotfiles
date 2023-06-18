@@ -69,6 +69,7 @@
         "/Users/fadel/.local/share/nvim/lazy/nvim-surround/lua",
         "/Users/fadel/.local/share/nvim/lazy/lualine-lsp-progress/lua",
         "/Users/fadel/.config/nvim/lua",
-        "${3rd}/luv/library"
+        "${3rd}/luv/library",
+        "${3rd}/luassert/library"
     ]
 }

@@ -1,22 +1,17 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
 	build = ":TSUpdate",
-	event = { "BufReadPost", "BufNewFile" },
+	event = { "BufReadPre", "BufNewFile" },
 	dependencies = {
 		{ "nvim-treesitter/nvim-treesitter-textobjects" },
 		{ "nvim-treesitter/nvim-treesitter-context", config = true },
 	},
 	config = function()
 		require("nvim-treesitter.configs").setup({
-			ensure_installed = "all",
-			sync_install = false,
-			ignore_install = { "phpdoc", "comment" },
+			ensure_installed = { "lua", "go", "rust" },
 			context_commentstring = { enable = true, enable_autocmd = false },
-			highlight = {
-				enable = true,
-				disable = {},
-				additional_vim_regex_highlighting = false,
-			},
+			highlight = { enable = true },
+			indent = { enable = true },
 			incremental_selection = {
 				enable = true,
 				keymaps = {
@@ -26,37 +21,34 @@ return {
 					node_decremental = "<c-p>",
 				},
 			},
-			indent = {
-				enable = true,
-			},
 			textobjects = {
 				select = {
 					enable = true,
-					lookahead = true, -- automatically jump forward to textobj, similar to targets.vim
+					lookahead = true,
 					keymaps = {
 						["aP"] = "@parameter.outer",
 						["iP"] = "@parameter.inner",
 						["af"] = "@function.outer",
 						["if"] = "@function.inner",
-						["aC"] = "@class.outer",
-						["iC"] = "@class.inner",
+						["ac"] = "@class.outer",
+						["ic"] = "@class.inner",
 						["aB"] = "@block.outer",
 						["iB"] = "@block.inner",
-						["ac"] = "@conditional.outer",
-						["ic"] = "@conditional.inner",
+						["ai"] = "@conditional.outer",
+						["ii"] = "@conditional.inner",
 						["al"] = "@loop.outer",
 						["il"] = "@loop.inner",
 					},
 					selection_modes = {
-						["@parameter.outer"] = "v", -- charwise
-						["@function.outer"] = "V", -- linewise
-						["@class.outer"] = "<c-v>", -- blockwise
+						["@parameter.outer"] = "v",
+						["@function.outer"] = "V",
+						["@class.outer"] = "<c-v>",
 					},
 					include_surrounding_whitespace = true,
 				},
 				move = {
 					enable = true,
-					set_jumps = false, -- whether to set jumps in the jumplist
+					set_jumps = false,
 					goto_next_start = {
 						["]]"] = "@function.outer",
 					},

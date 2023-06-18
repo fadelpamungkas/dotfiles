@@ -53,6 +53,7 @@ return {
   _c_ Colorizer
   _o_ Symbols Outline
   _u_ Undotree
+  _p_ Peek Markdown
 
   _l_ laststatus
   _h_ cmdheight
@@ -82,6 +83,17 @@ return {
 				{ "c", cmd("ColorizerToggle"), { exit = true, desc = "Colorizer" } },
 				{ "o", cmd("SymbolsOutline"), { exit = true, desc = "Symbol" } },
 				{ "u", cmd("silent! %foldopen! | UndotreeToggle"), { exit = true, desc = "undotree" } },
+				{
+					"p",
+					function()
+						if require("peek").is_open() then
+							require("peek").close()
+						else
+							require("peek").open()
+						end
+					end,
+					{ exit = true, desc = "Peek Markdown" },
+				},
 				{
 					"l",
 					function()

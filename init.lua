@@ -40,7 +40,9 @@ opt.splitbelow = true
 opt.splitright = true
 opt.completeopt = { "menu", "menuone", "noselect" }
 opt.scrolloff = 2
-opt.signcolumn = "no"
+opt.signcolumn = "yes"
+opt.number = true
+opt.relativenumber = true
 opt.laststatus = 3
 
 -- Remap space as leader key
@@ -79,4 +81,13 @@ vim.api.nvim_create_autocmd("User", {
 	end,
 })
 
-vim.cmd.colorscheme("kanagawa-dragon")
+vim.api.nvim_create_autocmd("ColorScheme", {
+	callback = function()
+		vim.api.nvim_set_hl(0, "LeapBackdrop", { link = "Comment" })
+		vim.api.nvim_set_hl(0, "LeapMatch", { fg = "white", nocombine = true })
+		vim.api.nvim_set_hl(0, "LeapLabelPrimary", { fg = "yellow", nocombine = true })
+		vim.api.nvim_set_hl(0, "LeapLabelSecondary", { fg = "red", nocombine = true })
+	end,
+})
+
+vim.cmd.colorscheme("gruvbox-material")

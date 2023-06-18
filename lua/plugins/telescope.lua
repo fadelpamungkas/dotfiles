@@ -7,17 +7,11 @@ return {
 		{ "<leader>s", "<cmd>Telescope current_buffer_fuzzy_find<CR>" },
 		{ "<leader>S", "<cmd>Telescope live_grep<CR>" },
 		{ "<leader>b", "<cmd>Telescope buffers<CR>" },
-		{
-			"<leader>m",
-			function()
-				require("telescope").extensions.project.project({})
-			end,
-			desc = "Find Project",
-		},
+		{ "<leader>m", "<cmd>Telescope zoxide list<CR>" },
 	},
 	dependencies = {
 		{ "nvim-lua/plenary.nvim" },
-		{ "nvim-telescope/telescope-project.nvim" },
+		{ "jvgrootveld/telescope-zoxide" },
 		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 	},
 	config = function()
@@ -86,128 +80,59 @@ return {
 		telescope.setup({
 			extensions = {},
 			defaults = {
-				layout_strategy = "bottom_pane",
-				-- file_ignore_patterns = {
-				-- 	".git",
-				-- },
+				layout_strategy = "buffer_window",
+				file_ignore_patterns = { "node_modules" },
+				initial_mode = "normal",
+				border = false,
+				sorting_strategy = "ascending",
+				preview = { hide_on_startup = true },
+				layout_config = { bottom_pane = { height = 10 } },
 				mappings = {
 					n = {
-						["q"] = require("telescope.actions").close,
 						["o"] = require("telescope.actions").select_default,
-						["s"] = require("telescope.actions").select_horizontal,
-						["v"] = require("telescope.actions").select_vertical,
+						["q"] = require("telescope.actions").close,
 						["p"] = require("telescope.actions.layout").toggle_preview,
 						["t"] = trouble.open_with_trouble,
 					},
 					i = {
-						["<c-q>"] = require("telescope.actions").close,
 						["<c-o>"] = require("telescope.actions").select_default,
-						["<c-s>"] = require("telescope.actions").select_horizontal,
-						["<c-v>"] = require("telescope.actions").select_vertical,
 						["<c-j>"] = require("telescope.actions").move_selection_next,
 						["<c-k>"] = require("telescope.actions").move_selection_previous,
 						["<c-p>"] = require("telescope.actions.layout").toggle_preview,
 						["<c-t>"] = trouble.open_with_trouble,
 					},
 				},
-				layout_config = {
-					bottom_pane = {
-						height = 20,
-						preview_cutoff = 120,
-						prompt_position = "top",
-					},
-					current_buffer = {
-						height = 0.5,
-						preview_cutoff = 0,
-						prompt_position = "bottom",
-					},
-					center = {
-						height = 0.4,
-						preview_cutoff = 40,
-						prompt_position = "top",
-						width = 0.5,
-					},
-					cursor = {
-						height = 0.9,
-						preview_cutoff = 40,
-						width = 0.8,
-					},
-					horizontal = {
-						height = 0.9,
-						preview_cutoff = 120,
-						prompt_position = "bottom",
-						width = 0.8,
-					},
-					vertical = {
-						height = 0.9,
-						preview_cutoff = 40,
-						prompt_position = "bottom",
-						width = 0.8,
-					},
-				},
-				initial_mode = "normal",
-				prompt_title = false,
-				border = false,
-				sorting_strategy = "ascending",
-				preview = {
-					hide_on_startup = true,
-				},
 			},
 			pickers = {
 				find_files = {
-					-- initial_mode = "insert",
-					layout_strategy = "buffer_window",
 					prompt_prefix = "File> ",
-					prompt_title = false,
 				},
 				oldfiles = {
-					layout_strategy = "buffer_window",
 					prompt_prefix = "Old File> ",
-					prompt_title = false,
 				},
 				live_grep = {
-					layout_strategy = "buffer_window",
 					initial_mode = "insert",
 					prompt_prefix = "Live Grep> ",
-					prompt_title = false,
 				},
 				current_buffer_fuzzy_find = {
-					layout_strategy = "buffer_window",
 					initial_mode = "insert",
 					prompt_prefix = "Fuzzy Find> ",
-					prompt_title = false,
-				},
-				registers = {
-					layout_strategy = "bottom_pane",
-					prompt_prefix = "Registers> ",
-					prompt_title = false,
-				},
-				git_commit = {
-					theme = "ivy",
 				},
 				colorscheme = {
 					layout_strategy = "bottom_pane",
 					prompt_prefix = "Colorscheme> ",
-					prompt_title = false,
 					enable_preview = true,
 				},
 				buffers = {
-					-- theme = "ivy",
-					layout_strategy = "buffer_window",
 					prompt_prefix = "Buffers> ",
-					prompt_title = false,
 					sort_lastuseed = true,
 					ignore_current_buffer = true,
 					only_cwd = true,
-					mappings = {
-						n = {
-							["d"] = "delete_buffer",
-						},
-					},
+					mappings = { n = { ["d"] = "delete_buffer" } },
 				},
 			},
 		})
 		telescope.load_extension("fzf")
-		telescope.load_extension("project")
+		telescope.load_extension("zoxide")
 	end,
 }

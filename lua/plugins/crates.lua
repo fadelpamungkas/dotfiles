@@ -1,6 +1,7 @@
 return {
 	"saecki/crates.nvim",
 	-- tag = "v0.3.0",
+  enabled = false,
 	event = "BufReadPre Cargo.toml",
 	dependencies = { "nvim-lua/plenary.nvim" },
 	opts = function()

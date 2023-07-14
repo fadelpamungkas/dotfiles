@@ -40,10 +40,10 @@ opt.splitbelow = true
 opt.splitright = true
 opt.completeopt = { "menu", "menuone", "noselect" }
 opt.scrolloff = 2
+opt.laststatus = 3
 opt.signcolumn = "yes"
 opt.number = true
 opt.relativenumber = true
-opt.laststatus = 3
 
 -- Remap space as leader key
 g.mapleader = " "
@@ -61,10 +61,10 @@ map("n", "<Left>", "<cmd>:vertical resize -1<CR>")
 map("n", "<Up>", "<cmd>resize +1<CR>")
 map("n", "<Down>", "<cmd>resize -1<CR>")
 
-map("n", "<c-j>", "<c-w>j")
-map("n", "<c-k>", "<c-w>k")
-map("n", "<c-h>", "<c-w>h")
-map("n", "<c-l>", "<c-w>l")
+map({ "n", "t" }, "<c-j>", "<c-w>j")
+map({ "n", "t" }, "<c-k>", "<c-w>k")
+map({ "n", "t" }, "<c-h>", "<c-w>h")
+map({ "n", "t" }, "<c-l>", "<c-w>l")
 
 map("n", "<c-s>", [[:%s/\<<c-r><c-w>\>/<c-r><c-w>/gI<left><left><left>]])
 map("n", "gV", "`[V`]")
@@ -83,11 +83,10 @@ vim.api.nvim_create_autocmd("User", {
 
 vim.api.nvim_create_autocmd("ColorScheme", {
 	callback = function()
-		vim.api.nvim_set_hl(0, "LeapBackdrop", { link = "Comment" })
-		vim.api.nvim_set_hl(0, "LeapMatch", { fg = "white", nocombine = true })
-		vim.api.nvim_set_hl(0, "LeapLabelPrimary", { fg = "yellow", nocombine = true })
-		vim.api.nvim_set_hl(0, "LeapLabelSecondary", { fg = "red", nocombine = true })
+		vim.api.nvim_set_hl(0, "FlashMatch", { fg = "lightgrey" })
+		vim.api.nvim_set_hl(0, "FlashLabel", { fg = "orange" })
+		vim.api.nvim_set_hl(0, "FlashCurrent", { fg = "cyan" })
 	end,
 })
 
-vim.cmd.colorscheme("gruvbox-material")
+vim.cmd.colorscheme("kanagawa-dragon")

@@ -1,6 +1,6 @@
 return {
 	{
-		"TimUntersberger/neogit",
+		"NeogitOrg/neogit",
 		cmd = "Neogit",
 		opts = {
 			disable_hint = true,
@@ -18,7 +18,7 @@ return {
 
 	{
 		"sindrets/diffview.nvim",
-		cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewToggleFiles", "DiffviewFocusFiles" },
+		cmd = { "DiffviewOpen", "DiffviewFileHistory" },
 		opts = { use_icons = false },
 	},
 }

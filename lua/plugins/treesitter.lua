@@ -26,8 +26,8 @@ return {
 					enable = true,
 					lookahead = true,
 					keymaps = {
-						["aP"] = "@parameter.outer",
-						["iP"] = "@parameter.inner",
+						["aa"] = "@parameter.outer",
+						["ia"] = "@parameter.inner",
 						["af"] = "@function.outer",
 						["if"] = "@function.inner",
 						["ac"] = "@class.outer",
@@ -44,7 +44,7 @@ return {
 						["@function.outer"] = "V",
 						["@class.outer"] = "<c-v>",
 					},
-					include_surrounding_whitespace = true,
+					-- include_surrounding_whitespace = true,
 				},
 				move = {
 					enable = true,

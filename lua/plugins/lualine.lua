@@ -1,7 +1,7 @@
 return {
 	"nvim-lualine/lualine.nvim",
 	event = "BufReadPost",
-	-- dependencies = { "arkav/lualine-lsp-progress" },
+	dependencies = { "arkav/lualine-lsp-progress" },
 	opts = {
 		options = {
 			icons_enabled = false,
@@ -18,7 +18,7 @@ return {
 			lualine_b = {},
 			lualine_c = {
 				{ "filename", newfile_status = true, path = 1 },
-				-- { "lsp_progress" },
+				{ "lsp_progress" },
 			},
 			lualine_x = {
 				{ "diagnostics" },

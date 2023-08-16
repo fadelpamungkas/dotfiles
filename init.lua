@@ -90,3 +90,4 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 })
 
 vim.cmd.colorscheme("kanagawa-dragon")
+-- vim.api.nvim_set_hl(0, "statusline", { bg = NONE })

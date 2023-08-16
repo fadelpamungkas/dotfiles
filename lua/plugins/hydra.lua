@@ -1,37 +1,10 @@
 return {
 	"anuvyklack/hydra.nvim",
-	keys = { "<leader>a", "<leader>g", "<leader>x" },
+	keys = { "<leader>g", "<leader>x" },
 	config = function()
 		local hydra = require("hydra")
-		local cmd = require("hydra.keymap-util").cmd
-
-		hydra({
-			name = "Activate",
-			config = {
-				color = "amaranth",
-				invoke_on_body = true,
-			},
-			mode = { "n", "x" },
-			body = "<Leader>a",
-			heads = {
-				{ "u", cmd("silent! %foldopen! | UndotreeToggle"), { exit = true, desc = "undotree" } },
-				{
-					"p",
-					function()
-						if require("peek").is_open() then
-							require("peek").close()
-						else
-							require("peek").open()
-						end
-					end,
-					{ exit = true, desc = "Peek Markdown" },
-				},
-				{ "<Esc>", nil, { exit = true } },
-				{ "q", nil, { exit = true } },
-			},
-		})
-
 		local gitsigns = require("gitsigns")
+		local dap = require("dap")
 
 		hydra({
 			name = "Git",
@@ -89,7 +62,7 @@ return {
 				{ "u", gitsigns.undo_stage_hunk, { desc = "undo" } },
 				{ "d", gitsigns.toggle_deleted, { nowait = true, desc = "deleted" } },
 				{ "S", gitsigns.stage_buffer },
-				{ "s", ":Gitsigns stage_hunk<CR>", { silent = true, desc = "stage" } },
+				{ "s", "<cmd>Gitsigns stage_hunk<CR>", { silent = true, desc = "stage" } },
 				{
 					"B",
 					function()
@@ -105,18 +78,15 @@ return {
 			},
 		})
 
-		local dap = require("dap")
-		local hintDap = [[
+		hydra({
+			name = "Dap",
+			hint = [[
 		 _n_: step over   _s_: Start/Continue   _b_: Breakpoint       _u_: Toggle UI
 		 _i_: step into   _x_: Disconnect       _K_: Hover Variables  _r_: Toggle Repl
 		 _o_: step out    _c_: to cursor        _E_: Evaluate         _C_: Close UI
 		 ^
 		 ^ ^              _X_: Quit             _q_: exit
-		]]
-
-		hydra({
-			name = "Dap",
-			hint = hintDap,
+		]],
 			config = {
 				buffer = bufnr,
 				color = "pink",

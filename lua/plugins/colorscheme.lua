@@ -21,6 +21,10 @@ return {
 		},
 	},
 	-- {
+	-- 	"ellisonleao/gruvbox.nvim",
+	-- 	opts = { bold = false },
+	-- },
+	-- {
 	-- 	dir = "~/.config/nvim/board",
 	-- 	dependencies = "rktjmp/lush.nvim",
 	-- },

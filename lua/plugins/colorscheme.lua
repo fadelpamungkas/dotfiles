@@ -6,13 +6,11 @@ return {
 			keywordStyle = { italic = false },
 			statementStyle = { bold = false },
 			transparent = true,
-			-- colors = { theme = { all = { ui = { bg_gutter = "none" } } } },
+			colors = { theme = { all = { ui = { bg_gutter = "none" } } } },
 		},
 	},
 	{
 		"catppuccin/nvim",
-		lazy = false,
-		priority = 1000,
 		name = "catppuccin",
 		opts = {
 			transparent_background = true,
@@ -20,19 +18,37 @@ return {
 			term_colors = true,
 		},
 	},
-	-- {
-	-- 	"ellisonleao/gruvbox.nvim",
-	-- 	opts = { bold = false },
-	-- },
-	-- {
-	-- 	dir = "~/.config/nvim/board",
-	-- 	dependencies = "rktjmp/lush.nvim",
-	-- },
-	-- { "ellisonleao/gruvbox.nvim", opts = { bold = false } },
-	-- {
-	-- 	"dracula/vim",
-	-- 	config = function()
-	-- 		vim.g.dracula_colorterm = 0
-	-- 	end,
-	-- },
+	{
+		"projekt0n/github-nvim-theme",
+		lazy = false,
+		priority = 1000,
+		config = function()
+			require("github-theme").setup({
+				options = {
+					hide_end_of_buffer = false,
+					transparent = true,
+					terminal_colors = true,
+				},
+			})
+		end,
+	},
+	{
+		"ellisonleao/gruvbox.nvim",
+		opts = { bold = false },
+	},
+	{
+		dir = "~/.config/nvim/board",
+		dependencies = "rktjmp/lush.nvim",
+	},
+	{
+		"rose-pine/neovim",
+		lazy = false,
+		priority = 1000,
+		name = "rose-pine",
+		opts = {
+			disable_background = true,
+			disable_float_background = false,
+			disable_italics = true,
+		},
+	},
 }

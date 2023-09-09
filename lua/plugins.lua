@@ -9,8 +9,18 @@ return {
 	{
 		"windwp/nvim-autopairs",
 		event = "InsertEnter",
-		opts = {},
+		opts = {
+			fast_wrap = {},
+		},
 	},
+	-- {
+	-- 	"altermo/ultimate-autopair.nvim",
+	-- 	event = { "InsertEnter", "CmdlineEnter" },
+	-- 	branch = "v0.6",
+	-- 	opts = {
+	-- 		--Config goes here
+	-- 	},
+	-- },
 
 	{
 		"kylechui/nvim-surround",
@@ -47,7 +57,10 @@ return {
 	{
 		"windwp/nvim-spectre",
 		cmd = { "Spectre" },
-		keys = { { "<leader>r", '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>' } },
+		keys = {
+			{ "<leader>r", '<esc><cmd>lua require("spectre").open_file_search()<CR>', mode = "v" },
+			{ "<leader>r", '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', mode = "n" },
+		},
 	},
 
 	{

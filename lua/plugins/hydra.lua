@@ -81,11 +81,11 @@ return {
 		hydra({
 			name = "Dap",
 			hint = [[
-		 _n_: step over   _s_: Start/Continue   _b_: Breakpoint       _u_: Toggle UI
-		 _i_: step into   _x_: Disconnect       _K_: Hover Variables  _r_: Toggle Repl
-		 _o_: step out    _c_: to cursor        _E_: Evaluate         _C_: Close UI
-		 ^
-		 ^ ^              _X_: Quit             _q_: exit
+ _n_: step over   _s_: Start/Continue   _b_: Breakpoint       _u_: Toggle UI
+ _i_: step into   _x_: Disconnect       _K_: Hover Variables  _r_: Toggle Repl
+ _o_: step out    _c_: to cursor        _E_: Evaluate         _C_: Close UI
+ ^
+ ^ ^              _X_: Quit             _q_: exit
 		]],
 			config = {
 				buffer = bufnr,

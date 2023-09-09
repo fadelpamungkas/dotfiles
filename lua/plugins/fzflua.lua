@@ -5,14 +5,14 @@ return {
 	-- keys = {
 	-- 	{ "<leader>f", "<cmd>FzfLua files<CR>" },
 	-- 	{ "<leader>F", "<cmd>FzfLua oldfiles<CR>" },
-	-- 	{ "<leader>s", "<cmd>FzfLua grep_curbuf<CR>" },
+	-- 	{ "<leader>/", "<cmd>FzfLua grep_curbuf<CR>" },
 	-- 	{ "<leader>S", "<cmd>FzfLua live_grep<CR>" },
 	-- 	{ "<leader>b", "<cmd>FzfLua buffers<CR>" },
 	-- 	{ "<leader>o", "<cmd>FzfLua lsp_document_symbols<CR>" },
 	-- 	{ "<leader>;", "<cmd>FzfLua resume<CR>" },
 	-- },
 	config = function()
-		-- local actions = require("fzf-lua.actions")
+		local actions = require("fzf-lua.actions")
 		require("fzf-lua").setup({
 			"max-perf",
 			winopts = {
@@ -33,7 +33,11 @@ return {
 			},
 			actions = {
 				files = {
-					["ctrl-m"] = function(selected, _)
+					["default"] = actions.file_edit_or_qf,
+					["ctrl-x"] = actions.file_split,
+					["ctrl-v"] = actions.file_vsplit,
+					["ctrl-t"] = actions.file_tabedit,
+					["ctrl-s"] = function(selected, _)
 						pcall(require("harpoon.mark").add_file, selected[1])
 					end,
 				},

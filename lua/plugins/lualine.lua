@@ -10,7 +10,6 @@ return {
 			section_separators = "",
 			disabled_filetypes = { statusline = { "alpha" } },
 			always_divide_middle = false,
-			globalstatus = true,
 			refresh = { statusline = 100 },
 		},
 		sections = {

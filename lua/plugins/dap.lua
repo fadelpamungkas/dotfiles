@@ -21,7 +21,9 @@ return {
 				type = "delve",
 				name = "Debug",
 				request = "launch",
-				program = "${file}",
+				envFile = "${workspaceFolder}/.env",
+				program = "${workspaceFolder}/cmd/main.go",
+				cwd = "${workspaceFolder}",
 			},
 			{
 				type = "delve",

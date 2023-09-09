@@ -17,10 +17,39 @@ return {
 		config = function()
 			require("telescope").setup({
 				defaults = {
+					-- -- sorting_strategy = "ascending",
+					-- -- results_title = false,
+					-- -- file_ignore_patterns = { "node_modules" },
+					-- -- layout_config = { prompt_position = "top" },
+					-- sorting_strategy = "ascending",
+					-- -- winblend = 20,
+					-- -- layout_strategy = "center",
+					-- -- border = false,
+					prompt_title = "",
+					-- results_title = "",
+					preview_title = "",
+					-- prompt_prefix = "",
+					selection_caret = "",
+					entry_prefix = "",
+					multi_icon = "",
+					color_devicons = false,
+					-- borderchars = { " ", " ", " ", " ", " ", " ", " ", " " },
+					-- preview = { msg_bg_fillchar = " " },
+					-- layout_config = {
+					-- 	prompt_position = "top",
+					-- 	-- anchor = "N",
+					-- 	-- width = 99,
+					-- },
 					sorting_strategy = "ascending",
-					results_title = false,
-					file_ignore_patterns = { "node_modules" },
-					layout_config = { prompt_position = "top" },
+					layout_strategy = "bottom_pane",
+					results_title = "",
+					file_ignore_patterns = { "node_modules", ".pyc" },
+					borderchars = { " ", " ", " ", " ", " ", " ", " ", " " },
+					prompt_prefix = ":",
+					-- preview = false,
+					layout_config = {
+						prompt_position = "bottom",
+					},
 					mappings = {
 						n = {
 							["o"] = require("telescope.actions").select_default,

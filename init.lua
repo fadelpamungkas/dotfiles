@@ -28,9 +28,9 @@ opt.hlsearch = false
 opt.incsearch = true
 opt.autoindent = true
 opt.smartindent = true
-opt.tabstop = 2
-opt.softtabstop = 2
-opt.shiftwidth = 2
+opt.tabstop = 4
+opt.softtabstop = 4
+opt.shiftwidth = 4
 opt.expandtab = true
 opt.undofile = true
 opt.wrap = false
@@ -41,9 +41,9 @@ opt.splitright = true
 opt.completeopt = { "menu", "menuone", "noselect" }
 opt.scrolloff = 2
 opt.laststatus = 3
-opt.signcolumn = "yes"
-opt.number = true
-opt.relativenumber = true
+-- opt.signcolumn = "yes"
+-- opt.number = true
+-- opt.relativenumber = true
 
 -- Remap space as leader key
 g.mapleader = " "
@@ -89,5 +89,5 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 	end,
 })
 
-vim.cmd.colorscheme("kanagawa")
+vim.cmd.colorscheme("github_dark")
 -- vim.api.nvim_set_hl(0, "statusline", { bg = NONE })

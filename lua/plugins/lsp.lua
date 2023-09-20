@@ -31,6 +31,12 @@ return {
 					vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 					vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
 
+					if vim.lsp.inlay_hint then
+						vim.keymap.set("n", "<leader>l", function()
+							vim.lsp.inlay_hint(0, nil)
+						end)
+					end
+
 					vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 					vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
 					vim.keymap.set("n", "gi", "<cmd>TroubleToggle lsp_implementations<cr>", opts)
@@ -61,8 +67,30 @@ return {
 				vim.tbl_deep_extend("force", lsp_defaults.capabilities, require("cmp_nvim_lsp").default_capabilities())
 
 			local servers = {
-				lua_ls = {},
-				gopls = {},
+				lua_ls = {
+					Lua = {
+						hint = { enable = true },
+						diagnostics = { globals = { "vim" } },
+					},
+				},
+				gopls = {
+					gopls = {
+						analyses = {
+							unusedparams = true,
+						},
+						staticcheck = true,
+						gofumpt = true,
+						hints = {
+							assignVariableTypes = true,
+							compositeLiteralFields = true,
+							compositeLiteralTypes = true,
+							constantValues = true,
+							functionTypeParameters = true,
+							parameterNames = true,
+							rangeVariableTypes = true,
+						},
+					},
+				},
 				-- clangd = {},
 				-- pyright = {},
 				-- rust_analyzer = {}, -- handled by rust-tools.nvim

@@ -99,6 +99,7 @@ return {
 	},
 
 	{
+		-- dir = "~/LuaProjects/harpoon",
 		"ThePrimeagen/harpoon",
 		event = "VeryLazy",
     -- stylua: ignore
@@ -108,9 +109,11 @@ return {
 			vim.keymap.set("n", "mq", function() require("harpoon.ui").nav_file(1) end)
 			vim.keymap.set("n", "mw", function() require("harpoon.ui").nav_file(2) end)
 			vim.keymap.set("n", "me", function() require("harpoon.ui").nav_file(3) end)
-			vim.keymap.set("n", "ma", function() require("harpoon.ui").nav_file(4) end)
-			vim.keymap.set("n", "ms", function() require("harpoon.ui").nav_file(5) end)
-			vim.keymap.set("n", "md", function() require("harpoon.ui").nav_file(6) end)
+            vim.keymap.set("n", "mr", function() require("harpoon.ui").nav_file(4) end)
+			vim.keymap.set("n", "ma", function() require("harpoon.ui").nav_file(5) end)
+			vim.keymap.set("n", "ms", function() require("harpoon.ui").nav_file(6) end)
+			vim.keymap.set("n", "md", function() require("harpoon.ui").nav_file(7) end)
+            vim.keymap.set("n", "mf", function() require("harpoon.ui").nav_file(8) end)
 		end,
 	},
 

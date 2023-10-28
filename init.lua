@@ -89,5 +89,12 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 	end,
 })
 
+-- additional filetypes
+vim.filetype.add({
+	extension = {
+		templ = "templ",
+	},
+})
+
 vim.cmd.colorscheme("github_dark")
 -- vim.api.nvim_set_hl(0, "statusline", { bg = NONE })

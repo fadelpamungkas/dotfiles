@@ -165,4 +165,29 @@ return {
 			{ "<leader>Z", [[<cmd>lua require("persistence").load({ last = true })<cr>]] },
 		},
 	},
+
+	{
+		"folke/todo-comments.nvim",
+		event = "BufReadPre",
+		keys = {
+			{ "<leader>t", "<cmd>TodoTrouble<cr>" },
+		},
+		opts = {
+			signs = false,
+			highlight = {
+				before = "",
+				keyword = "fg",
+				after = "",
+			},
+			keywords = {
+				FIX = { icon = "E", color = "error", alt = { "FIXME", "BUG", "FIXIT", "ISSUE" } },
+				TODO = { icon = "I", color = "info" },
+				HACK = { icon = "W", color = "warning" },
+				WARN = { icon = "W", color = "warning", alt = { "WARNING", "XXX" } },
+				PERF = { icon = "H", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
+				NOTE = { icon = "H", color = "hint", alt = { "INFO" } },
+				TEST = { icon = "T", color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
+			},
+		},
+	},
 }

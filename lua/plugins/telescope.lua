@@ -12,6 +12,7 @@ return {
 			{ "<leader>b", "<cmd>Telescope buffers<CR>" },
 			{ "<leader>o", "<cmd>Telescope lsp_document_symbols<CR>" },
 			{ "<leader>,", "<cmd>Telescope resume<CR>" },
+            { "<leader>t", "<cmd>Telescope live_grep default_text=(TODO:|FIXME:|FIX:|ISSUE:|NOTE:|INFO:|WARN:|PERF:|TEST:)<CR>" },
 		},
 		dependencies = { { "nvim-telescope/telescope-fzf-native.nvim", build = "make" } },
 		config = function()

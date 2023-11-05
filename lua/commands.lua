@@ -28,6 +28,16 @@ vim.api.nvim_create_autocmd({ "InsertEnter", "WinLeave" }, {
 	end,
 })
 
+-- TODO: comment
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufEnter" }, {
+	callback = function()
+		vim.cmd([[
+        hi link TodoComment WarningMsg
+        match TodoComment /\(TODO\|FIXME\|FIX\|ISSUE\|NOTE\|INFO\|WARN\|PERF\|TEST\):/
+        ]])
+	end,
+})
+
 vim.api.nvim_create_autocmd({ "FileType" }, {
 	pattern = {
 		"qf",

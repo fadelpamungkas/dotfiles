@@ -47,7 +47,9 @@ return {
 		config = function()
 			local ls = require("luasnip")
 
+			ls.filetype_extend("typescriptreact", { "html" })
 			require("luasnip.loaders.from_vscode").lazy_load()
+
 			ls.config.setup({
 				ext_opts = {
 					[require("luasnip.util.types").choiceNode] = { active = { virt_text = { { "cnode" } } } },

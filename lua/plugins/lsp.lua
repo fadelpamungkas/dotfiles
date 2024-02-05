@@ -78,7 +78,6 @@ return {
 						analyses = {
 							unusedparams = true,
 						},
-						staticcheck = true,
 						gofumpt = true,
 						hints = {
 							assignVariableTypes = true,
@@ -91,6 +90,7 @@ return {
 						},
 					},
 				},
+				eslint = {},
 				-- clangd = {},
 				-- pyright = {},
 				-- rust_analyzer = {}, -- handled by rust-tools.nvim
@@ -107,21 +107,35 @@ return {
 		end,
 	},
 	{
-		"jose-elias-alvarez/null-ls.nvim",
+		"nvimtools/none-ls.nvim",
 		event = "BufReadPre",
 		dependencies = { "nvim-lua/plenary.nvim" },
 		opts = function()
 			local null_ls = require("null-ls")
 			return {
 				sources = {
-					null_ls.builtins.formatting.prettierd,
+					null_ls.builtins.formatting.prettier,
 					null_ls.builtins.formatting.gofmt,
-					null_ls.builtins.formatting.goimports,
+					null_ls.builtins.formatting.gofumpt,
+					-- goimports -w -local github.com/fadelpamungkas/frud-server .
+					null_ls.builtins.formatting.goimports.with({
+						extra_args = function(params)
+							local Path = require("plenary.path")
+							local go_mod = Path:new(params.root .. "/" .. "go.mod")
+
+							if go_mod:exists() and go_mod:is_file() then
+								local module = go_mod:readlines()[1]:match([[^module%s+(.+)]])
+								if module then
+									return { "-local", module }
+								end
+							end
+							return {}
+						end,
+					}),
 					null_ls.builtins.formatting.stylua,
 					null_ls.builtins.formatting.black,
 					null_ls.builtins.formatting.isort,
-					null_ls.builtins.code_actions.eslint,
-					null_ls.builtins.diagnostics.eslint_d,
+					null_ls.builtins.code_actions.gomodifytags,
 					null_ls.builtins.diagnostics.golangci_lint,
 					null_ls.builtins.diagnostics.flake8,
 					null_ls.builtins.formatting.rustfmt.with({

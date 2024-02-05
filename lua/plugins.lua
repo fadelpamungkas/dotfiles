@@ -6,13 +6,14 @@ return {
 		cmd = "UndotreeToggle",
 	},
 
-	{
-		"windwp/nvim-autopairs",
-		event = "InsertEnter",
-		opts = {
-			fast_wrap = {},
-		},
-	},
+	-- {
+	-- 	"windwp/nvim-autopairs",
+	-- 	event = "InsertEnter",
+	-- 	opts = {
+	-- 		fast_wrap = {},
+	-- 	},
+	-- },
+
 	-- {
 	-- 	"altermo/ultimate-autopair.nvim",
 	-- 	event = { "InsertEnter", "CmdlineEnter" },
@@ -40,6 +41,17 @@ return {
 		cmd = "Mason",
 		build = ":MasonUpdate",
 		opts = { ui = { width = 1, height = 1 } },
+	},
+
+	{
+		"JoosepAlviste/nvim-ts-context-commentstring",
+		config = function()
+			---@diagnostic disable-next-line: missing-fields
+			require("ts_context_commentstring").setup({
+				enable = true,
+				enable_autocmd = false,
+			})
+		end,
 	},
 
 	{
@@ -79,30 +91,10 @@ return {
 	},
 
 	{
-		"zbirenbaum/copilot.lua",
-		cmd = "Copilot",
-		event = "InsertEnter",
-		opts = {
-			panel = { keymap = { open = "<C-CR>" } },
-			filetypes = { yaml = true, markdown = true },
-			suggestion = {
-				enabled = true,
-				auto_trigger = true,
-				keymap = {
-					accept = "<C-s>",
-					next = "<C-]>",
-					prev = "<C-[>",
-					dismiss = "<C-\\>",
-				},
-			},
-		},
-	},
-
-	{
 		-- dir = "~/LuaProjects/harpoon",
 		"ThePrimeagen/harpoon",
 		event = "VeryLazy",
-    -- stylua: ignore
+        -- stylua: ignore
 		config = function()
 			vim.keymap.set("n", "<leader>h", require("harpoon.mark").add_file)
 			vim.keymap.set("n", "<leader>H", require("harpoon.ui").toggle_quick_menu)
@@ -156,13 +148,28 @@ return {
 		},
 	},
 
+	-- {
+	-- 	"folke/persistence.nvim",
+	-- 	event = "BufReadPre",
+	-- 	opts = { options = { "buffers", "curdir", "tabpages", "winsize", "help" } },
+	-- 	keys = {
+	-- 		{ "<leader>z", [[<cmd>lua require("persistence").load()<cr>]] },
+	-- 		{ "<leader>Z", [[<cmd>lua require("persistence").load({ last = true })<cr>]] },
+	-- 	},
+	-- },
+
 	{
-		"folke/persistence.nvim",
-		event = "BufReadPre",
-		opts = { options = { "buffers", "curdir", "tabpages", "winsize", "help" } },
+		"rest-nvim/rest.nvim",
+		dependencies = { { "nvim-lua/plenary.nvim" } },
 		keys = {
-			{ "<leader>z", [[<cmd>lua require("persistence").load()<cr>]] },
-			{ "<leader>Z", [[<cmd>lua require("persistence").load({ last = true })<cr>]] },
+			{ "<leader>cr", "<Plug>RestNvim" },
+			{ "<leader>cp", "<Plug>RestNvimPreview" },
+			{ "<leader>cl", "<Plug>RestNvimLast" },
+		},
+		commit = "8b62563",
+		ft = { "http" },
+		opts = {
+			result_split_horizontal = true,
 		},
 	},
 }

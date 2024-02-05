@@ -72,6 +72,17 @@ map("n", "gV", "`[V`]")
 map("x", "<leader>p", [["_dP]])
 map("x", "<leader>P", [["_dp]])
 
+map("n", "<leader>w", "<cmd>set wrap!<CR>")
+
+-- map('n', '<tab>', ':cnext<CR>', { noremap = true, silent = true })
+-- map('n', '<s-tab>', ':cprev<CR>', { noremap = true, silent = true })
+
+-- Automatically Pair brackets, parethesis, and quotes
+map("i", "(<CR>", "(<CR>)<Esc>O")
+map("i", "{<CR>", "{<CR>}<Esc>O")
+map("i", "`<CR>", "`<CR>`<Esc>O")
+------------------------------
+
 require("lazyconfig")
 
 vim.api.nvim_create_autocmd("User", {
@@ -96,5 +107,90 @@ vim.filetype.add({
 	},
 })
 
-vim.cmd.colorscheme("github_dark")
+-- Statusline
+local statusline_group = vim.api.nvim_create_augroup("StatusLine", { clear = true })
+
+local diagnostics = ""
+vim.api.nvim_create_autocmd({ "DiagnosticChanged", "BufWinEnter" }, {
+	group = statusline_group,
+	callback = function()
+		local results = {}
+		for _, attr in pairs({
+			{ "Error", "E" },
+			{ "Warn", "W" },
+			{ "Hint", "H" },
+			{ "Info", "I" },
+		}) do
+			local n = vim.diagnostic.get(0, { severity = attr[1] })
+			if #n > 0 then
+				table.insert(results, string.format(" %s%d", attr[2], #n))
+			end
+		end
+		diagnostics = table.concat(results)
+	end,
+})
+
+local function unsaved_buffers()
+	for _, buf in pairs(vim.api.nvim_list_bufs()) do
+		if vim.api.nvim_get_current_buf() == buf then
+			goto continue
+		end
+		if vim.api.nvim_buf_get_option(buf, "modified") then
+			return string.format(" %s ", "Unsaved")
+		end
+		::continue::
+	end
+
+	return ""
+end
+
+local function file_section()
+	local name = (vim.fn.expand("%:.") == "") and "No Name" or vim.fn.expand("%:.")
+	local attr = ""
+
+	if vim.bo.modified and vim.bo.readonly then
+		attr = "[+][RO]"
+	elseif vim.bo.modified then
+		attr = "[+]"
+	elseif vim.bo.readonly then
+		attr = "[RO]"
+	end
+
+	return string.format("%s%s", name, attr)
+end
+
+local lsp_progress = ""
+vim.api.nvim_create_autocmd("LspProgress", {
+	group = vim.api.nvim_create_augroup("lsp_progress_statusline", {}),
+	callback = function(opts)
+		if not vim.lsp.get_client_by_id(opts.data.client_id) then
+			return
+		end
+		local data = opts.data.result.value
+		if data.kind ~= "end" then
+			lsp_progress = data.percentage == nil and "" or string.format(" (%d%%%%)", data.percentage)
+			lsp_progress = lsp_progress .. " " .. data.title
+			lsp_progress = lsp_progress .. " " .. (data.message == nil and "" or data.message)
+		else
+			lsp_progress = ""
+		end
+		vim.cmd.redrawstatus()
+	end,
+})
+
+_G.set_statusline = function()
+	return file_section() .. unsaved_buffers() .. diagnostics .. lsp_progress .. "%=" .. "%l:%c %L %p%%"
+end
+
+vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
+	group = statusline_group,
+	command = "setlocal statusline=%!v:lua.set_statusline()",
+})
+
+vim.cmd.colorscheme("lunaperche")
+vim.api.nvim_set_hl(0, "Normal", { bg = NONE })
+-- vim.api.nvim_set_hl(0, "StatusLine", { bg = NONE })
+vim.api.nvim_set_hl(0, "ModeMsg", { bg = NONE })
+
+-- vim.cmd.colorscheme("default")
 -- vim.api.nvim_set_hl(0, "statusline", { bg = NONE })

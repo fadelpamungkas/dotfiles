@@ -48,6 +48,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 		"spectre_panel",
 		"tsplayground",
 		"PlenaryTestPopup",
+		"rest_nvim_results",
 	},
 	callback = function()
 		vim.cmd([[
@@ -118,3 +119,21 @@ end, {
 
 -- Assign it to a keymap
 vim.keymap.set("v", "<leader>vc", "<esc><cmd>CompareClipboardSelection<cr>")
+
+function _G.toggle_quickfix()
+	local windows = vim.api.nvim_list_wins()
+
+	for _, win in pairs(windows) do
+		if vim.api.nvim_win_get_config(win).relative == "" then
+			local buf = vim.api.nvim_win_get_buf(win)
+			if vim.bo[buf].buftype == "quickfix" then
+				vim.cmd("cclose")
+				return
+			end
+		end
+	end
+
+	vim.cmd("botright copen")
+end
+
+vim.keymap.set("n", "<leader>q", ":lua toggle_quickfix()<CR>", { noremap = true, silent = true })

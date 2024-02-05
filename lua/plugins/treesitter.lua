@@ -7,9 +7,9 @@ return {
 		{ "nvim-treesitter/nvim-treesitter-context", config = true },
 	},
 	config = function()
+		---@diagnostic disable-next-line: missing-fields
 		require("nvim-treesitter.configs").setup({
-			ensure_installed = { "lua", "go", "rust" },
-			context_commentstring = { enable = true, enable_autocmd = false },
+			ensure_installed = { "lua", "go", "rust", "vimdoc" },
 			highlight = { enable = true },
 			indent = { enable = true },
 			incremental_selection = {

@@ -1,4 +1,56 @@
 return {
+	-- {
+	--        "EdenEast/nightfox.nvim",
+	-- 	lazy = false,
+	-- 	priority = 1000,
+	-- 	config = function()
+	-- 		vim.cmd.colorscheme("nightfox")
+	-- 	end,
+	--    },
+	{
+		"Mofiqul/adwaita.nvim",
+		lazy = false,
+		priority = 1000,
+		config = function()
+			vim.g.adwaita_darker = true -- for darker version
+			vim.g.adwaita_disable_cursorline = true -- to disable cursorline
+			vim.g.adwaita_transparent = true -- makes the background transparent
+			-- vim.cmd.colorscheme("adwaita")
+		end,
+	},
+	{
+		"catppuccin/nvim",
+		name = "catppuccin",
+		lazy = false,
+		priority = 1000,
+		config = function()
+			require("catppuccin").setup({
+				-- no_italic = false,
+				no_bold = true,
+				no_underline = true,
+				transparent_background = true,
+				show_end_of_buffer = true,
+			})
+			vim.cmd.colorscheme("catppuccin")
+		end,
+	},
+
+	-- {
+	-- 	"sainnhe/sonokai",
+	-- 	lazy = false,
+	-- 	priority = 1000,
+	-- 	config = function()
+	-- 		vim.g.sonokai_enable_italic = false
+	-- 		-- vim.cmd.colorscheme("sonokai")
+	-- 	end,
+	-- },
+	--
+	-- {
+	-- 	"rktjmp/lush.nvim",
+	-- 	priority = 1000,
+	-- 	lazy = false,
+	-- },
+
 	{ "nvim-lua/plenary.nvim" },
 
 	{
@@ -43,28 +95,28 @@ return {
 		opts = { ui = { width = 1, height = 1 } },
 	},
 
-	{
-		"JoosepAlviste/nvim-ts-context-commentstring",
-		config = function()
-			---@diagnostic disable-next-line: missing-fields
-			require("ts_context_commentstring").setup({
-				enable = true,
-				enable_autocmd = false,
-			})
-		end,
-	},
-
-	{
-		"numToStr/Comment.nvim",
-		event = "BufReadPost",
-		dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
-		opts = function()
-			---@diagnostic disable-next-line: missing-fields
-			require("Comment").setup({
-				pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
-			})
-		end,
-	},
+	-- {
+	-- 	"JoosepAlviste/nvim-ts-context-commentstring",
+	-- 	config = function()
+	-- 		---@diagnostic disable-next-line: missing-fields
+	-- 		require("ts_context_commentstring").setup({
+	-- 			enable = true,
+	-- 			enable_autocmd = false,
+	-- 		})
+	-- 	end,
+	-- },
+	--
+	-- {
+	-- 	"numToStr/Comment.nvim",
+	-- 	event = "BufReadPost",
+	-- 	dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
+	-- 	opts = function()
+	-- 		---@diagnostic disable-next-line: missing-fields
+	-- 		require("Comment").setup({
+	-- 			pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
+	-- 		})
+	-- 	end,
+	-- },
 
 	{
 		"windwp/nvim-spectre",
@@ -77,10 +129,22 @@ return {
 
 	{
 		"folke/trouble.nvim",
-		cmd = { "TroubleToggle", "Trouble" },
-		keys = { { "<leader>d", "<cmd>TroubleToggle document_diagnostics<cr>" } },
+		cmd = { "Trouble" },
+		keys = { { "<leader>d", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>" } },
 		opts = {
-			icons = false,
+			icons = {
+				indent = {
+					top = "| ",
+					middle = "+-",
+					last = "`-",
+					fold_open = "> ",
+					fold_closed = "v ",
+					ws = "  ",
+				},
+				folder_closed = "[ ] ",
+				folder_open = "[>] ",
+			},
+			focus = true,
 			fold_open = "v",
 			fold_closed = ">",
 			indent_lines = false,
@@ -90,23 +154,60 @@ return {
 		},
 	},
 
+	-- {
+	-- 	-- dir = "~/LuaProjects/harpoon",
+	-- 	"ThePrimeagen/harpoon",
+	-- 	event = "VeryLazy",
+	--        -- stylua: ignore
+	-- 	config = function()
+	-- 		vim.keymap.set("n", "<leader>h", require("harpoon.mark").add_file)
+	-- 		vim.keymap.set("n", "<leader>H", require("harpoon.ui").toggle_quick_menu)
+	-- 		vim.keymap.set("n", "mq", function() require("harpoon.ui").nav_file(1) end)
+	-- 		vim.keymap.set("n", "mw", function() require("harpoon.ui").nav_file(2) end)
+	-- 		vim.keymap.set("n", "me", function() require("harpoon.ui").nav_file(3) end)
+	--            vim.keymap.set("n", "mr", function() require("harpoon.ui").nav_file(4) end)
+	-- 		vim.keymap.set("n", "ma", function() require("harpoon.ui").nav_file(5) end)
+	-- 		vim.keymap.set("n", "ms", function() require("harpoon.ui").nav_file(6) end)
+	-- 		vim.keymap.set("n", "md", function() require("harpoon.ui").nav_file(7) end)
+	--            vim.keymap.set("n", "mf", function() require("harpoon.ui").nav_file(8) end)
+	-- 	end,
+	-- },
+
 	{
-		-- dir = "~/LuaProjects/harpoon",
 		"ThePrimeagen/harpoon",
+		branch = "harpoon2",
 		event = "VeryLazy",
-        -- stylua: ignore
-		config = function()
-			vim.keymap.set("n", "<leader>h", require("harpoon.mark").add_file)
-			vim.keymap.set("n", "<leader>H", require("harpoon.ui").toggle_quick_menu)
-			vim.keymap.set("n", "mq", function() require("harpoon.ui").nav_file(1) end)
-			vim.keymap.set("n", "mw", function() require("harpoon.ui").nav_file(2) end)
-			vim.keymap.set("n", "me", function() require("harpoon.ui").nav_file(3) end)
-            vim.keymap.set("n", "mr", function() require("harpoon.ui").nav_file(4) end)
-			vim.keymap.set("n", "ma", function() require("harpoon.ui").nav_file(5) end)
-			vim.keymap.set("n", "ms", function() require("harpoon.ui").nav_file(6) end)
-			vim.keymap.set("n", "md", function() require("harpoon.ui").nav_file(7) end)
-            vim.keymap.set("n", "mf", function() require("harpoon.ui").nav_file(8) end)
-		end,
+		opts = {
+			settings = {
+				save_on_toggle = true,
+			},
+		},
+		keys = {
+			{ "mq", function() require("harpoon"):list():select(1) end },
+			{ "mw", function() require("harpoon"):list():select(2) end },
+			{ "me", function() require("harpoon"):list():select(3) end },
+			{ "mr", function() require("harpoon"):list():select(4) end },
+			{ "ma", function() require("harpoon"):list():select(5) end },
+			{ "ms", function() require("harpoon"):list():select(6) end },
+			{ "md", function() require("harpoon"):list():select(7) end },
+			{ "mf", function() require("harpoon"):list():select(8) end },
+			{ "<leader>h", function() require("harpoon"):list():add() end },
+
+			{
+				"<leader>H",
+				function()
+					local harpoon = require("harpoon")
+					local opts = {
+						border = "rounded",
+						-- title_pos = "center",
+                        title = " Navigator ",
+						ui_width_ratio = 0.35,
+					}
+
+					harpoon.ui:toggle_quick_menu(harpoon:list(), opts)
+				end,
+			},
+		},
 	},
 
 	{
@@ -114,6 +215,7 @@ return {
 		lazy = false,
 		keys = { { "-", "<cmd>lua require('oil').open()<CR>" } },
 		opts = {
+			default_file_explorer = true,
 			use_default_keymaps = false,
 			keymaps = {
 				["g?"] = "actions.show_help",

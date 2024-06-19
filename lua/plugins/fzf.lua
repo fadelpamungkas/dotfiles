@@ -30,6 +30,13 @@ return {
 						scrollbar = false,
 					},
 				},
+				files = {
+					fd_opts = [[--color=never --type f --hidden --follow --exclude '.git' --exclude 'node_modules' --exclude '.npm']],
+				},
+				grep = {
+					rg_opts = "--column --follow --line-number --no-heading "
+						.. "--color=always --smart-case -g '!{node_modules,.git,**/_build,deps,.elixir_ls,**/target,**/assets/node_modules,**/assets/vendor,**/.next,**/.vercel,**/build,**/out}'",
+				},
 				keymap = {
 					fzf = {
 						["ctrl-q"] = "select-all+accept",

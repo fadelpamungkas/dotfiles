@@ -22,39 +22,39 @@ return {
 
 			vim.api.nvim_create_autocmd("LspAttach", {
 				callback = function(args)
-					local bufnr = args.buf
-					local ft = vim.bo[bufnr].filetype
-					local have_nls = #require("null-ls.sources").get_available(ft, "NULL_LS_FORMATTING") > 0
-					local opts = { noremap = true, silent = true, buffer = bufnr }
+					-- local bufnr = args.buf
+					-- local ft = vim.bo[bufnr].filetype
+					-- local have_nls = #require("null-ls.sources").get_available(ft, "NULL_LS_FORMATTING") > 0
+					local opts = { noremap = true, silent = true, buffer = args.buf }
 
 					vim.keymap.set("n", "<leader>D", vim.diagnostic.open_float, opts)
 					vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 					vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
 
-					if vim.lsp.inlay_hint then
-						vim.keymap.set("n", "<leader>l", function()
-							vim.lsp.inlay_hint(0, nil)
-						end)
-					end
+					vim.keymap.set("n", "<leader>l", function()
+						vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled())
+					end)
 
 					vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 					vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-					vim.keymap.set("n", "gi", "<cmd>TroubleToggle lsp_implementations<cr>", opts)
-					vim.keymap.set("n", "gr", "<cmd>TroubleToggle lsp_references<cr>", opts)
+					vim.keymap.set("n", "gi", "<cmd>Trouble lsp_implementations toggle<cr>", opts)
+					vim.keymap.set("n", "gr", "<cmd>Trouble lsp_references toggle<cr>", opts)
+					vim.keymap.set("n", "gL", "<cmd>Trouble lsp toggle focus=false win.position=right<cr>", opts)
 					vim.keymap.set("n", "gR", vim.lsp.buf.rename, opts)
 					vim.keymap.set("n", "gD", vim.lsp.buf.type_definition, opts)
 					vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
 					vim.keymap.set({ "n", "v" }, "ga", vim.lsp.buf.code_action, opts)
 					vim.keymap.set("n", "gh", function()
-						vim.lsp.buf.format({
-							async = true,
-							filter = function(c)
-								if have_nls then
-									return c.name == "null-ls"
-								end
-								return c.name ~= "null-ls"
-							end,
-						})
+						require("conform").format({ bufnr = args.buf })
+						-- vim.lsp.buf.format({
+						-- 	async = true,
+						-- 	filter = function(c)
+						-- 		if have_nls then
+						-- 			return c.name == "null-ls"
+						-- 		end
+						-- 		return c.name ~= "null-ls"
+						-- 	end,
+						-- })
 					end, opts)
 				end,
 			})
@@ -90,10 +90,11 @@ return {
 						},
 					},
 				},
+				-- yaml_language_server = {},
 				eslint = {},
 				-- clangd = {},
 				-- pyright = {},
-				-- rust_analyzer = {}, -- handled by rust-tools.nvim
+				rust_analyzer = {}, -- handled by rust-tools.nvim
 				-- tsserver = {},
 				-- tailwindcss = {},
 			}
@@ -110,6 +111,7 @@ return {
 		"nvimtools/none-ls.nvim",
 		event = "BufReadPre",
 		dependencies = { "nvim-lua/plenary.nvim" },
+		enabled = false,
 		opts = function()
 			local null_ls = require("null-ls")
 			return {
@@ -137,26 +139,46 @@ return {
 					null_ls.builtins.formatting.isort,
 					null_ls.builtins.code_actions.gomodifytags,
 					null_ls.builtins.diagnostics.golangci_lint,
-					null_ls.builtins.diagnostics.flake8,
-					null_ls.builtins.formatting.rustfmt.with({
-						extra_args = function(params)
-							local Path = require("plenary.path")
-							local cargo_toml = Path:new(params.root .. "/" .. "Cargo.toml")
-
-							if cargo_toml:exists() and cargo_toml:is_file() then
-								for _, line in ipairs(cargo_toml:readlines()) do
-									local edition = line:match([[^edition%s*=%s*%"(%d+)%"]])
-									if edition then
-										return { "--edition=" .. edition }
-									end
-								end
-							end
-							-- default edition when we don't find `Cargo.toml` or the `edition` in it.
-							return { "--edition=2021" }
-						end,
-					}),
+					-- null_ls.builtins.diagnostics.flake8,
+					-- null_ls.builtins.formatting.rustfmt.with({
+					-- 	extra_args = function(params)
+					-- 		local Path = require("plenary.path")
+					-- 		local cargo_toml = Path:new(params.root .. "/" .. "Cargo.toml")
+					--
+					-- 		if cargo_toml:exists() and cargo_toml:is_file() then
+					-- 			for _, line in ipairs(cargo_toml:readlines()) do
+					-- 				local edition = line:match([[^edition%s*=%s*%"(%d+)%"]])
+					-- 				if edition then
+					-- 					return { "--edition=" .. edition }
+					-- 				end
+					-- 			end
+					-- 		end
+					-- 		-- default edition when we don't find `Cargo.toml` or the `edition` in it.
+					-- 		return { "--edition=2021" }
+					-- 	end,
+					-- }),
 				},
 			}
 		end,
+	},
+	{
+		"stevearc/conform.nvim",
+		event = "BufReadPre",
+		opts = {
+			formatters_by_ft = {
+				javascriptreact = { "prettierd" },
+				typescriptreact = { "prettierd" },
+				javascript = { "prettierd" },
+				typescript = { "prettierd" },
+				python = { "isort", "black" },
+				html = { "prettierd" },
+				yaml = { "prettierd" },
+				json = { "yq" },
+				css = { "prettierd" },
+				lua = { "stylua" },
+				go = { "goimports", "gofmt" },
+			},
+			-- format_on_save = {},
+		},
 	},
 }

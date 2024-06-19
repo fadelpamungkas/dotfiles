@@ -26,6 +26,7 @@ opt.ignorecase = true
 opt.smartcase = true
 opt.hlsearch = false
 opt.incsearch = true
+opt.inccommand = "split"
 opt.autoindent = true
 opt.smartindent = true
 opt.tabstop = 4
@@ -159,27 +160,27 @@ local function file_section()
 	return string.format("%s%s", name, attr)
 end
 
-local lsp_progress = ""
-vim.api.nvim_create_autocmd("LspProgress", {
-	group = vim.api.nvim_create_augroup("lsp_progress_statusline", {}),
-	callback = function(opts)
-		if not vim.lsp.get_client_by_id(opts.data.client_id) then
-			return
-		end
-		local data = opts.data.result.value
-		if data.kind ~= "end" then
-			lsp_progress = data.percentage == nil and "" or string.format(" (%d%%%%)", data.percentage)
-			lsp_progress = lsp_progress .. " " .. data.title
-			lsp_progress = lsp_progress .. " " .. (data.message == nil and "" or data.message)
-		else
-			lsp_progress = ""
-		end
-		vim.cmd.redrawstatus()
-	end,
-})
+-- local lsp_progress = ""
+-- vim.api.nvim_create_autocmd("LspProgress", {
+-- 	group = vim.api.nvim_create_augroup("lsp_progress_statusline", {}),
+-- 	callback = function(opts)
+-- 		if not vim.lsp.get_client_by_id(opts.data.client_id) then
+-- 			return
+-- 		end
+-- 		local data = opts.data.result.value
+-- 		if data.kind ~= "end" then
+-- 			lsp_progress = data.percentage == nil and "" or string.format(" (%d%%%%)", data.percentage)
+-- 			lsp_progress = lsp_progress .. " " .. data.title
+-- 			lsp_progress = lsp_progress .. " " .. (data.message == nil and "" or data.message)
+-- 		else
+-- 			lsp_progress = ""
+-- 		end
+-- 		vim.cmd.redrawstatus()
+-- 	end,
+-- })
 
 _G.set_statusline = function()
-	return file_section() .. unsaved_buffers() .. diagnostics .. lsp_progress .. "%=" .. "%l:%c %L %p%%"
+	return file_section() .. unsaved_buffers() .. diagnostics .. "%=" .. "%l:%c %L %p%%"
 end
 
 vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
@@ -187,10 +188,12 @@ vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
 	command = "setlocal statusline=%!v:lua.set_statusline()",
 })
 
-vim.cmd.colorscheme("lunaperche")
-vim.api.nvim_set_hl(0, "Normal", { bg = NONE })
+-- vim.cmd.colorscheme("lunaperche")
+-- vim.api.nvim_set_hl(0, "Normal", { bg = NONE })
+-- vim.api.nvim_set_hl(0, "ModeMsg", { bg = NONE })
 -- vim.api.nvim_set_hl(0, "StatusLine", { bg = NONE })
-vim.api.nvim_set_hl(0, "ModeMsg", { bg = NONE })
 
 -- vim.cmd.colorscheme("default")
 -- vim.api.nvim_set_hl(0, "statusline", { bg = NONE })
+-- vim.o.background = "dark"
+-- vim.cmd([[ colorscheme neofusion ]])

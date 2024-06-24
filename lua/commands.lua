@@ -1,3 +1,40 @@
+-- LSP auto commands
+vim.api.nvim_create_autocmd("LspAttach", {
+	callback = function(args)
+		local opts = { noremap = true, silent = true, buffer = args.buf }
+
+		vim.keymap.set("n", "<leader>D", vim.diagnostic.open_float, opts)
+		vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+		vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+
+		vim.keymap.set("n", "<leader>l", function()
+			vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled())
+		end)
+
+		vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+		vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+		vim.keymap.set("n", "gi", "<cmd>Trouble lsp_implementations toggle<cr>", opts)
+		vim.keymap.set("n", "gr", "<cmd>Trouble lsp_references toggle<cr>", opts)
+		vim.keymap.set("n", "gL", "<cmd>Trouble lsp toggle focus=false win.position=right<cr>", opts)
+		vim.keymap.set("n", "gR", vim.lsp.buf.rename, opts)
+		vim.keymap.set("n", "gD", vim.lsp.buf.type_definition, opts)
+		vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
+		vim.keymap.set({ "n", "v" }, "ga", vim.lsp.buf.code_action, opts)
+	end,
+})
+
+vim.api.nvim_create_user_command("Format", function(args)
+	local range = nil
+	if args.count ~= -1 then
+		local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
+		range = {
+			start = { args.line1, 0 },
+			["end"] = { args.line2, end_line:len() },
+		}
+	end
+	require("conform").format({ async = true, lsp_format = "fallback", range = range })
+end, { range = true })
+
 -- Highlight on yank
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {

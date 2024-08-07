@@ -19,6 +19,8 @@ return {
 			{ name = "staging", url = "postgres://postgres:mypassword@localhost:5432/my-staging-db" },
 			{ name = "invoice", url = "mysql://root@localhost/invoice" },
 			{ name = "public_video", url = "sqlite:/Users/fadel/GoProjects/frud-serv-main/test.db" },
+			{ name = "local_redis", url = "redis://localhost:6379" },
+			{ name = "local_mongodb", url = "mongodb://localhost:27017" },
 		}
 		vim.g.db_ui_table_helpers = {
 			postgresql = {
@@ -29,6 +31,20 @@ return {
 				Count = "SELECT COUNT(*) FROM {table}",
 				Explain = "EXPLAIN QUERY PLAN {last_query}",
 			},
+			redis = {
+				Count = "DBSIZE",
+				Keys = "KEYS *",
+				ClearAll = "FLUSHALL",
+			},
+      mongodb = {
+        Count = "db.{table}.count()",
+        Find = "db.{table}.find()",
+        FindOne = "db.{table}.findOne()",
+        FindById = "db.{table}.findOne(ObjectId('{id}'))",
+        Insert = "db.{table}.insert({document})",
+        Update = "db.{table}.update({query}, {update})",
+        Delete = "db.{table}.remove({query})",
+      },
 		}
 	end,
 }

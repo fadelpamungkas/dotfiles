@@ -29,56 +29,19 @@ return {
 			-- Defined feature will be used by faster.nvim only if it is on (`on=true`).
 			-- Defer will be used if some features need to be disabled after others.
 			-- defer=false features will be disabled first and defer=true features last.
+      -- stylua: ignore
 			features = {
-				filetype = {
-					on = true,
-					defer = true,
-				},
-				illuminate = {
-					on = true,
-					defer = false,
-				},
-				indent_blankline = {
-					on = true,
-					defer = false,
-				},
-				lsp = {
-					on = true,
-					defer = false,
-				},
-				lualine = {
-					on = true,
-					defer = false,
-				},
-				matchparen = {
-					on = true,
-					defer = false,
-				},
-				syntax = {
-					on = true,
-					defer = true,
-				},
-				treesitter = {
-					on = true,
-					defer = false,
-				},
-				vimopts = {
-					on = true,
-					defer = false,
-				},
+				filetype = { on = true, defer = true },
+				illuminate = { on = true, defer = false },
+				indent_blankline = { on = true, defer = false },
+				lsp = { on = true, defer = false },
+				lualine = { on = true, defer = false },
+				matchparen = { on = true, defer = false },
+				syntax = { on = true, defer = true },
+				treesitter = { on = true, defer = false },
+				vimopts = { on = true, defer = false },
 			},
 		},
-	},
-	{
-		"Mofiqul/adwaita.nvim",
-		lazy = false,
-		priority = 1000,
-		config = function()
-			vim.g.adwaita_darker = true -- for darker version
-			vim.g.adwaita_disable_cursorline = true -- to disable cursorline
-			vim.g.adwaita_transparent = true -- makes the background transparent
-			-- vim.cmd.colorscheme("adwaita")
-		end,
 	},
 	{
 		"catppuccin/nvim",
@@ -88,38 +51,9 @@ return {
 		config = function()
 			require("catppuccin").setup({
 				background = {
-					light = "latte",
 					dark = "mocha",
 				},
 				color_overrides = {
-					latte = {
-						rosewater = "#c14a4a",
-						flamingo = "#c14a4a",
-						red = "#c14a4a",
-						maroon = "#c14a4a",
-						pink = "#945e80",
-						mauve = "#945e80",
-						peach = "#c35e0a",
-						yellow = "#b47109",
-						green = "#6c782e",
-						teal = "#4c7a5d",
-						sky = "#4c7a5d",
-						sapphire = "#4c7a5d",
-						blue = "#45707a",
-						lavender = "#45707a",
-						text = "#654735",
-						subtext1 = "#73503c",
-						subtext0 = "#805942",
-						overlay2 = "#8c6249",
-						overlay1 = "#8c856d",
-						overlay0 = "#a69d81",
-						surface2 = "#bfb695",
-						surface1 = "#d1c7a3",
-						surface0 = "#e3dec3",
-						base = "#f9f5d7",
-						mantle = "#f0ebce",
-						crust = "#e8e3c8",
-					},
 					mocha = {
 						rosewater = "#ea6962",
 						flamingo = "#ea6962",
@@ -153,18 +87,14 @@ return {
 				show_end_of_buffer = true,
 				integration_default = false,
 				integrations = {
-					barbecue = { dim_dirname = true, bold_basename = true, dim_context = false, alt_background = false },
 					cmp = true,
 					gitsigns = true,
-					hop = true,
 					illuminate = { enabled = true },
 					native_lsp = { enabled = true, inlay_hints = { background = true } },
 					neogit = true,
-					neotree = true,
 					semantic_tokens = true,
 					treesitter = true,
 					treesitter_context = true,
-					vimwiki = true,
 					which_key = true,
 				},
 				highlight_overrides = {
@@ -425,36 +355,12 @@ return {
 							["@lsp.type.variable"] = { link = "TSVariable" },
 						}
 					end,
-					latte = function(colors)
-						return {
-							IblIndent = { fg = colors.mantle },
-							IblScope = { fg = colors.surface1 },
-
-							LineNr = { fg = colors.surface1 },
-						}
-					end,
 				},
 			})
 
-			vim.api.nvim_command("colorscheme catppuccin")
+			vim.cmd.colorscheme("catppuccin")
 		end,
 	},
-
-	-- {
-	-- 	"sainnhe/sonokai",
-	-- 	lazy = false,
-	-- 	priority = 1000,
-	-- 	config = function()
-	-- 		vim.g.sonokai_enable_italic = false
-	-- 		-- vim.cmd.colorscheme("sonokai")
-	-- 	end,
-	-- },
-	--
-	-- {
-	-- 	"rktjmp/lush.nvim",
-	-- 	priority = 1000,
-	-- 	lazy = false,
-	-- },
 
 	{ "nvim-lua/plenary.nvim" },
 
@@ -462,23 +368,6 @@ return {
 		"mbbill/undotree",
 		cmd = "UndotreeToggle",
 	},
-
-	-- {
-	-- 	"windwp/nvim-autopairs",
-	-- 	event = "InsertEnter",
-	-- 	opts = {
-	-- 		fast_wrap = {},
-	-- 	},
-	-- },
-
-	-- {
-	-- 	"altermo/ultimate-autopair.nvim",
-	-- 	event = { "InsertEnter", "CmdlineEnter" },
-	-- 	branch = "v0.6",
-	-- 	opts = {
-	-- 		--Config goes here
-	-- 	},
-	-- },
 
 	{
 		"kylechui/nvim-surround",
@@ -499,29 +388,6 @@ return {
 		build = ":MasonUpdate",
 		opts = { ui = { width = 1, height = 1 } },
 	},
-
-	-- {
-	-- 	"JoosepAlviste/nvim-ts-context-commentstring",
-	-- 	config = function()
-	-- 		---@diagnostic disable-next-line: missing-fields
-	-- 		require("ts_context_commentstring").setup({
-	-- 			enable = true,
-	-- 			enable_autocmd = false,
-	-- 		})
-	-- 	end,
-	-- },
-	--
-	-- {
-	-- 	"numToStr/Comment.nvim",
-	-- 	event = "BufReadPost",
-	-- 	dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
-	-- 	opts = function()
-	-- 		---@diagnostic disable-next-line: missing-fields
-	-- 		require("Comment").setup({
-	-- 			pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
-	-- 		})
-	-- 	end,
-	-- },
 
 	{
 		"windwp/nvim-spectre",
@@ -559,25 +425,6 @@ return {
 		},
 	},
 
-	-- {
-	-- 	-- dir = "~/LuaProjects/harpoon",
-	-- 	"ThePrimeagen/harpoon",
-	-- 	event = "VeryLazy",
-	--        -- stylua: ignore
-	-- 	config = function()
-	-- 		vim.keymap.set("n", "<leader>h", require("harpoon.mark").add_file)
-	-- 		vim.keymap.set("n", "<leader>H", require("harpoon.ui").toggle_quick_menu)
-	-- 		vim.keymap.set("n", "mq", function() require("harpoon.ui").nav_file(1) end)
-	-- 		vim.keymap.set("n", "mw", function() require("harpoon.ui").nav_file(2) end)
-	-- 		vim.keymap.set("n", "me", function() require("harpoon.ui").nav_file(3) end)
-	--            vim.keymap.set("n", "mr", function() require("harpoon.ui").nav_file(4) end)
-	-- 		vim.keymap.set("n", "ma", function() require("harpoon.ui").nav_file(5) end)
-	-- 		vim.keymap.set("n", "ms", function() require("harpoon.ui").nav_file(6) end)
-	-- 		vim.keymap.set("n", "md", function() require("harpoon.ui").nav_file(7) end)
-	--            vim.keymap.set("n", "mf", function() require("harpoon.ui").nav_file(8) end)
-	-- 	end,
-	-- },
-
 	{
 		"ThePrimeagen/harpoon",
 		branch = "harpoon2",
@@ -587,69 +434,23 @@ return {
 				save_on_toggle = true,
 			},
 		},
+    -- stylua: ignore
 		keys = {
-			{
-				"mq",
-				function()
-					require("harpoon"):list():select(1)
-				end,
-			},
-			{
-				"mw",
-				function()
-					require("harpoon"):list():select(2)
-				end,
-			},
-			{
-				"me",
-				function()
-					require("harpoon"):list():select(3)
-				end,
-			},
-			{
-				"mr",
-				function()
-					require("harpoon"):list():select(4)
-				end,
-			},
-			{
-				"ma",
-				function()
-					require("harpoon"):list():select(5)
-				end,
-			},
-			{
-				"ms",
-				function()
-					require("harpoon"):list():select(6)
-				end,
-			},
-			{
-				"md",
-				function()
-					require("harpoon"):list():select(7)
-				end,
-			},
-			{
-				"mf",
-				function()
-					require("harpoon"):list():select(8)
-				end,
-			},
-			{
-				"<leader>h",
-				function()
-					require("harpoon"):list():add()
-				end,
-			},
-
+			{ "mq", function() require("harpoon"):list():select(1) end },
+			{ "mw", function() require("harpoon"):list():select(2) end },
+			{ "me", function() require("harpoon"):list():select(3) end },
+			{ "mr", function() require("harpoon"):list():select(4) end },
+			{ "ma", function() require("harpoon"):list():select(5) end },
+			{ "ms", function() require("harpoon"):list():select(6) end },
+			{ "md", function() require("harpoon"):list():select(7) end },
+			{ "mf", function() require("harpoon"):list():select(8) end },
+			{ "<leader>h", function() require("harpoon"):list():add() end },
 			{
 				"<leader>H",
 				function()
 					local harpoon = require("harpoon")
 					local opts = {
 						border = "rounded",
-						-- title_pos = "center",
 						title = " Navigator ",
 						ui_width_ratio = 0.35,
 					}
@@ -711,27 +512,9 @@ return {
 	},
 
 	{
-		"rest-nvim/rest.nvim",
-		dependencies = { { "nvim-lua/plenary.nvim" } },
-		keys = {
-			{ "<leader>cr", "<Plug>RestNvim" },
-			{ "<leader>cp", "<Plug>RestNvimPreview" },
-			{ "<leader>cl", "<Plug>RestNvimLast" },
-		},
-		commit = "8b62563",
-		ft = { "http" },
-		opts = {
-			result_split_horizontal = true,
-		},
-	},
-
-	{
 		"oysandvik94/curl.nvim",
 		cmd = { "CurlOpen" },
-		ft = { "curl" },
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-		},
+		dependencies = { "nvim-lua/plenary.nvim" },
 		config = true,
 	},
 }

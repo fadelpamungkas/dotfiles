@@ -131,6 +131,7 @@ vim.api.nvim_create_user_command("CompareClipboard", function()
 		windo diffthis
 	]])
 	vim.cmd("set filetype=" .. ftype)
+  vim.cmd("nnoremap <silent> <buffer> q <cmd>tabclose<CR>")
 end, { nargs = 0 })
 
 -- Assign it to a keymap
@@ -149,6 +150,7 @@ vim.api.nvim_create_user_command("CompareClipboardSelection", function()
 		normal! Vp
 		windo diffthis
 	]])
+  vim.cmd("nnoremap <silent> <buffer> q <cmd>tabclose<CR>")
 end, {
 	nargs = 0,
 	range = true,

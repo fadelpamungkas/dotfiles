@@ -1,27 +1,29 @@
 -- LSP auto commands
-vim.api.nvim_create_autocmd("LspAttach", {
-	callback = function(args)
-		local opts = { noremap = true, silent = true, buffer = args.buf }
-
-		vim.keymap.set("n", "<leader>D", vim.diagnostic.open_float, opts)
-		vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
-		vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-
-		vim.keymap.set("n", "<leader>l", function()
-			vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled())
-		end)
-
-		vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-		vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-		vim.keymap.set("n", "gi", "<cmd>Trouble lsp_implementations toggle<cr>", opts)
-		vim.keymap.set("n", "gr", "<cmd>Trouble lsp_references toggle<cr>", opts)
-		vim.keymap.set("n", "gL", "<cmd>Trouble lsp toggle focus=false win.position=right<cr>", opts)
-		vim.keymap.set("n", "gR", vim.lsp.buf.rename, opts)
-		vim.keymap.set("n", "gD", vim.lsp.buf.type_definition, opts)
-		vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
-		vim.keymap.set({ "n", "v" }, "ga", vim.lsp.buf.code_action, opts)
-	end,
-})
+-- vim.api.nvim_create_autocmd("LspAttach", {
+-- 	callback = function(args)
+-- 		if args.client.name ~= "jdtls" then
+-- 			local opts = { noremap = true, silent = true, buffer = args.buf }
+--
+-- 			vim.keymap.set("n", "<leader>D", vim.diagnostic.open_float, opts)
+-- 			vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+-- 			vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+--
+-- 			vim.keymap.set("n", "<leader>l", function()
+-- 				vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled())
+-- 			end)
+--
+-- 			vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+-- 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+-- 			vim.keymap.set("n", "gi", "<cmd>Trouble lsp_implementations toggle<cr>", opts)
+-- 			vim.keymap.set("n", "gr", "<cmd>Trouble lsp_references toggle<cr>", opts)
+-- 			vim.keymap.set("n", "gL", "<cmd>Trouble lsp toggle focus=false win.position=right<cr>", opts)
+-- 			vim.keymap.set("n", "gR", vim.lsp.buf.rename, opts)
+-- 			vim.keymap.set("n", "gD", vim.lsp.buf.type_definition, opts)
+-- 			vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
+-- 			vim.keymap.set({ "n", "v" }, "ga", vim.lsp.buf.code_action, opts)
+-- 		end
+-- 	end,
+-- })
 
 vim.api.nvim_create_user_command("Format", function(args)
 	local range = nil
@@ -131,7 +133,7 @@ vim.api.nvim_create_user_command("CompareClipboard", function()
 		windo diffthis
 	]])
 	vim.cmd("set filetype=" .. ftype)
-  vim.cmd("nnoremap <silent> <buffer> q <cmd>tabclose<CR>")
+	vim.cmd("nnoremap <silent> <buffer> q <cmd>tabclose<CR>")
 end, { nargs = 0 })
 
 -- Assign it to a keymap
@@ -150,7 +152,7 @@ vim.api.nvim_create_user_command("CompareClipboardSelection", function()
 		normal! Vp
 		windo diffthis
 	]])
-  vim.cmd("nnoremap <silent> <buffer> q <cmd>tabclose<CR>")
+	vim.cmd("nnoremap <silent> <buffer> q <cmd>tabclose<CR>")
 end, {
 	nargs = 0,
 	range = true,
@@ -176,3 +178,72 @@ function _G.toggle_quickfix()
 end
 
 vim.keymap.set("n", "<leader>q", ":lua toggle_quickfix()<CR>", { noremap = true, silent = true })
+
+-- curl
+local response_buf = nil
+
+vim.api.nvim_create_user_command("ExecuteCurl", function(opts)
+	local start_line, end_line
+
+	if opts.range == 0 then
+		start_line = 0
+		end_line = -1
+	else
+		start_line = opts.line1 - 1
+		end_line = opts.line2
+	end
+
+	local lines = vim.api.nvim_buf_get_lines(0, start_line, end_line, false)
+	local curl_command = table.concat(lines, " "):gsub("%s+", " ")
+
+	local result = ""
+	local job_id = vim.fn.jobstart(curl_command, {
+		on_stdout = function(_, data)
+			result = result .. table.concat(data, "\n")
+		end,
+		on_exit = function()
+			vim.schedule(function()
+				result = result:gsub("\r\n", "\n")
+
+				if response_buf and vim.api.nvim_buf_is_valid(response_buf) then
+					vim.api.nvim_buf_set_lines(response_buf, 0, -1, false, {})
+				else
+					response_buf = vim.api.nvim_create_buf(false, true)
+					vim.api.nvim_buf_set_option(response_buf, "buftype", "nofile")
+					vim.api.nvim_buf_set_option(response_buf, "bufhidden", "hide")
+					vim.api.nvim_buf_set_option(response_buf, "swapfile", false)
+					vim.api.nvim_buf_set_name(response_buf, "Curl Response")
+				end
+
+				vim.api.nvim_buf_set_lines(response_buf, 0, -1, false, vim.split(result, "\n"))
+
+				local win_id = vim.fn.bufwinid(response_buf)
+				if win_id == -1 then
+					vim.cmd("vsplit")
+					vim.api.nvim_win_set_buf(0, response_buf)
+				else
+					vim.api.nvim_set_current_win(win_id)
+				end
+
+				if result:match("^%s*{") or result:match("^%s*%[") then
+					vim.api.nvim_buf_set_option(response_buf, "filetype", "json")
+				else
+					vim.api.nvim_buf_set_option(response_buf, "filetype", "http")
+				end
+
+				vim.api.nvim_buf_set_keymap(response_buf, "n", "q", ":hide<CR>", { noremap = true, silent = true })
+			end)
+		end,
+	})
+
+	if job_id == 0 then
+		print("Failed to start job")
+	elseif job_id == -1 then
+		print("Invalid arguments")
+	else
+		print("Executing curl command...")
+	end
+end, { range = true })
+
+vim.keymap.set("v", "<leader>xc", ":ExecuteCurl<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>xc", "vap:ExecuteCurl<CR>", { noremap = true, silent = true })

@@ -58,7 +58,25 @@ return {
 					end,
 					{ expr = true, desc = "jump" },
 				},
+
 				{ "p", gitsigns.preview_hunk, { desc = "preview" } },
+				{
+					"R",
+					function()
+						vim.bo.modifiable = true
+						gitsigns.reset_buffer()
+						vim.bo.modifiable = false
+					end,
+				},
+				{
+					"r",
+					function()
+						vim.bo.modifiable = true
+						gitsigns.reset_hunk()
+						vim.bo.modifiable = false
+					end,
+					{ desc = "reset" },
+				},
 				{ "u", gitsigns.undo_stage_hunk, { desc = "undo" } },
 				{ "d", gitsigns.toggle_deleted, { nowait = true, desc = "deleted" } },
 				{ "S", gitsigns.stage_buffer },

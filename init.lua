@@ -139,7 +139,7 @@ vim.api.nvim_create_autocmd({ "DiagnosticChanged", "BufWinEnter" }, {
 		}) do
 			local n = vim.diagnostic.get(0, { severity = attr[1] })
 			if #n > 0 then
-				table.insert(results, string.format(" %s%d", attr[2], #n))
+				table.insert(results, string.format("%s%d ", attr[2], #n))
 			end
 		end
 		diagnostics = table.concat(results)
@@ -149,7 +149,7 @@ vim.api.nvim_create_autocmd({ "DiagnosticChanged", "BufWinEnter" }, {
 local function unsaved_buffers()
 	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
 		if vim.api.nvim_buf_get_option(buf, "modified") then
-			return " Unsaved "
+			return "Unsaved"
 		end
 	end
 	return ""
@@ -161,53 +161,95 @@ local function file_section()
 end
 
 -- LSP Progress
-local lsp_progress = ""
-vim.api.nvim_create_autocmd("User", {
-	pattern = "LspProgressUpdate",
-	group = vim.api.nvim_create_augroup("lsp_progress_statusline", {}),
-	callback = function(opts)
-		if not vim.lsp.get_client_by_id(opts.data.client_id) then
+local lsp_progress = {
+	client = nil,
+	kind = nil,
+	title = nil,
+	percentage = nil,
+	message = nil,
+}
+
+vim.api.nvim_create_autocmd("LspProgress", {
+	desc = "Update LSP progress in statusline",
+	pattern = { "begin", "report", "end" },
+	callback = function(args)
+		if not (args.data and args.data.client_id) then
 			return
 		end
-		local data = opts.data.result.value
-		if data.kind ~= "end" then
-			lsp_progress = data.percentage == nil and "" or string.format(" (%d%%%%)", data.percentage)
-			lsp_progress = lsp_progress .. " " .. data.title
-			lsp_progress = lsp_progress .. " " .. (data.message == nil and "" or data.message)
+
+		lsp_progress = {
+			client = vim.lsp.get_client_by_id(args.data.client_id),
+			kind = args.data.params.value.kind,
+			message = args.data.params.value.message,
+			percentage = args.data.params.value.percentage,
+			title = args.data.params.value.title,
+		}
+
+		if lsp_progress.kind == "end" then
+			lsp_progress.title = nil
+			vim.defer_fn(function()
+				vim.cmd.redrawstatus()
+			end, 500)
 		else
-			lsp_progress = ""
+			vim.cmd.redrawstatus()
 		end
-		vim.cmd.redrawstatus()
 	end,
 })
 
-local branch_cache = nil
-local function get_branch()
-	if branch_cache == nil then
-		local branch = vim.fn.systemlist("git branch --show-current 2>/dev/null")
-		if vim.v.shell_error == 0 and #branch > 0 then
-			branch_cache = string.format("  %s ", branch[1])
-		else
-			branch_cache = ""
-		end
+local function lsp_status()
+	if not rawget(vim, "lsp") then
+		return ""
 	end
-	return branch_cache
+
+	if vim.o.columns < 120 then
+		return ""
+	end
+
+	if not lsp_progress.client or not lsp_progress.title then
+		return ""
+	end
+
+	local title = lsp_progress.title or ""
+	local percentage = (lsp_progress.percentage and (lsp_progress.percentage .. "%%")) or ""
+	local message = lsp_progress.message or ""
+
+	local lsp_message = string.format("%s", title)
+
+	if message ~= "" then
+		lsp_message = string.format("%s %s", lsp_message, message)
+	end
+
+	if percentage ~= "" then
+		lsp_message = string.format("%s %s", lsp_message, percentage)
+	end
+
+	return string.format("%s ", lsp_message)
+end
+
+local function get_branch()
+	local branch = vim.b.gitsigns_head
+
+	if branch == "" or branch == nil then
+		return ""
+	end
+
+	return string.format("%s ", branch)
 end
 
 _G.set_statusline = function()
-	return file_section() .. "%m%r" .. unsaved_buffers() .. diagnostics .. lsp_progress .. "%=" .. get_branch() .. "%l:%c %L %p%%"
+	return file_section()
+		.. "%m%r"
+		.. unsaved_buffers()
+		.. diagnostics
+		.. lsp_status()
+		.. "%="
+		.. get_branch()
+		.. "%l:%c %L %p%%"
 end
 
 vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
 	group = statusline_group,
 	command = "setlocal statusline=%!v:lua.set_statusline()",
-})
-
-vim.api.nvim_create_autocmd("BufWritePost", {
-	group = statusline_group,
-	callback = function()
-		branch_cache = nil
-	end,
 })
 
 -- vim.cmd.colorscheme("lunaperche")
@@ -219,71 +261,3 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 -- vim.api.nvim_set_hl(0, "statusline", { bg = NONE })
 -- vim.o.background = "dark"
 -- vim.cmd([[ colorscheme neofusion ]])
-
-local response_buf = nil
-
-vim.api.nvim_create_user_command("ExecuteCurl", function(opts)
-	local start_line, end_line
-
-	if opts.range == 0 then
-		start_line = 0
-		end_line = -1
-	else
-		start_line = opts.line1 - 1
-		end_line = opts.line2
-	end
-
-	local lines = vim.api.nvim_buf_get_lines(0, start_line, end_line, false)
-	local curl_command = table.concat(lines, " "):gsub("%s+", " ")
-
-	local result = ""
-	local job_id = vim.fn.jobstart(curl_command, {
-		on_stdout = function(_, data)
-			result = result .. table.concat(data, "\n")
-		end,
-		on_exit = function()
-			vim.schedule(function()
-				result = result:gsub("\r\n", "\n")
-
-				if response_buf and vim.api.nvim_buf_is_valid(response_buf) then
-					vim.api.nvim_buf_set_lines(response_buf, 0, -1, false, {})
-				else
-					response_buf = vim.api.nvim_create_buf(false, true)
-					vim.api.nvim_buf_set_option(response_buf, "buftype", "nofile")
-					vim.api.nvim_buf_set_option(response_buf, "bufhidden", "hide")
-					vim.api.nvim_buf_set_option(response_buf, "swapfile", false)
-					vim.api.nvim_buf_set_name(response_buf, "Curl Response")
-				end
-
-				vim.api.nvim_buf_set_lines(response_buf, 0, -1, false, vim.split(result, "\n"))
-
-				local win_id = vim.fn.bufwinid(response_buf)
-				if win_id == -1 then
-					vim.cmd("vsplit")
-					vim.api.nvim_win_set_buf(0, response_buf)
-				else
-					vim.api.nvim_set_current_win(win_id)
-				end
-
-				if result:match("^%s*{") or result:match("^%s*%[") then
-					vim.api.nvim_buf_set_option(response_buf, "filetype", "json")
-				else
-					vim.api.nvim_buf_set_option(response_buf, "filetype", "http")
-				end
-
-				vim.api.nvim_buf_set_keymap(response_buf, "n", "q", ":hide<CR>", { noremap = true, silent = true })
-			end)
-		end,
-	})
-
-	if job_id == 0 then
-		print("Failed to start job")
-	elseif job_id == -1 then
-		print("Invalid arguments")
-	else
-		print("Executing curl command...")
-	end
-end, { range = true })
-
-vim.keymap.set("v", "<leader>xc", ":ExecuteCurl<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>xc", "vap:ExecuteCurl<CR>", { noremap = true, silent = true })

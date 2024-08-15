@@ -16,6 +16,9 @@ return {
 	},
 	config = function()
 		local actions = require("fzf-lua.actions")
+		-- local config = require("fzf-lua.config")
+		-- config.defaults.actions.files["ctrl-t"] = require("trouble.sources.fzf").actions.open
+		--
 		require("fzf-lua").setup({
 			winopts = {
 				-- split = "belowright new", -- open in a top split
@@ -45,7 +48,7 @@ return {
 					["default"] = actions.file_edit_or_qf,
 					["ctrl-x"] = actions.file_split,
 					["ctrl-v"] = actions.file_vsplit,
-					["ctrl-t"] = actions.file_tabedit,
+					-- ["ctrl-t"] = actions.file_tabedit,
 					["ctrl-s"] = function(selected, _)
 						pcall(require("harpoon.mark").add_file, selected[1])
 					end,

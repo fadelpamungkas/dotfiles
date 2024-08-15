@@ -57,11 +57,38 @@ return {
 				-- tsserver = {},
 				-- tailwindcss = {},
 			}
+			local lsp_attach = function(client, bufnr)
+				local opts = { noremap = true, silent = true, buffer = bufnr }
+
+				vim.keymap.set("n", "<leader>D", vim.diagnostic.open_float, opts)
+				vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+				vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+
+				vim.keymap.set("n", "<leader>l", function()
+					vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled())
+				end)
+
+				vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+				vim.keymap.set("n", "gi", "<cmd>Trouble lsp_implementations toggle<cr>", opts)
+				vim.keymap.set("n", "gr", "<cmd>Trouble lsp_references toggle<cr>", opts)
+				vim.keymap.set("n", "gL", "<cmd>Trouble lsp toggle focus=false win.position=right<cr>", opts)
+				vim.keymap.set("n", "gR", vim.lsp.buf.rename, opts)
+				vim.keymap.set("n", "gD", vim.lsp.buf.type_definition, opts)
+				vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
+				vim.keymap.set({ "n", "v" }, "ga", vim.lsp.buf.code_action, opts)
+			end
 
 			mason_lspconfig.setup({ ensure_installed = vim.tbl_keys(servers) })
 			mason_lspconfig.setup_handlers({
 				function(server_name)
-					lspconfig[server_name].setup({ settings = servers[server_name] })
+					-- lspconfig[server_name].setup({ settings = servers[server_name] })
+					if server_name ~= "jdtls" then
+						lspconfig[server_name].setup({
+							on_attach = lsp_attach,
+							capabilities = lsp_defaults.capabilities,
+						})
+					end
 				end,
 			})
 		end,

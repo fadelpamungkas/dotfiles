@@ -1,3 +1,6 @@
 board/
 falcon2/
 min/
+
+.opencode/
+OpenCode.md

@@ -1,4 +1,22 @@
 return {
+  {
+    "wtfox/jellybeans.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("jellybeans").setup()
+      vim.cmd.colorscheme("jellybeans")
+    end,
+  },
+  {
+    "alligator/accent.vim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      vim.cmd("let g:accent_colour = 'blue'")
+      vim.cmd("let g:accent_no_bg = 1")
+    end,
+  },
 	{
 		"rebelot/kanagawa.nvim",
 		opts = {
@@ -23,4 +41,41 @@ return {
 			})
 		end,
 	},
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("catppuccin").setup({
+        no_italic = true,
+        term_colors = true,
+        transparent_background = true,
+        show_end_of_buffer = true,
+        integration_default = false,
+        integrations = {
+          cmp = true,
+          gitsigns = true,
+          illuminate = { enabled = true },
+          native_lsp = { enabled = true, inlay_hints = { background = true } },
+          neogit = true,
+          semantic_tokens = true,
+          treesitter = true,
+          treesitter_context = true,
+          which_key = true,
+        },
+        styles = {
+          loops = {},
+          functions = {},
+          keywords = {},
+          strings = {},
+          variables = {},
+          numbers = {},
+          booleans = {},
+          properties = {},
+          types = {},
+        },
+      })
+    end,
+  },
 }

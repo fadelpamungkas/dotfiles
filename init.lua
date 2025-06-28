@@ -1,26 +1,29 @@
 local opt = vim.opt
 local g = vim.g
 local function map(mode, lhs, rhs, opts)
-	opts = opts or {}
-	opts.silent = opts.silent ~= false
-	vim.keymap.set(mode, lhs, rhs, opts)
+  opts = opts or {}
+  opts.silent = opts.silent ~= false
+  vim.keymap.set(mode, lhs, rhs, opts)
 end
 
 if g.neovide ~= nil then
-	vim.o.guifont = "Menlo:h14"
-	g.neovide_cursor_antialiasing = true
-	g.neovide_cursor_vfx_mode = ""
-	g.neovide_cursor_animation_length = 0.05
-	g.neovide_cursor_trail_size = 0
-	g.neovide_scale_factor = 1
-	g.neovide_transparency = 1
-	g.transparency = 0.5
-	vim.keymap.set("n", "<F11>", ":let g:neovide_fullscreen = !g:neovide_fullscreen<CR>")
+  vim.o.guifont = "Menlo:h14"
+  g.neovide_cursor_antialiasing = true
+  g.neovide_cursor_vfx_mode = ""
+  g.neovide_cursor_animation_length = 0.05
+  g.neovide_cursor_trail_size = 0
+  g.neovide_scale_factor = 1
+  g.neovide_transparency = 1
+  g.transparency = 0.5
+  vim.keymap.set("n", "<F11>", ":let g:neovide_fullscreen = !g:neovide_fullscreen<CR>")
 end
+
+vim.schedule(function()
+  opt.clipboard = 'unnamedplus'
+end)
 
 opt.updatetime = 200
 opt.background = "dark"
-opt.clipboard = "unnamedplus"
 opt.showmatch = true
 opt.ignorecase = true
 opt.smartcase = true
@@ -102,25 +105,26 @@ map("v", "<Leader>M", ":'<,'>!jq .<CR>")
 require("lazyconfig")
 
 vim.api.nvim_create_autocmd("User", {
-	pattern = "VeryLazy",
-	callback = function()
-		require("commands")
-	end,
+  pattern = "VeryLazy",
+  callback = function()
+    require("commands")
+  end,
 })
 
 vim.api.nvim_create_autocmd("ColorScheme", {
-	callback = function()
-		vim.api.nvim_set_hl(0, "FlashMatch", { fg = "lightgrey" })
-		vim.api.nvim_set_hl(0, "FlashLabel", { fg = "orange" })
-		vim.api.nvim_set_hl(0, "FlashCurrent", { fg = "cyan" })
-	end,
+  callback = function()
+    vim.api.nvim_set_hl(0, "FlashMatch", { fg = "lightgrey" })
+    vim.api.nvim_set_hl(0, "FlashLabel", { fg = "orange" })
+    vim.api.nvim_set_hl(0, "FlashCurrent", { fg = "cyan" })
+  end,
 })
 
 -- additional filetypes
 vim.filetype.add({
-	extension = {
-		templ = "templ",
-	},
+  extension = {
+    templ = "templ",
+    ['http'] = 'http',
+  },
 })
 
 -- Statusline
@@ -128,136 +132,145 @@ local statusline_group = vim.api.nvim_create_augroup("StatusLine", { clear = tru
 
 local diagnostics = ""
 vim.api.nvim_create_autocmd({ "DiagnosticChanged", "BufWinEnter" }, {
-	group = statusline_group,
-	callback = function()
-		local results = {}
-		for _, attr in pairs({
-			{ "Error", "E" },
-			{ "Warn", "W" },
-			{ "Hint", "H" },
-			{ "Info", "I" },
-		}) do
-			local n = vim.diagnostic.get(0, { severity = attr[1] })
-			if #n > 0 then
-				table.insert(results, string.format("%s%d ", attr[2], #n))
-			end
-		end
-		diagnostics = table.concat(results)
-	end,
+  group = statusline_group,
+  callback = function()
+    local results = {}
+    for _, attr in pairs({
+      { "Error", "E" },
+      { "Warn",  "W" },
+      { "Hint",  "H" },
+      { "Info",  "I" },
+    }) do
+      local n = vim.diagnostic.get(0, { severity = attr[1] })
+      if #n > 0 then
+        table.insert(results, string.format("%s%d ", attr[2], #n))
+      end
+    end
+    diagnostics = table.concat(results)
+  end,
 })
 
 local function unsaved_buffers()
-	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-		if vim.api.nvim_buf_get_option(buf, "modified") then
-			return "Unsaved"
-		end
-	end
-	return ""
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_get_option(buf, "modified") then
+      return "Unsaved"
+    end
+  end
+  return ""
 end
 
 local function file_section()
-	local name = (vim.fn.expand("%:.") == "") and "No Name" or vim.fn.expand("%:.")
-	return string.format("%s ", name)
+  local name = (vim.fn.expand("%:.") == "") and "No Name" or vim.fn.expand("%:.")
+  return string.format("%s ", name)
 end
 
 -- LSP Progress
 local lsp_progress = {
-	client = nil,
-	kind = nil,
-	title = nil,
-	percentage = nil,
-	message = nil,
+  client = nil,
+  kind = nil,
+  title = nil,
+  percentage = nil,
+  message = nil,
 }
 
 vim.api.nvim_create_autocmd("LspProgress", {
-	desc = "Update LSP progress in statusline",
-	pattern = { "begin", "report", "end" },
-	callback = function(args)
-		if not (args.data and args.data.client_id) then
-			return
-		end
+  desc = "Update LSP progress in statusline",
+  pattern = { "begin", "report", "end" },
+  callback = function(args)
+    if not (args.data and args.data.client_id) then
+      return
+    end
 
-		lsp_progress = {
-			client = vim.lsp.get_client_by_id(args.data.client_id),
-			kind = args.data.params.value.kind,
-			message = args.data.params.value.message,
-			percentage = args.data.params.value.percentage,
-			title = args.data.params.value.title,
-		}
+    lsp_progress = {
+      client = vim.lsp.get_client_by_id(args.data.client_id),
+      kind = args.data.params.value.kind,
+      message = args.data.params.value.message,
+      percentage = args.data.params.value.percentage,
+      title = args.data.params.value.title,
+    }
 
-		if lsp_progress.kind == "end" then
-			lsp_progress.title = nil
-			vim.defer_fn(function()
-				vim.cmd.redrawstatus()
-			end, 500)
-		else
-			vim.cmd.redrawstatus()
-		end
-	end,
+    if lsp_progress.kind == "end" then
+      lsp_progress.title = nil
+      vim.defer_fn(function()
+        vim.cmd.redrawstatus()
+      end, 500)
+    else
+      vim.cmd.redrawstatus()
+    end
+  end,
 })
 
 local function lsp_status()
-	if not rawget(vim, "lsp") then
-		return ""
-	end
+  if not rawget(vim, "lsp") then
+    return ""
+  end
 
-	if vim.o.columns < 120 then
-		return ""
-	end
+  if vim.o.columns < 120 then
+    return ""
+  end
 
-	if not lsp_progress.client or not lsp_progress.title then
-		return ""
-	end
+  if not lsp_progress.client or not lsp_progress.title then
+    return ""
+  end
 
-	local title = lsp_progress.title or ""
-	local percentage = (lsp_progress.percentage and (lsp_progress.percentage .. "%%")) or ""
-	local message = lsp_progress.message or ""
+  local title = lsp_progress.title or ""
+  local percentage = (lsp_progress.percentage and (lsp_progress.percentage .. "%%")) or ""
+  local message = lsp_progress.message or ""
 
-	local lsp_message = string.format("%s", title)
+  local lsp_message = string.format("%s", title)
 
-	if message ~= "" then
-		lsp_message = string.format("%s %s", lsp_message, message)
-	end
+  if message ~= "" then
+    lsp_message = string.format("%s %s", lsp_message, message)
+  end
 
-	if percentage ~= "" then
-		lsp_message = string.format("%s %s", lsp_message, percentage)
-	end
+  if percentage ~= "" then
+    lsp_message = string.format("%s %s", lsp_message, percentage)
+  end
 
-	return string.format("%s ", lsp_message)
+  return string.format("%s ", lsp_message)
 end
 
 local function get_branch()
-	local branch = vim.b.gitsigns_head
+  local branch = vim.b.gitsigns_head
 
-	if branch == "" or branch == nil then
-		return ""
-	end
+  if branch == "" or branch == nil then
+    return ""
+  end
 
-	return string.format("%s ", branch)
+  return string.format("%s ", branch)
 end
 
 _G.set_statusline = function()
-	return file_section()
-		.. "%m%r"
-		.. unsaved_buffers()
-		.. diagnostics
-		.. lsp_status()
-		.. "%="
-		.. get_branch()
-		.. "%l:%c %L %p%%"
+  return file_section()
+      .. "%m%r"
+      .. unsaved_buffers()
+      .. diagnostics
+      .. lsp_status()
+      .. "%="
+      .. get_branch()
+      .. "%l:%c %L %p%%"
 end
 
 vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
-	group = statusline_group,
-	command = "setlocal statusline=%!v:lua.set_statusline()",
+  group = statusline_group,
+  command = "setlocal statusline=%!v:lua.set_statusline()",
 })
 
--- vim.cmd.colorscheme("lunaperche")
--- vim.api.nvim_set_hl(0, "Normal", { bg = NONE })
--- vim.api.nvim_set_hl(0, "ModeMsg", { bg = NONE })
--- vim.api.nvim_set_hl(0, "StatusLine", { bg = NONE })
+vim.api.nvim_create_user_command("Lunaperche", function()
+  vim.cmd.colorscheme("lunaperche")
+  vim.api.nvim_set_hl(0, "Normal", { bg = NONE })
+  vim.api.nvim_set_hl(0, "ModeMsg", { bg = NONE })
+  vim.api.nvim_set_hl(0, "StatusLine", { bg = NONE })
+  vim.o.background = "dark"
+end, {})
 
--- vim.cmd.colorscheme("default")
--- vim.api.nvim_set_hl(0, "statusline", { bg = NONE })
--- vim.o.background = "dark"
--- vim.cmd([[ colorscheme neofusion ]])
+vim.api.nvim_create_user_command("Default", function()
+  vim.cmd.colorscheme("default")
+  vim.api.nvim_set_hl(0, "Normal", { bg = NONE })
+  vim.api.nvim_set_hl(0, "ModeMsg", { bg = NONE })
+  vim.api.nvim_set_hl(0, "StatusLine", { bg = NONE, fg = "white" })
+  vim.o.background = "dark"
+end, {})
+
+vim.cmd("set t_md=")
+vim.cmd("Lunaperche")

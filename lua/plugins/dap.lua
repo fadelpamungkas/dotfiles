@@ -1,7 +1,7 @@
 return {
   {
     "miroshQa/debugmaster.nvim",
-    dependencies = { "mfussenegger/nvim-dap", },
+    dependencies = { "mfussenegger/nvim-dap" },
     keys = { "<leader>x" },
     config = function()
       local dm = require("debugmaster")
@@ -15,21 +15,21 @@ return {
       local dap = require("dap")
       -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation
       dap.adapters.delve = function(callback, config)
-        if config.mode == 'remote' and config.request == 'attach' then
+        if config.mode == "remote" and config.request == "attach" then
           callback({
-            type = 'server',
-            host = config.host or '127.0.0.1',
-            port = config.port or '38697'
+            type = "server",
+            host = config.host or "127.0.0.1",
+            port = config.port or "38697",
           })
         else
           callback({
-            type = 'server',
-            port = '${port}',
+            type = "server",
+            port = "${port}",
             executable = {
-              command = 'dlv',
-              args = { 'dap', '-l', '127.0.0.1:${port}', '--log', '--log-output=dap' },
+              command = "dlv",
+              args = { "dap", "-l", "127.0.0.1:${port}", "--log", "--log-output=dap" },
               detached = vim.fn.has("win32") == 0,
-            }
+            },
           })
         end
       end
@@ -43,11 +43,11 @@ return {
           -- program = "${file}"
           program = function()
             -- check if in cwd has main.go, if not ask for the path
-            local main_file = vim.fn.getcwd() .. '/main.go'
+            local main_file = vim.fn.getcwd() .. "/main.go"
             if vim.fn.filereadable(main_file) == 1 then
               return main_file
             else
-              return vim.fn.input('Path to main.go: ', vim.fn.getcwd() .. '/', 'file')
+              return vim.fn.input("Path to main.go: ", vim.fn.getcwd() .. "/", "file")
             end
           end,
         },
@@ -59,11 +59,11 @@ return {
           -- program = "${file}"
           program = function()
             -- check if in cwd has main_test.go, if not ask for the path
-            local test_file = vim.fn.getcwd() .. '/main_test.go'
+            local test_file = vim.fn.getcwd() .. "/main_test.go"
             if vim.fn.filereadable(test_file) == 1 then
               return test_file
             else
-              return vim.fn.input('Path to main_test.go: ', vim.fn.getcwd() .. '/', 'file')
+              return vim.fn.input("Path to main_test.go: ", vim.fn.getcwd() .. "/", "file")
             end
           end,
         },
@@ -73,31 +73,31 @@ return {
           name = "Debug test (go.mod)",
           request = "launch",
           mode = "test",
-          program = "./${relativeFileDirname}"
-        }
+          program = "./${relativeFileDirname}",
+        },
       }
 
       dap.adapters.python = function(cb, config)
-        if config.request == 'attach' then
+        if config.request == "attach" then
           ---@diagnostic disable-next-line: undefined-field
           local port = (config.connect or config).port
           ---@diagnostic disable-next-line: undefined-field
-          local host = (config.connect or config).host or '127.0.0.1'
+          local host = (config.connect or config).host or "127.0.0.1"
           cb({
-            type = 'server',
-            port = assert(port, '`connect.port` is required for a python `attach` configuration'),
+            type = "server",
+            port = assert(port, "`connect.port` is required for a python `attach` configuration"),
             host = host,
             options = {
-              source_filetype = 'python',
+              source_filetype = "python",
             },
           })
         else
           cb({
-            type = 'executable',
-            command = '/Users/fadel.pamungkas/.local/share/nvim/mason/bin/debugpy-adapter',
+            type = "executable",
+            command = "/Users/fadel.pamungkas/.local/share/nvim/mason/bin/debugpy-adapter",
             -- args = { '-m', 'debugpy.adapter' },
             options = {
-              source_filetype = 'python',
+              source_filetype = "python",
             },
           })
         end
@@ -105,8 +105,8 @@ return {
       dap.configurations.python = {
         {
           -- The first three options are required by nvim-dap
-          type = 'python', -- the type here established the link to the adapter definition: `dap.adapters.python`
-          request = 'launch',
+          type = "python", -- the type here established the link to the adapter definition: `dap.adapters.python`
+          request = "launch",
           name = "Launch file",
 
           -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
@@ -114,11 +114,11 @@ return {
           -- program = "${file}", -- This configuration will launch the current file if used.
           -- check if in cwd has main.py, if not ask for the path
           program = function()
-            local main_file = vim.fn.getcwd() .. '/main.py'
+            local main_file = vim.fn.getcwd() .. "/main.py"
             if vim.fn.filereadable(main_file) == 1 then
               return main_file
             else
-              return vim.fn.input('Path to main.py: ', vim.fn.getcwd() .. '/', 'file')
+              return vim.fn.input("Path to main.py: ", vim.fn.getcwd() .. "/", "file")
             end
           end,
           pythonPath = function()
@@ -126,18 +126,18 @@ return {
             -- The code below looks for a `venv` or `.venv` folder in the current directly and uses the python within.
             -- You could adapt this - to for example use the `VIRTUAL_ENV` environment variable.
             local cwd = vim.fn.getcwd()
-            if vim.fn.executable(cwd .. '/.venv/bin/python') == 1 then
-              return cwd .. '/.venv/bin/python'
-            elseif vim.fn.executable(cwd .. '/venv/bin/python') == 1 then
-              return cwd .. '/venv/bin/python'
+            if vim.fn.executable(cwd .. "/.venv/bin/python") == 1 then
+              return cwd .. "/.venv/bin/python"
+            elseif vim.fn.executable(cwd .. "/venv/bin/python") == 1 then
+              return cwd .. "/venv/bin/python"
             else
-              return '/usr/bin/python'
+              return "/usr/bin/python"
             end
           end,
         },
       }
-    end
-  }
+    end,
+  },
 }
 -- return {
 --   "mfussenegger/nvim-dap",

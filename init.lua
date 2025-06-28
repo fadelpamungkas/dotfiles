@@ -19,7 +19,7 @@ if g.neovide ~= nil then
 end
 
 vim.schedule(function()
-  opt.clipboard = 'unnamedplus'
+  opt.clipboard = "unnamedplus"
 end)
 
 opt.updatetime = 200
@@ -123,7 +123,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 vim.filetype.add({
   extension = {
     templ = "templ",
-    ['http'] = 'http',
+    ["http"] = "http",
   },
 })
 
@@ -137,9 +137,9 @@ vim.api.nvim_create_autocmd({ "DiagnosticChanged", "BufWinEnter" }, {
     local results = {}
     for _, attr in pairs({
       { "Error", "E" },
-      { "Warn",  "W" },
-      { "Hint",  "H" },
-      { "Info",  "I" },
+      { "Warn", "W" },
+      { "Hint", "H" },
+      { "Info", "I" },
     }) do
       local n = vim.diagnostic.get(0, { severity = attr[1] })
       if #n > 0 then
@@ -242,13 +242,13 @@ end
 
 _G.set_statusline = function()
   return file_section()
-      .. "%m%r"
-      .. unsaved_buffers()
-      .. diagnostics
-      .. lsp_status()
-      .. "%="
-      .. get_branch()
-      .. "%l:%c %L %p%%"
+    .. "%m%r"
+    .. unsaved_buffers()
+    .. diagnostics
+    .. lsp_status()
+    .. "%="
+    .. get_branch()
+    .. "%l:%c %L %p%%"
 end
 
 vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {

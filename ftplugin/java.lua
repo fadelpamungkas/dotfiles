@@ -46,7 +46,7 @@ local config = {
       contentProvider = { preferred = "fernflower" },
       extendedClientCapabilities = jdtls.extendedClientCapabilities,
       saveActions = { organizeImports = false },
-      symbols = { includeSourceMethodDeclarations = true, },
+      symbols = { includeSourceMethodDeclarations = true },
       selectionRange = { enabled = true },
       signatureHelp = {
         enabled = true,

@@ -1,44 +1,21 @@
-vim.api.nvim_create_user_command("Format", function(args)
-  local range = nil
-  if args.count ~= -1 then
-    local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
-    range = {
-      start = { args.line1, 0 },
-      ["end"] = { args.line2, end_line:len() },
-    }
-  end
-  require("conform").format({ async = true, lsp_format = "fallback", range = range })
-end, { range = true })
-
 -- Highlight on yank
-local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
   callback = function()
     vim.highlight.on_yank()
   end,
-  group = highlight_group,
-  pattern = "*",
 })
 
 -- show cursor line only in active window
+local cursorGrp = vim.api.nvim_create_augroup("CursorLine", { clear = true })
 vim.api.nvim_create_autocmd({ "InsertLeave", "WinEnter" }, {
-  callback = function()
-    local ok, cl = pcall(vim.api.nvim_win_get_var, 0, "auto-cursorline")
-    if ok and cl then
-      vim.wo.cursorline = true
-      vim.api.nvim_win_del_var(0, "auto-cursorline")
-    end
-  end,
+  pattern = "*",
+  command = "set cursorline",
+  group = cursorGrp,
 })
-vim.api.nvim_create_autocmd({ "InsertEnter", "WinLeave" }, {
-  callback = function()
-    local cl = vim.wo.cursorline
-    if cl then
-      vim.api.nvim_win_set_var(0, "auto-cursorline", cl)
-      vim.wo.cursorline = false
-    end
-  end,
-})
+vim.api.nvim_create_autocmd(
+  { "InsertEnter", "WinLeave" },
+  { pattern = "*", command = "set nocursorline", group = cursorGrp }
+)
 
 -- TODO: comment
 vim.api.nvim_create_autocmd({ "BufReadPost", "BufEnter" }, {
@@ -50,7 +27,8 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufEnter" }, {
   end,
 })
 
-vim.api.nvim_create_autocmd({ "FileType" }, {
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("close_with_q", { clear = true }),
   pattern = {
     "qf",
     "help",
@@ -62,11 +40,9 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
     "PlenaryTestPopup",
     "rest_nvim_results",
   },
-  callback = function()
-    vim.cmd([[
-    nnoremap <silent> <buffer> q <cmd>close<CR>
-    set nobuflisted
-    ]])
+  callback = function(event)
+    vim.bo[event.buf].buflisted = false
+    vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
   end,
 })
 

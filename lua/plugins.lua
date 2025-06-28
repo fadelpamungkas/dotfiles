@@ -70,22 +70,22 @@ return {
   },
 
   {
-    'MagicDuck/grug-far.nvim',
+    "MagicDuck/grug-far.nvim",
     config = function()
-      require('grug-far').setup({
+      require("grug-far").setup({
         -- options, see Configuration section below
         -- there are no required options atm
         -- engine = 'ripgrep' is default, but 'astgrep' or 'astgrep-rules' can
         -- be specified
-      });
-    end
+      })
+    end,
   },
 
   {
     "windwp/nvim-spectre",
     cmd = { "Spectre" },
     keys = {
-      { "<leader>r", '<esc><cmd>lua require("spectre").open_file_search()<CR>',              mode = "v" },
+      { "<leader>r", '<esc><cmd>lua require("spectre").open_file_search()<CR>', mode = "v" },
       { "<leader>r", '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', mode = "n" },
     },
   },
@@ -121,7 +121,7 @@ return {
           end,
           desc = "Toggle Current Buffer Filter",
         },
-      }
+      },
     },
   },
 
@@ -213,11 +213,16 @@ return {
   },
 
   {
-    'mistweaverco/kulala.nvim',
+    "mistweaverco/kulala.nvim",
     keys = {
-      { "<leader>s", function() require('kulala').run() end },
+      {
+        "<leader>s",
+        function()
+          require("kulala").run()
+        end,
+      },
     },
     ft = "http",
-    opts = {}
+    opts = {},
   },
 }

@@ -4,7 +4,7 @@ return {
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
       -- { "hrsh7th/cmp-nvim-lsp" },
-      { 'saghen/blink.cmp' },
+      { "saghen/blink.cmp" },
       { "williamboman/mason-lspconfig.nvim" },
     },
     config = function()
@@ -97,8 +97,8 @@ return {
         -- tsserver = {},
         -- tailwindcss = {},
       }
-      vim.api.nvim_create_autocmd('LspAttach', {
-        group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
+      vim.api.nvim_create_autocmd("LspAttach", {
+        group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
         callback = function(event)
           local opts = { noremap = true, silent = true, buffer = event.buf }
 
@@ -118,31 +118,31 @@ return {
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
           if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
-            local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
-            vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+            local highlight_augroup = vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
+            vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
               buffer = event.buf,
               group = highlight_augroup,
               callback = vim.lsp.buf.document_highlight,
             })
 
-            vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+            vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
               buffer = event.buf,
               group = highlight_augroup,
               callback = vim.lsp.buf.clear_references,
             })
 
-            vim.api.nvim_create_autocmd('LspDetach', {
-              group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
+            vim.api.nvim_create_autocmd("LspDetach", {
+              group = vim.api.nvim_create_augroup("kickstart-lsp-detach", { clear = true }),
               callback = function(event2)
                 vim.lsp.buf.clear_references()
-                vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
+                vim.api.nvim_clear_autocmds({ group = "kickstart-lsp-highlight", buffer = event2.buf })
               end,
             })
           end
 
           if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
-            vim.keymap.set('n', '<leader>l', function()
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
+            vim.keymap.set("n", "<leader>l", function()
+              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
             end, opts)
           end
         end,
@@ -158,7 +158,7 @@ return {
           else
             lspconfig[server_name].setup({
               capabilities = require("blink.cmp").get_lsp_capabilities(),
-              settings = servers[server_name]
+              settings = servers[server_name],
             })
           end
         end,
@@ -169,7 +169,36 @@ return {
     "stevearc/conform.nvim",
     event = { "BufWritePre", "BufNewFile" },
     cmd = { "ConformInfo" },
-    keys = { { "gh", "<cmd>Format<cr>", mode = { "n", "v" } } },
+    keys = {
+      {
+        "gh",
+        function()
+          local range = nil
+          local mode = vim.fn.mode()
+
+          if mode == "v" or mode == "V" or mode == "" then
+            local start_pos = vim.api.nvim_buf_get_mark(0, "<")
+            local end_pos = vim.api.nvim_buf_get_mark(0, ">")
+
+            if start_pos[1] > 0 and end_pos[1] > 0 then
+              local end_line = vim.api.nvim_buf_get_lines(0, end_pos[1] - 1, end_pos[1], true)[1]
+              range = {
+                start = { start_pos[1] - 1, start_pos[2] },
+                ["end"] = { end_pos[1] - 1, end_line and end_line:len() or 0 },
+              }
+            end
+          end
+
+          require("conform").format({ async = true, lsp_format = "fallback", range = range }, function(err, did_edit)
+            if not err and did_edit then
+              vim.notify("Formatted", vim.log.levels.INFO, { title = "Conform" })
+            end
+          end)
+        end,
+        mode = { "n", "v" },
+        desc = "Format code with conform",
+      },
+    },
     opts = {
       formatters_by_ft = {
         javascriptreact = { "eslint_d" },
@@ -190,6 +219,9 @@ return {
         async = false,
         quiet = false,
         lsp_fallback = true,
+      },
+      default_format_opts = {
+        lsp_format = "fallback",
       },
       -- format_on_save = {},
     },

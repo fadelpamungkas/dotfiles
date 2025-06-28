@@ -14,10 +14,10 @@ return {
           hint = {
             type = "window",
             float_opts = {
-              border = "rounded"
-            }
-          }
-        }
+              border = "rounded",
+            },
+          },
+        },
       })
       local cmd = require("hydra.keymap-util").cmd
       local lsp_hydra, dap_hydra, repl_hydra, test_hydra = nil, nil, nil, nil
@@ -26,7 +26,7 @@ return {
 
       local hydra_hint_func = function(mode)
         return function()
-          return string.format('[%s]', vim.g.__miversen_extended_mode == mode and "x" or "")
+          return string.format("[%s]", vim.g.__miversen_extended_mode == mode and "x" or "")
         end
       end
 
@@ -54,7 +54,6 @@ return {
           mode_hydras[mode]:activate()
         end
       end
-
 
       local hydra_toggle_function = function(mode)
         return function()
@@ -97,13 +96,13 @@ _q_: Quit Mode
             type = "window",
             position = "middle-right",
             float_opts = {
-              border = "rounded"
+              border = "rounded",
             },
-            hide_on_load = true
+            hide_on_load = true,
           },
           on_exit = function()
-            hydra_disable_function('lsp', true)
-          end
+            hydra_disable_function("lsp", true)
+          end,
         },
         heads = {
           {
@@ -115,8 +114,8 @@ _q_: Quit Mode
               desc = "Code actions for current token",
               silent = true,
               exit = false,
-              private = true
-            }
+              private = true,
+            },
           },
           {
             "s",
@@ -125,8 +124,8 @@ _q_: Quit Mode
               desc = "Definitions for current token",
               silent = true,
               exit = false,
-              private = true
-            }
+              private = true,
+            },
           },
           {
             "r",
@@ -137,8 +136,8 @@ _q_: Quit Mode
               desc = "Rename the current token",
               silent = true,
               exit = false,
-              private = true
-            }
+              private = true,
+            },
           },
           {
             "d",
@@ -148,7 +147,7 @@ _q_: Quit Mode
               silent = true,
               exit = false,
               private = true,
-            }
+            },
           },
           {
             "w",
@@ -157,8 +156,8 @@ _q_: Quit Mode
               desc = "Show workspace diagnostics",
               silent = true,
               exit = true,
-              private = true
-            }
+              private = true,
+            },
           },
           {
             "f",
@@ -169,8 +168,8 @@ _q_: Quit Mode
               desc = "Format current buffer",
               silent = true,
               exit = false,
-              private = true
-            }
+              private = true,
+            },
           },
           {
             "n",
@@ -179,8 +178,8 @@ _q_: Quit Mode
               desc = "Show references to token",
               silent = true,
               exit = false,
-              private = true
-            }
+              private = true,
+            },
           },
           {
             "e",
@@ -191,8 +190,8 @@ _q_: Quit Mode
               desc = "Show Hover Doc",
               silent = true,
               exit = false,
-              private = true
-            }
+              private = true,
+            },
           },
           {
             "D",
@@ -201,8 +200,8 @@ _q_: Quit Mode
               desc = "Shows current token declerations",
               silent = true,
               exit = false,
-              private = true
-            }
+              private = true,
+            },
           },
           {
             "o",
@@ -211,8 +210,8 @@ _q_: Quit Mode
               desc = "Show Implementations of current token",
               silent = true,
               exit = false,
-              private = true
-            }
+              private = true,
+            },
           },
           {
             "?",
@@ -225,8 +224,8 @@ _q_: Quit Mode
             end,
             {
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "<Esc>",
@@ -237,18 +236,18 @@ _q_: Quit Mode
             end,
             {
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "q",
             nil,
             {
               exit = true,
-              silent = true
-            }
-          }
-        }
+              silent = true,
+            },
+          },
+        },
       })
       dap_hydra = Hydra({
         name = "DAP",
@@ -260,13 +259,13 @@ _q_: Quit Mode
             type = "window",
             position = "middle-right",
             float_opts = {
-              border = "rounded"
+              border = "rounded",
             },
             hide_on_load = true,
           },
           on_exit = function()
-            hydra_disable_function('dap', true)
-          end
+            hydra_disable_function("dap", true)
+          end,
         },
         hint = [[
 ^              DAP
@@ -303,8 +302,8 @@ _q_: Quit Mode
               desc = "Toggles Dap UI",
               exit = false,
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "d",
@@ -315,8 +314,8 @@ _q_: Quit Mode
               desc = "Set Breakpoint",
               exit = false,
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "D",
@@ -326,19 +325,16 @@ _q_: Quit Mode
                   require("dap").set_breakpoint(output)
                 end
               end
-              vim.ui.input(
-                {
-                  prompt = "Condition: ",
-                },
-                callback
-              )
+              vim.ui.input({
+                prompt = "Condition: ",
+              }, callback)
             end,
             {
               desc = "Set Conditional Breakpoint",
               exit = false,
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "c",
@@ -349,29 +345,25 @@ _q_: Quit Mode
               desc = "Continue from breakpoint",
               exit = false,
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "S",
             function()
               local dap = require("dap")
-              dap.terminate(
-                {},
-                {
-                  terminateDebugee = true
-                },
-                function()
-                  dap.close()
-                end
-              )
+              dap.terminate({}, {
+                terminateDebugee = true,
+              }, function()
+                dap.close()
+              end)
             end,
             {
               desc = "Stop Debugger",
               exit = false,
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "k",
@@ -382,8 +374,8 @@ _q_: Quit Mode
               desc = "Step out of code block",
               exit = false,
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "o",
@@ -394,8 +386,8 @@ _q_: Quit Mode
               desc = "Step **over** code block",
               exit = false,
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "j",
@@ -406,28 +398,32 @@ _q_: Quit Mode
               desc = "Step **into** code block",
               exit = false,
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "L",
             function()
-              local filetype = vim.api.nvim_buf_get_option(0, 'filetype')
+              local filetype = vim.api.nvim_buf_get_option(0, "filetype")
               local dap = require("dap")
-              if filetype == '' then filetype = 'nil' end
+              if filetype == "" then
+                filetype = "nil"
+              end
               if dap and dap.launch_server and dap.launch_server[filetype] then
                 dap.launch_server[filetype]()
               else
-                vim.notify(string.format("No DAP Launch server configured for filetype %s", filetype),
-                  vim.log.levels.WARN)
+                vim.notify(
+                  string.format("No DAP Launch server configured for filetype %s", filetype),
+                  vim.log.levels.WARN
+                )
               end
             end,
             {
               desc = "Launch DAP server",
               exit = false,
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "r",
@@ -438,8 +434,8 @@ _q_: Quit Mode
               desc = "Open DAP REPL",
               exit = false,
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "?",
@@ -452,8 +448,8 @@ _q_: Quit Mode
             end,
             {
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "<Esc>",
@@ -464,18 +460,18 @@ _q_: Quit Mode
             end,
             {
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "q",
             nil,
             {
               exit = true,
-              silent = true
-            }
-          }
-        }
+              silent = true,
+            },
+          },
+        },
       })
 
       test_hydra = Hydra({
@@ -488,13 +484,13 @@ _q_: Quit Mode
             type = "window",
             position = "middle-right",
             float_opts = {
-              border = "rounded"
+              border = "rounded",
             },
             hide_on_load = true,
           },
           on_exit = function()
-            hydra_disable_function('test', true)
-          end
+            hydra_disable_function("test", true)
+          end,
         },
         hint = [[
 ^          Testing
@@ -526,8 +522,8 @@ _q_: Quit Mode
               desc = "Toggles unit test UI",
               exit = false,
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "r",
@@ -538,8 +534,8 @@ _q_: Quit Mode
               desc = "Run unit tests for file",
               exit = false,
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "a",
@@ -550,8 +546,8 @@ _q_: Quit Mode
               desc = "Run all unit tests",
               exit = false,
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "d",
@@ -562,8 +558,8 @@ _q_: Quit Mode
               desc = "Run unit tests in DAP mode",
               exit = false,
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "l",
@@ -574,8 +570,8 @@ _q_: Quit Mode
               desc = "Rerun previous unit test",
               exit = false,
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "s",
@@ -586,8 +582,8 @@ _q_: Quit Mode
               desc = "Stop unit tests",
               exit = false,
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "?",
@@ -600,8 +596,8 @@ _q_: Quit Mode
             end,
             {
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "<Esc>",
@@ -612,18 +608,18 @@ _q_: Quit Mode
             end,
             {
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "q",
             nil,
             {
               exit = true,
-              silent = true
-            }
-          }
-        }
+              silent = true,
+            },
+          },
+        },
       })
 
       repl_hydra = Hydra({
@@ -636,13 +632,13 @@ _q_: Quit Mode
             type = "window",
             position = "middle-right",
             float_opts = {
-              border = "rounded"
+              border = "rounded",
             },
             hide_on_load = true,
           },
           on_exit = function()
-            hydra_disable_function('repl', true)
-          end
+            hydra_disable_function("repl", true)
+          end,
         },
         hint = [[
 ^          REPL
@@ -667,8 +663,8 @@ _q_: Quit Mode
               desc = "Writes current file to repl",
               exit = false,
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "r",
@@ -679,8 +675,8 @@ _q_: Quit Mode
               desc = "Resets repl",
               exit = false,
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "?",
@@ -693,8 +689,8 @@ _q_: Quit Mode
             end,
             {
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "<Esc>",
@@ -705,18 +701,18 @@ _q_: Quit Mode
             end,
             {
               private = true,
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "q",
             nil,
             {
               exit = true,
-              silent = true
-            }
-          }
-        }
+              silent = true,
+            },
+          },
+        },
       })
       Hydra({
         name = "Mode",
@@ -737,15 +733,15 @@ _q_: Quit Mode
             type = "window",
             position = "middle",
             float_opts = {
-              border = "rounded"
+              border = "rounded",
             },
             -- hide_on_load = true,
             funcs = {
               dap_mode = hydra_hint_func("dap"),
               repl_mode = hydra_hint_func("repl"),
               lsp_mode = hydra_hint_func("lsp"),
-              test_mode = hydra_hint_func('test'),
-            }
+              test_mode = hydra_hint_func("test"),
+            },
           },
           color = "blue",
           invoke_on_body = true,
@@ -758,7 +754,7 @@ _q_: Quit Mode
             {
               private = true,
               on_key = false,
-            }
+            },
           },
           {
             "r",
@@ -766,40 +762,40 @@ _q_: Quit Mode
             {
               private = true,
               on_key = false,
-            }
+            },
           },
           {
             "l",
             hydra_toggle_function("lsp"),
             {
               private = true,
-              on_key = false
-            }
+              on_key = false,
+            },
           },
           {
             "t",
             hydra_toggle_function("test"),
             {
               private = true,
-              on_key = false
-            }
+              on_key = false,
+            },
           },
           {
             "c",
             hydra_toggle_function(),
             {
               private = true,
-              on_key = false
-            }
+              on_key = false,
+            },
           },
           {
             "q",
             nil,
             {
-              exit = true
-            }
+              exit = true,
+            },
           },
-        }
+        },
       })
       mode_hydras = {
         lsp = lsp_hydra,
@@ -823,98 +819,98 @@ _q_: Quit Mode
 ^                                _q_/_<Esc>_: Exit Hydra
 ]],
         config = {
-          color = 'teal',
+          color = "teal",
           invoke_on_body = true,
           hint = {
             type = "window",
             position = "bottom",
             float_opts = {
-              border = 'rounded',
+              border = "rounded",
             },
             show_name = true,
-          }
+          },
         },
         body = "t",
         heads = {
           {
             "f",
-            cmd 'Neotree filesystem reveal right',
+            cmd("Neotree filesystem reveal right"),
             {
               desc = "Opens Neotree File Explorer",
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "h?",
-            cmd "Telescope help_tags",
+            cmd("Telescope help_tags"),
             {
               desc = "Open Help Tags",
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "c?",
-            cmd "Telescope commands",
+            cmd("Telescope commands"),
             {
               desc = "Open Available Telescope Commands",
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "s",
-            cmd "Telescope current_buffer_fuzzy_find skip_empty_lines=true",
+            cmd("Telescope current_buffer_fuzzy_find skip_empty_lines=true"),
             {
               desc = "Fuzzy find in current buffer",
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "m?",
-            cmd "Telescope man_pages",
+            cmd("Telescope man_pages"),
             {
               desc = "Opens Man Pages",
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "x",
-            cmd "TroubleToggle quickfix",
+            cmd("TroubleToggle quickfix"),
             {
               desc = "Opens Quickfix",
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "l",
-            cmd "TroubleToggle loclist",
+            cmd("TroubleToggle loclist"),
             {
               desc = "Opens Location List",
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "t",
-            cmd "CFloatTerm",
+            cmd("CFloatTerm"),
             {
               desc = "Floating Term",
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "o",
-            cmd "CSplitTerm horizontal",
+            cmd("CSplitTerm horizontal"),
             {
               desc = "Horizontal Term",
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "p",
-            cmd "CSplitTerm vertical",
+            cmd("CSplitTerm vertical"),
             {
               desc = "Vertical Term",
-              silent = true
-            }
+              silent = true,
+            },
           },
           {
             "q",
@@ -922,8 +918,8 @@ _q_: Quit Mode
             {
               desc = "quit",
               exit = true,
-              nowait = true
-            }
+              nowait = true,
+            },
           },
           {
             "<Esc>",
@@ -931,12 +927,12 @@ _q_: Quit Mode
             {
               desc = "quit",
               exit = true,
-              nowait = true
-            }
-          }
-        }
+              nowait = true,
+            },
+          },
+        },
       })
-    end
+    end,
   },
   --  {
   --    "anuvyklack/hydra.nvim",

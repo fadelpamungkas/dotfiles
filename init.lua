@@ -104,6 +104,9 @@ map("v", "<Leader>M", ":'<,'>!jq .<CR>")
 
 require("lazyconfig")
 
+-- Initialize statusline
+require("statusline").setup()
+
 vim.api.nvim_create_autocmd("User", {
   pattern = "VeryLazy",
   callback = function()
@@ -127,141 +130,18 @@ vim.filetype.add({
   },
 })
 
--- Statusline
-local statusline_group = vim.api.nvim_create_augroup("StatusLine", { clear = true })
-
-local diagnostics = ""
-vim.api.nvim_create_autocmd({ "DiagnosticChanged", "BufWinEnter" }, {
-  group = statusline_group,
-  callback = function()
-    local results = {}
-    for _, attr in pairs({
-      { "Error", "E" },
-      { "Warn", "W" },
-      { "Hint", "H" },
-      { "Info", "I" },
-    }) do
-      local n = vim.diagnostic.get(0, { severity = attr[1] })
-      if #n > 0 then
-        table.insert(results, string.format("%s%d ", attr[2], #n))
-      end
-    end
-    diagnostics = table.concat(results)
-  end,
-})
-
-local function unsaved_buffers()
-  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.api.nvim_buf_get_option(buf, "modified") then
-      return "Unsaved"
-    end
-  end
-  return ""
-end
-
-local function file_section()
-  local name = (vim.fn.expand("%:.") == "") and "No Name" or vim.fn.expand("%:.")
-  return string.format("%s ", name)
-end
-
--- LSP Progress
-local lsp_progress = {
-  client = nil,
-  kind = nil,
-  title = nil,
-  percentage = nil,
-  message = nil,
-}
-
-vim.api.nvim_create_autocmd("LspProgress", {
-  desc = "Update LSP progress in statusline",
-  pattern = { "begin", "report", "end" },
-  callback = function(args)
-    if not (args.data and args.data.client_id) then
-      return
-    end
-
-    lsp_progress = {
-      client = vim.lsp.get_client_by_id(args.data.client_id),
-      kind = args.data.params.value.kind,
-      message = args.data.params.value.message,
-      percentage = args.data.params.value.percentage,
-      title = args.data.params.value.title,
-    }
-
-    if lsp_progress.kind == "end" then
-      lsp_progress.title = nil
-      vim.defer_fn(function()
-        vim.cmd.redrawstatus()
-      end, 500)
-    else
-      vim.cmd.redrawstatus()
-    end
-  end,
-})
-
-local function lsp_status()
-  if not rawget(vim, "lsp") then
-    return ""
-  end
-
-  if vim.o.columns < 120 then
-    return ""
-  end
-
-  if not lsp_progress.client or not lsp_progress.title then
-    return ""
-  end
-
-  local title = lsp_progress.title or ""
-  local percentage = (lsp_progress.percentage and (lsp_progress.percentage .. "%%")) or ""
-  local message = lsp_progress.message or ""
-
-  local lsp_message = string.format("%s", title)
-
-  if message ~= "" then
-    lsp_message = string.format("%s %s", lsp_message, message)
-  end
-
-  if percentage ~= "" then
-    lsp_message = string.format("%s %s", lsp_message, percentage)
-  end
-
-  return string.format("%s ", lsp_message)
-end
-
-local function get_branch()
-  local branch = vim.b.gitsigns_head
-
-  if branch == "" or branch == nil then
-    return ""
-  end
-
-  return string.format("%s ", branch)
-end
-
-_G.set_statusline = function()
-  return file_section()
-    .. "%m%r"
-    .. unsaved_buffers()
-    .. diagnostics
-    .. lsp_status()
-    .. "%="
-    .. get_branch()
-    .. "%l:%c %L %p%%"
-end
-
-vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
-  group = statusline_group,
-  command = "setlocal statusline=%!v:lua.set_statusline()",
-})
-
 vim.api.nvim_create_user_command("Lunaperche", function()
+  vim.o.background = "dark"
   vim.cmd.colorscheme("lunaperche")
   vim.api.nvim_set_hl(0, "Normal", { bg = NONE })
   vim.api.nvim_set_hl(0, "ModeMsg", { bg = NONE })
   vim.api.nvim_set_hl(0, "StatusLine", { bg = NONE })
-  vim.o.background = "dark"
+
+  -- Diff highlights (for diff mode and fugitive)
+  vim.api.nvim_set_hl(0, "DiffAdd", { fg = "#66c266", bg = "#2a3a2a" })
+  vim.api.nvim_set_hl(0, "DiffChange", { fg = "#c2c266", bg = "#3a3a2a" })
+  vim.api.nvim_set_hl(0, "DiffDelete", { fg = "#c26666", bg = "#3a2a2a" })
+  vim.api.nvim_set_hl(0, "DiffText", { fg = "#ffffff", bg = "#4a4a2a" })
 end, {})
 
 vim.api.nvim_create_user_command("Default", function()
@@ -272,5 +152,17 @@ vim.api.nvim_create_user_command("Default", function()
   vim.o.background = "dark"
 end, {})
 
-vim.cmd("set t_md=")
+-- Disable bold text formatting in all highlight groups
+vim.api.nvim_create_autocmd("ColorScheme", {
+  callback = function()
+    -- Remove bold from all highlight groups
+    for _, group in ipairs(vim.fn.getcompletion("", "highlight")) do
+      local hl = vim.api.nvim_get_hl_by_name(group, true)
+      if hl.bold then
+        hl.bold = nil
+        vim.api.nvim_set_hl(0, group, hl)
+      end
+    end
+  end,
+})
 vim.cmd("Lunaperche")

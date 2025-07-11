@@ -1,30 +1,10 @@
 return {
   {
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    event = "InsertEnter",
-    opts = {
-      copilot_node_command = "/Users/fadel.pamungkas/.volta/tools/image/node/20.16.0/bin/node",
-      panel = { keymap = { open = "<C-CR>" } },
-      filetypes = { yaml = true, markdown = true },
-      suggestion = {
-        enabled = true,
-        auto_trigger = true,
-        keymap = {
-          accept = "<C-s>",
-          next = "<C-]>",
-          prev = "<C-[>",
-          dismiss = "<C-\\>",
-        },
-      },
-    },
-  },
-
-  {
     "saghen/blink.cmp",
     dependencies = {
       "rafamadriz/friendly-snippets",
       { "xzbdmw/colorful-menu.nvim", opts = {} },
+      -- { "L3MON4D3/LuaSnip", keys = {} },
     },
     version = "1.*",
     opts = {
@@ -110,6 +90,8 @@ return {
           },
         },
         menu = {
+          border = nil,
+          scrolloff = 1,
           auto_show = function(ctx)
             return ctx.mode ~= "cmdline"
           end,

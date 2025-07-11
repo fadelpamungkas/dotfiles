@@ -3,7 +3,6 @@ return {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      -- { "hrsh7th/cmp-nvim-lsp" },
       { "saghen/blink.cmp" },
       { "williamboman/mason-lspconfig.nvim" },
     },
@@ -13,14 +12,19 @@ return {
         underline = false,
         update_in_insert = false,
         virtual_text = {
-          -- severity = { max = "WARN" },
+          source = "if_many",
           prefix = "◼︎", -- could be '●', '▎', 'x'
+          spacing = 2,
+          format = function(diagnostic)
+            local diagnostic_message = {
+              [vim.diagnostic.severity.ERROR] = diagnostic.message,
+              [vim.diagnostic.severity.WARN] = diagnostic.message,
+              [vim.diagnostic.severity.INFO] = diagnostic.message,
+              [vim.diagnostic.severity.HINT] = diagnostic.message,
+            }
+            return diagnostic_message[diagnostic.severity]
+          end,
         },
-        -- virtual_lines = {
-        --   current_line = true,
-        --   -- severity = { min = "INFO", max = "ERROR" },
-        --   -- severity = { min = "ERROR" },
-        -- },
         severity_sort = true,
         float = {
           focusable = true,
@@ -30,18 +34,9 @@ return {
         },
       })
 
-      -- local signs = { Error = "E", Warn = "W", Hint = "H", Info = "I" }
-      -- for type, _ in pairs(signs) do
-      -- 	local hl = "DiagnosticSign" .. type
-      -- 	vim.fn.sign_define(hl, { texthl = hl, numhl = hl, linehl = hl })
-      -- end
-
       local lspconfig = require("lspconfig")
       local lsp_defaults = lspconfig.util.default_config
       local mason_lspconfig = require("mason-lspconfig")
-
-      -- lsp_defaults.capabilities =
-      --     vim.tbl_deep_extend("force", lsp_defaults.capabilities, require("cmp_nvim_lsp").default_capabilities())
 
       local servers = {
         lua_ls = {
@@ -80,23 +75,8 @@ return {
             },
           },
         },
-        -- ruff = {},
-        -- ruff_lsp = {
-        --   settings = {
-        --     ruff = {
-        --       format = {
-        --         sortImports = true,
-        --       },
-        --     },
-        --   },
-        -- },
-        -- eslint = {},
-        -- clangd = {},
-        -- pyright = {},
-        -- rust_analyzer = {}, -- handled by rust-tools.nvim
-        -- tsserver = {},
-        -- tailwindcss = {},
       }
+
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
         callback = function(event)
@@ -116,8 +96,14 @@ return {
           vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
           vim.keymap.set({ "n", "v" }, "ga", vim.lsp.buf.code_action, opts)
 
+          local function client_supports_method(client, method, bufnr)
+            return client:supports_method(method, bufnr)
+          end
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
+          if
+            client
+            and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf)
+          then
             local highlight_augroup = vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
             vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
               buffer = event.buf,
@@ -140,63 +126,54 @@ return {
             })
           end
 
-          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+          if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
             vim.keymap.set("n", "<leader>l", function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
-            end, opts)
+            end)
           end
         end,
       })
 
-      mason_lspconfig.setup({ ensure_installed = vim.tbl_keys(servers) })
-      mason_lspconfig.setup_handlers({
-        function(server_name)
-          if server_name ~= "jdtls" then
-            lspconfig[server_name].setup({
-              capabilities = lsp_defaults.capabilities,
-            })
-          else
-            lspconfig[server_name].setup({
-              capabilities = require("blink.cmp").get_lsp_capabilities(),
-              settings = servers[server_name],
-            })
-          end
-        end,
+      local capabilities = require("blink.cmp").get_lsp_capabilities()
+
+      mason_lspconfig.setup({
+        ensure_installed = vim.tbl_keys(servers),
+        automatic_installation = false,
+        handlers = {
+          function(server_name)
+            local server = servers[server_name] or {}
+            server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+            require("lspconfig")[server_name].setup(server)
+          end,
+        },
       })
     end,
   },
   {
     "stevearc/conform.nvim",
+    init = function()
+      vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+    end,
     event = { "BufWritePre", "BufNewFile" },
     cmd = { "ConformInfo" },
     keys = {
       {
         "gh",
         function()
-          local range = nil
-          local mode = vim.fn.mode()
+          require("conform").format({ async = true }, function(err, did_edit)
+            if not err then
+              local mode = vim.api.nvim_get_mode().mode
+              if vim.startswith(string.lower(mode), "v") then
+                vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
+              end
 
-          if mode == "v" or mode == "V" or mode == "" then
-            local start_pos = vim.api.nvim_buf_get_mark(0, "<")
-            local end_pos = vim.api.nvim_buf_get_mark(0, ">")
-
-            if start_pos[1] > 0 and end_pos[1] > 0 then
-              local end_line = vim.api.nvim_buf_get_lines(0, end_pos[1] - 1, end_pos[1], true)[1]
-              range = {
-                start = { start_pos[1] - 1, start_pos[2] },
-                ["end"] = { end_pos[1] - 1, end_line and end_line:len() or 0 },
-              }
-            end
-          end
-
-          require("conform").format({ async = true, lsp_format = "fallback", range = range }, function(err, did_edit)
-            if not err and did_edit then
-              vim.notify("Formatted", vim.log.levels.INFO, { title = "Conform" })
+              if did_edit then
+                vim.notify("Formatted", vim.log.levels.INFO, { title = "Conform" })
+              end
             end
           end)
         end,
         mode = { "n", "v" },
-        desc = "Format code with conform",
       },
     },
     opts = {
@@ -215,15 +192,14 @@ return {
         go = { "goimports", "gofumpt", "golines" },
       },
       format = {
-        timeout_ms = 3000,
-        async = false,
+        timeout_ms = 5000,
+        async = true,
         quiet = false,
         lsp_fallback = true,
       },
       default_format_opts = {
         lsp_format = "fallback",
       },
-      -- format_on_save = {},
     },
   },
   {
@@ -231,7 +207,6 @@ return {
     event = { "BufReadPre", "BufNewFile" },
     config = function()
       local lint = require("lint")
-      -- local utils = require("core.utils")
 
       lint.linters_by_ft = {
         javascriptreact = { "eslint" },
@@ -240,7 +215,6 @@ return {
         typescript = { "eslint" },
         python = { "ruff", "mypy" },
         css = { "stylelint" },
-        -- lua = { "luacheck" },
         go = { "golangcilint" },
       }
 
@@ -266,4 +240,8 @@ return {
       })
     end,
   },
+  -- {
+  --   "mfussenegger/nvim-jdtls",
+  --   ft = { "java" },
+  -- },
 }

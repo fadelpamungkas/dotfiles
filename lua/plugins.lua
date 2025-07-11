@@ -1,47 +1,5 @@
 return {
 
-  -- {
-  --   "wtfox/jellybeans.nvim",
-  --   lazy = false,
-  --   priority = 1000,
-  --   config = function()
-  --     require("jellybeans").setup()
-  --     vim.cmd.colorscheme("jellybeans")
-  --   end,
-  -- },
-  --
-  -- {
-  --   "Skardyy/makurai-nvim",
-  --   lazy = false,
-  --   priority = 1000,
-  --   -- config = function()
-  --   --   require("jellybeans").setup()
-  --   --   vim.cmd.colorscheme("jellybeans")
-  --   -- end,
-  -- },
-  -- {
-  --   "slugbyte/lackluster.nvim",
-  --   lazy = false,
-  --   priority = 1000,
-  --   init = function()
-  --     local lackluster = require("lackluster")
-  --
-  --     lackluster.setup({
-  --       -- tweak_syntax = {
-  --       --   comment = lackluster.color.gray4, -- or gray5
-  --       -- },
-  --       tweak_background = {
-  --         normal = 'none',
-  --         telescope = 'none',
-  --         menu = lackluster.color.gray3,
-  --         popup = 'default',
-  --       },
-  --     })
-  --
-  --     -- vim.cmd.colorscheme("lackluster")
-  --   end,
-  -- },
-
   { "nvim-lua/plenary.nvim" },
 
   {
@@ -71,6 +29,26 @@ return {
 
   {
     "MagicDuck/grug-far.nvim",
+    keys = {
+      {
+        "<leader>r",
+        function()
+          require("grug-far").open({
+            paths = { vim.fn.expand("%") },
+          })
+        end,
+        mode = "v",
+      },
+      {
+        "<leader>r",
+        function()
+          require("grug-far").open({
+            prefills = { search = vim.fn.expand("<cword>") },
+          })
+        end,
+        mode = "n",
+      },
+    },
     config = function()
       require("grug-far").setup({
         -- options, see Configuration section below
@@ -79,15 +57,6 @@ return {
         -- be specified
       })
     end,
-  },
-
-  {
-    "windwp/nvim-spectre",
-    cmd = { "Spectre" },
-    keys = {
-      { "<leader>r", '<esc><cmd>lua require("spectre").open_file_search()<CR>', mode = "v" },
-      { "<leader>r", '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', mode = "n" },
-    },
   },
 
   {
@@ -121,42 +90,6 @@ return {
           end,
           desc = "Toggle Current Buffer Filter",
         },
-      },
-    },
-  },
-
-  {
-    "ThePrimeagen/harpoon",
-    branch = "harpoon2",
-    event = "VeryLazy",
-    opts = {
-      settings = {
-        save_on_toggle = true,
-      },
-    },
-    -- stylua: ignore
-    keys = {
-      { "mq",        function() require("harpoon"):list():select(1) end },
-      { "mw",        function() require("harpoon"):list():select(2) end },
-      { "me",        function() require("harpoon"):list():select(3) end },
-      { "mr",        function() require("harpoon"):list():select(4) end },
-      { "ma",        function() require("harpoon"):list():select(5) end },
-      { "ms",        function() require("harpoon"):list():select(6) end },
-      { "md",        function() require("harpoon"):list():select(7) end },
-      { "mf",        function() require("harpoon"):list():select(8) end },
-      { "<leader>h", function() require("harpoon"):list():add() end },
-      {
-        "<leader>H",
-        function()
-          local harpoon = require("harpoon")
-          local opts = {
-            border = "rounded",
-            title = " Navigator ",
-            ui_width_ratio = 0.35,
-          }
-
-          harpoon.ui:toggle_quick_menu(harpoon:list(), opts)
-        end,
       },
     },
   },
@@ -203,16 +136,6 @@ return {
   },
 
   {
-    "folke/persistence.nvim",
-    event = "BufReadPre",
-    opts = {},
-    keys = {
-      { "<leader>z", [[<cmd>lua require("persistence").load()<cr>]] },
-      { "<leader>Z", [[<cmd>lua require("persistence").load({ last = true })<cr>]] },
-    },
-  },
-
-  {
     "mistweaverco/kulala.nvim",
     keys = {
       {
@@ -224,5 +147,10 @@ return {
     },
     ft = "http",
     opts = {},
+  },
+
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    ft = { "markdown", "Avante" },
   },
 }

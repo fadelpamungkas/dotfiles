@@ -1,5 +1,13 @@
 return {
   -- {
+  --   "adibhanna/forest-night.nvim",
+  --   priority = 1000,
+  --   lazy = false,
+  --   config = function()
+  --     vim.cmd("colorscheme forest-night")
+  --   end,
+  -- },
+  -- {
   --   "wtfox/jellybeans.nvim",
   --   lazy = false,
   --   priority = 1000,

@@ -95,67 +95,6 @@ end
 
 vim.keymap.set("n", "<leader>q", ":lua toggle_quickfix()<CR>", { noremap = true, silent = true })
 
--- Create a new scratch buffer
-vim.api.nvim_create_user_command("Ns", function()
-  pcall(function()
-    vim.cmd("vsplit")
-    local buf = vim.api.nvim_create_buf(false, true)
-    vim.api.nvim_win_set_buf(0, buf)
-
-    local opts = {
-      buftype = "nofile",
-      bufhidden = "hide",
-      swapfile = false,
-    }
-
-    for opt, val in pairs(opts) do
-      vim.api.nvim_buf_set_option(buf, opt, val)
-    end
-  end)
-end, { nargs = 0 })
-
--- Compare clipboard to current buffer
-vim.api.nvim_create_user_command("CompareClipboard", function()
-  pcall(function()
-    local ftype = vim.bo.filetype
-    vim.cmd("tabnew %")
-    vim.cmd("Ns")
-    vim.cmd("normal! P")
-    vim.cmd("windo diffthis")
-    vim.bo.filetype = ftype
-    vim.keymap.set("n", "q", "<cmd>tabclose<CR>", { buffer = true, silent = true })
-  end)
-end, { nargs = 0 })
-
--- Compare clipboard to visual selection
-vim.api.nvim_create_user_command("CompareClipboardSelection", function()
-  pcall(function()
-    vim.cmd('normal! gv"zy')
-
-    vim.cmd("tabnew")
-    local buf = vim.api.nvim_create_buf(false, true)
-    vim.api.nvim_win_set_buf(0, buf)
-
-    local opts = { buftype = "nofile", bufhidden = "hide", swapfile = false }
-    for opt, val in pairs(opts) do
-      vim.api.nvim_buf_set_option(buf, opt, val)
-    end
-
-    vim.cmd('normal! V"zp')
-    vim.cmd("Ns")
-    vim.cmd("normal! Vp")
-    vim.cmd("windo diffthis")
-    vim.keymap.set("n", "q", "<cmd>tabclose<CR>", { buffer = true, silent = true })
-  end)
-end, {
-  nargs = 0,
-  range = true,
-})
-
--- Keymaps for clipboard comparison
-vim.keymap.set("n", "<leader>vc", "<cmd>CompareClipboard<cr>")
-vim.keymap.set("v", "<leader>vc", "<esc><cmd>CompareClipboardSelection<cr>")
-
 -- Debounced file change detection
 local file_check_timer = nil
 local function debounced_checktime()
@@ -186,3 +125,7 @@ require("sessionizer").setup()
 
 -- Custom marks
 require("marks").setup()
+
+-- Clipboard comparison
+require("diffclip").setup()
+

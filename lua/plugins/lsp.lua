@@ -5,6 +5,7 @@ return {
     dependencies = {
       { "saghen/blink.cmp" },
       { "williamboman/mason-lspconfig.nvim" },
+      { "b0o/schemastore.nvim" }, -- JSON schemas for jsonls
     },
     config = function()
       vim.diagnostic.config({
@@ -34,8 +35,6 @@ return {
         },
       })
 
-      local lspconfig = require("lspconfig")
-      local lsp_defaults = lspconfig.util.default_config
       local mason_lspconfig = require("mason-lspconfig")
 
       local servers = {
@@ -43,6 +42,135 @@ return {
           Lua = {
             hint = { enable = true },
             diagnostics = { globals = { "vim" } },
+          },
+        },
+        ts_ls = {
+          settings = {
+            typescript = {
+              inlayHints = {
+                includeInlayParameterNameHints = "all",
+                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                includeInlayFunctionParameterTypeHints = true,
+                includeInlayVariableTypeHints = true,
+                includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+                includeInlayPropertyDeclarationTypeHints = true,
+                includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayEnumMemberValueHints = true,
+              },
+            },
+            javascript = {
+              inlayHints = {
+                includeInlayParameterNameHints = "all",
+                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                includeInlayFunctionParameterTypeHints = true,
+                includeInlayVariableTypeHints = true,
+                includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+                includeInlayPropertyDeclarationTypeHints = true,
+                includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayEnumMemberValueHints = true,
+              },
+            },
+          },
+        },
+        tailwindcss = {
+          settings = {
+            tailwindCSS = {
+              experimental = {
+                classRegex = {
+                  { "cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" },
+                  { "cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)" },
+                },
+              },
+            },
+          },
+        },
+        jsonls = {
+          settings = {
+            json = {
+              schemas = require("schemastore").json.schemas(),
+              validate = { enable = true },
+            },
+          },
+        },
+        html = {},
+        cssls = {},
+        dockerls = {},
+        docker_compose_language_service = {},
+        taplo = {}, -- TOML
+        clangd = {
+          cmd = {
+            "clangd",
+            "--background-index",
+            "--clang-tidy",
+            "--header-insertion=iwyu",
+            "--completion-style=detailed",
+            "--function-arg-placeholders",
+            "--fallback-style=llvm",
+          },
+          init_options = {
+            usePlaceholders = true,
+            completeUnimported = true,
+            clangdFileStatus = true,
+          },
+        },
+        zls = {
+          settings = {
+            zls = {
+              enable_inlay_hints = true,
+              enable_snippets = true,
+              warn_style = true,
+            },
+          },
+        },
+        rust_analyzer = {
+          settings = {
+            ["rust-analyzer"] = {
+              cargo = {
+                allFeatures = true,
+                loadOutDirsFromCheck = true,
+                buildScripts = {
+                  enable = true,
+                },
+              },
+              checkOnSave = {
+                command = "clippy",
+              },
+              procMacro = {
+                enable = true,
+              },
+              inlayHints = {
+                bindingModeHints = {
+                  enable = false,
+                },
+                chainingHints = {
+                  enable = true,
+                },
+                closingBraceHints = {
+                  enable = true,
+                  minLines = 25,
+                },
+                closureReturnTypeHints = {
+                  enable = "never",
+                },
+                lifetimeElisionHints = {
+                  enable = "never",
+                  useParameterNames = false,
+                },
+                maxLength = 25,
+                parameterHints = {
+                  enable = true,
+                },
+                reborrowHints = {
+                  enable = "never",
+                },
+                renderColons = true,
+                typeHints = {
+                  enable = true,
+                  hideClosureInitialization = false,
+                  hideNamedConstructor = false,
+                },
+              },
+            },
           },
         },
         gopls = {
@@ -68,6 +196,27 @@ return {
             },
           },
         },
+        ruff = {
+          init_options = {
+            settings = {
+              -- Ruff language server settings go here
+            },
+          },
+        },
+        pyright = {
+          settings = {
+            pyright = {
+              -- Using Ruff's import organizer
+              disableOrganizeImports = true,
+            },
+            python = {
+              analysis = {
+                -- Ignore all files for analysis to exclusively use Ruff for linting
+                ignore = { "*" },
+              },
+            },
+          },
+        },
         yamlls = {
           settings = {
             yaml = {
@@ -76,6 +225,22 @@ return {
           },
         },
       }
+
+      local original_capabilities = vim.lsp.protocol.make_client_capabilities()
+      local capabilities = require("blink.cmp").get_lsp_capabilities(original_capabilities)
+
+      mason_lspconfig.setup({
+        ensure_installed = vim.tbl_keys(servers),
+        automatic_installation = false,
+        handlers = {
+          function(server_name)
+            local server = servers[server_name] or {}
+            server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+            require("lspconfig")[server_name].setup(server)
+          end,
+        },
+      })
+
 
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
@@ -100,9 +265,14 @@ return {
             return client:supports_method(method, bufnr)
           end
           local client = vim.lsp.get_client_by_id(event.data.client_id)
+          if client.name == "ruff" then
+            -- Disable hover in favor of Pyright
+            client.server_capabilities.hoverProvider = false
+          end
+
           if
-            client
-            and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf)
+              client
+              and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf)
           then
             local highlight_augroup = vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
             vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
@@ -132,20 +302,6 @@ return {
             end)
           end
         end,
-      })
-
-      local capabilities = require("blink.cmp").get_lsp_capabilities()
-
-      mason_lspconfig.setup({
-        ensure_installed = vim.tbl_keys(servers),
-        automatic_installation = false,
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-            require("lspconfig")[server_name].setup(server)
-          end,
-        },
       })
     end,
   },
@@ -189,7 +345,9 @@ return {
         json = { "prettier" },
         css = { "prettier" },
         lua = { "stylua" },
-        go = { "goimports", "gofumpt", "golines" },
+        go = { "gofumpt", "golangci-lint", "goimports", "golines" },
+        rust = { "rustfmt" },
+        dockerfile = { "hadolint" },
       },
       format = {
         timeout_ms = 5000,
@@ -216,6 +374,10 @@ return {
         python = { "ruff", "mypy" },
         css = { "stylelint" },
         go = { "golangcilint" },
+        rust = { "clippy" },
+        dockerfile = { "hadolint" },
+        c = { "clangtidy" },
+        cpp = { "clangtidy" },
       }
 
       lint.linters.luacheck.args = {
@@ -240,8 +402,4 @@ return {
       })
     end,
   },
-  -- {
-  --   "mfussenegger/nvim-jdtls",
-  --   ft = { "java" },
-  -- },
 }

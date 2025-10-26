@@ -4,7 +4,8 @@ return {
     cmd = "Copilot",
     event = "InsertEnter",
     opts = {
-      copilot_node_command = "/Users/fadel.pamungkas/.volta/tools/image/node/20.16.0/bin/node",
+      -- copilot_node_command = "/Users/fadel.pamungkas/.volta/tools/image/node/20.16.0/bin/node",
+      copilot_node_command = "node",
       panel = { keymap = { open = "<C-CR>" } },
       filetypes = { yaml = true, markdown = true },
       suggestion = {
@@ -13,7 +14,7 @@ return {
         keymap = {
           accept = "<C-s>",
           next = "<C-]>",
-          prev = "<C-[>",
+          prev = "<C-p>",
           dismiss = "<C-\\>",
         },
       },

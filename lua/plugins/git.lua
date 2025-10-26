@@ -14,6 +14,22 @@ return {
   {
     "lewis6991/gitsigns.nvim",
     event = "BufReadPre",
+    keys = {
+      {
+        "gp",
+        function()
+          require("gitsigns").toggle_linehl()
+          require("gitsigns").toggle_deleted()
+          require("gitsigns").toggle_word_diff()
+        end,
+      },
+      {
+        "gP",
+        function()
+          require("gitsigns").preview_hunk_inline()
+        end,
+      },
+    },
     opts = {
       signcolumn = true,
       numhl = false,

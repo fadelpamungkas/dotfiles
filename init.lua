@@ -127,6 +127,7 @@ vim.filetype.add({
   extension = {
     templ = "templ",
     ["http"] = "http",
+    ["java"] = "java",
   },
 })
 

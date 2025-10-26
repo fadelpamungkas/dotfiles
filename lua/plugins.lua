@@ -34,7 +34,7 @@ return {
         "<leader>r",
         function()
           require("grug-far").open({
-            paths = { vim.fn.expand("%") },
+            prefills = { paths = vim.fn.expand("%") },
           })
         end,
         mode = "v",
@@ -43,7 +43,10 @@ return {
         "<leader>r",
         function()
           require("grug-far").open({
-            prefills = { search = vim.fn.expand("<cword>") },
+            prefills = {
+              paths = vim.fn.expand("%"),
+              search = vim.fn.expand("<cword>"),
+            },
           })
         end,
         mode = "n",
@@ -134,19 +137,14 @@ return {
       modes = { char = { jump_labels = true, multi_line = false } },
     },
   },
-
   {
     "mistweaverco/kulala.nvim",
-    keys = {
-      {
-        "<leader>s",
-        function()
-          require("kulala").run()
-        end,
-      },
+    ft = { "http", "rest" },
+    opts = {
+      global_keymaps = true,
+      global_keymaps_prefix = "<leader>e",
+      kulala_keymaps_prefix = "",
     },
-    ft = "http",
-    opts = {},
   },
 
   {

@@ -1,6 +1,10 @@
 board/
 falcon2/
 min/
+pack/
+tmpstate/
+nvim-pack-lock.json
 
 .opencode/
 OpenCode.md
+.claude/

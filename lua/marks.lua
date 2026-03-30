@@ -345,12 +345,12 @@ function M.toggle_menu()
   -- Create floating window with fully editable content
   local buf = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, file_lines)
-  vim.api.nvim_buf_set_option(buf, "bufhidden", "wipe")
-  vim.api.nvim_buf_set_option(buf, "buftype", "acwrite") -- Enable writing
-  vim.api.nvim_buf_set_option(buf, "swapfile", false)
-  vim.api.nvim_buf_set_option(buf, "modifiable", true) -- Fully editable
+  vim.bo[buf].bufhidden = "wipe"
+  vim.bo[buf].buftype = "acwrite"
+  vim.bo[buf].swapfile = false
+  vim.bo[buf].modifiable = true
   vim.api.nvim_buf_set_name(buf, "marks://edit")
-  vim.api.nvim_buf_set_option(buf, "filetype", "marks") -- For potential syntax highlighting
+  vim.bo[buf].filetype = "marks"
 
   -- Calculate window size - wider width and fixed height
   local width = math.floor(vim.o.columns * 0.3) -- Make it wider (60% of screen width)
@@ -375,32 +375,28 @@ function M.toggle_menu()
   -- Auto-save and close
   vim.keymap.set("n", "q", function()
     -- Auto-save if buffer is modified
-    if vim.api.nvim_buf_get_option(buf, "modified") then
+    if vim.bo[buf].modified then
       local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
       local new_files = parse_buffer_to_files(lines, files)
 
       if #new_files > 0 then
         save_marks_list(new_files)
         vim.notify("Marks auto-saved! (" .. #new_files .. " files)", vim.log.levels.INFO)
-        -- Mark buffer as unmodified after saving
-        vim.api.nvim_buf_set_option(buf, "modified", false)
+        vim.bo[buf].modified = false
       end
     end
     vim.cmd("close")
   end, opts)
 
-  -- Escape also auto-saves
   vim.keymap.set("n", "<Esc>", function()
-    -- Auto-save if buffer is modified
-    if vim.api.nvim_buf_get_option(buf, "modified") then
+    if vim.bo[buf].modified then
       local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
       local new_files = parse_buffer_to_files(lines, files)
 
       if #new_files > 0 then
         save_marks_list(new_files)
         vim.notify("Marks auto-saved! (" .. #new_files .. " files)", vim.log.levels.INFO)
-        -- Mark buffer as unmodified after saving
-        vim.api.nvim_buf_set_option(buf, "modified", false)
+        vim.bo[buf].modified = false
       end
     end
     vim.cmd("close")
@@ -433,8 +429,7 @@ function M.toggle_menu()
       if #new_files > 0 then
         save_marks_list(new_files)
         vim.notify("Marks saved! (" .. #new_files .. " files)", vim.log.levels.INFO)
-        -- Mark buffer as unmodified
-        vim.api.nvim_buf_set_option(buf, "modified", false)
+        vim.bo[buf].modified = false
       else
         vim.notify("No valid files found", vim.log.levels.WARN)
       end

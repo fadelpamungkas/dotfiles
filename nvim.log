@@ -1,0 +1,12 @@
+WRN 2026-03-30T18:49:38.025 ?.49731    server_start:197: Failed to start server: operation not permitted: /var/folders/kt/33bhzvhn5qbf7x_qb7knwnhw0000gp/T/nvim.fadelpamungkas/DpzgSa/nvim.49731.0
+WRN 2026-03-30T18:49:38.108 ?.49731    server_start:197: Failed to start server: operation not permitted: /var/folders/kt/33bhzvhn5qbf7x_qb7knwnhw0000gp/T/nvim.fadelpamungkas/DpzgSa/fzf-lua.1774871378.49731.1
+WRN 2026-03-30T18:49:45.869 ?.49970    server_start:197: Failed to start server: operation not permitted: /var/folders/kt/33bhzvhn5qbf7x_qb7knwnhw0000gp/T/nvim.fadelpamungkas/9qBAeE/nvim.49970.0
+WRN 2026-03-30T18:49:45.932 ?.49970    server_start:197: Failed to start server: operation not permitted: /var/folders/kt/33bhzvhn5qbf7x_qb7knwnhw0000gp/T/nvim.fadelpamungkas/9qBAeE/fzf-lua.1774871385.49970.1
+WRN 2026-03-30T18:49:51.463 ?.50178    server_start:197: Failed to start server: operation not permitted: /var/folders/kt/33bhzvhn5qbf7x_qb7knwnhw0000gp/T/nvim.fadelpamungkas/kBybtD/nvim.50178.0
+WRN 2026-03-30T18:49:51.530 ?.50178    server_start:197: Failed to start server: operation not permitted: /var/folders/kt/33bhzvhn5qbf7x_qb7knwnhw0000gp/T/nvim.fadelpamungkas/kBybtD/fzf-lua.1774871391.50178.1
+WRN 2026-03-30T18:49:59.769 ?.50414    server_start:197: Failed to start server: operation not permitted: /var/folders/kt/33bhzvhn5qbf7x_qb7knwnhw0000gp/T/nvim.fadelpamungkas/5W0kcf/nvim.50414.0
+WRN 2026-03-30T18:49:59.828 ?.50414    server_start:197: Failed to start server: operation not permitted: /var/folders/kt/33bhzvhn5qbf7x_qb7knwnhw0000gp/T/nvim.fadelpamungkas/5W0kcf/fzf-lua.1774871399.50414.1
+WRN 2026-03-30T18:50:09.752 ?.50758    server_start:197: Failed to start server: operation not permitted: /var/folders/kt/33bhzvhn5qbf7x_qb7knwnhw0000gp/T/nvim.fadelpamungkas/QRHtLO/nvim.50758.0
+WRN 2026-03-30T18:50:09.812 ?.50758    server_start:197: Failed to start server: operation not permitted: /var/folders/kt/33bhzvhn5qbf7x_qb7knwnhw0000gp/T/nvim.fadelpamungkas/QRHtLO/fzf-lua.1774871409.50758.1
+WRN 2026-03-30T18:50:16.756 ?.51709    server_start:197: Failed to start server: operation not permitted: /var/folders/kt/33bhzvhn5qbf7x_qb7knwnhw0000gp/T/nvim.fadelpamungkas/pxZPdP/nvim.51709.0
+WRN 2026-03-30T18:50:16.819 ?.51709    server_start:197: Failed to start server: operation not permitted: /var/folders/kt/33bhzvhn5qbf7x_qb7knwnhw0000gp/T/nvim.fadelpamungkas/pxZPdP/fzf-lua.1774871416.51709.1

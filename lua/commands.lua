@@ -1,7 +1,7 @@
 -- Highlight on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
   callback = function()
-    vim.highlight.on_yank()
+    vim.hl.on_yank()
   end,
 })
 
@@ -17,7 +17,7 @@ vim.api.nvim_create_autocmd(
   { pattern = "*", command = "set nocursorline", group = cursorGrp }
 )
 
--- TODO comment highlighting (with error protection)
+-- TODO comment highlighting
 vim.api.nvim_create_autocmd({ "BufReadPost", "BufEnter" }, {
   callback = function()
     pcall(function()
@@ -29,22 +29,6 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufEnter" }, {
   end,
 })
 
--- Auto toggle highlight search
-local ns = vim.api.nvim_create_namespace("toggle_hlsearch")
-
-local function toggle_hlsearch(char)
-  if vim.fn.mode() == "n" then
-    local keys = { "<CR>", "n", "N", "*", "#", "?", "/" }
-    local new_hlsearch = vim.tbl_contains(keys, vim.fn.keytrans(char))
-
-    if vim.opt.hlsearch:get() ~= new_hlsearch then
-      vim.opt.hlsearch = new_hlsearch
-    end
-  end
-end
-
-vim.on_key(toggle_hlsearch, ns)
-
 -- Close with q for special buffer types
 vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("close_with_q", { clear = true }),
@@ -54,10 +38,6 @@ vim.api.nvim_create_autocmd("FileType", {
     "man",
     "vim",
     "lspinfo",
-    "spectre_panel",
-    "tsplayground",
-    "PlenaryTestPopup",
-    "rest_nvim_results",
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
@@ -65,56 +45,33 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Enhanced quickfix management
-local quickfix_height = 10 -- Remember quickfix height
-
-local function get_quickfix_window()
+-- Quickfix toggle
+local quickfix_height = 10
+vim.keymap.set("n", "<leader>q", function()
   for _, win in pairs(vim.api.nvim_list_wins()) do
     if vim.api.nvim_win_get_config(win).relative == "" then
       local buf = vim.api.nvim_win_get_buf(win)
       if vim.bo[buf].buftype == "quickfix" then
-        return win
+        quickfix_height = vim.api.nvim_win_get_height(win)
+        vim.cmd("cclose")
+        return
       end
     end
   end
-  return nil
-end
-
-function _G.toggle_quickfix()
-  local qf_win = get_quickfix_window()
-
-  if qf_win then
-    -- Save height before closing
-    quickfix_height = vim.api.nvim_win_get_height(qf_win)
-    vim.cmd("cclose")
-  else
-    -- Open with remembered height
-    vim.cmd("botright copen " .. quickfix_height)
-  end
-end
-
-vim.keymap.set("n", "<leader>q", ":lua toggle_quickfix()<CR>", { noremap = true, silent = true })
+  vim.cmd("botright copen " .. quickfix_height)
+end, { noremap = true, silent = true })
 
 -- Debounced file change detection
-local file_check_timer = nil
+local check_timer = vim.uv.new_timer()
 local function debounced_checktime()
-  if file_check_timer then
-    vim.fn.timer_stop(file_check_timer)
-  end
-
-  file_check_timer = vim.fn.timer_start(100, function()
-    -- Don't run checktime in command-line window or command mode
-    local mode = vim.fn.mode()
-    local cmdwin = vim.fn.getcmdwintype()
-
-    if mode ~= "c" and cmdwin == "" then
+  check_timer:stop()
+  check_timer:start(100, 0, vim.schedule_wrap(function()
+    if vim.fn.mode() ~= "c" and vim.fn.getcmdwintype() == "" then
       pcall(vim.cmd.checktime)
     end
-    file_check_timer = nil
-  end)
+  end))
 end
 
--- Check if file changed outside of vim (with debouncing)
 vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGained" }, {
   callback = debounced_checktime,
   pattern = { "*" },
@@ -125,52 +82,3 @@ require("sessionizer").setup()
 
 -- Custom marks
 require("marks").setup()
-
--- Clipboard comparison
-vim.api.nvim_create_user_command("Ns", function()
-	vim.cmd([[
-		execute 'vsplit | enew'
-		setlocal buftype=nofile
-		setlocal bufhidden=hide
-		setlocal noswapfile
-	]])
-end, { nargs = 0 })
-
--- Compare clipboard to current buffer
-vim.api.nvim_create_user_command("CompareClipboard", function()
-	local ftype = vim.api.nvim_eval("&filetype") -- original filetype
-	vim.cmd([[
-		tabnew %
-		Ns
-		normal! P
-		windo diffthis
-	]])
-	vim.cmd("set filetype=" .. ftype)
-	vim.cmd("nnoremap <silent> <buffer> q <cmd>tabclose<CR>")
-end, { nargs = 0 })
-
--- Assign it to a keymap
-vim.keymap.set("n", "<leader>vc", "<cmd>CompareClipboard<cr>")
-
--- Compare clipboard to visual selection
-vim.api.nvim_create_user_command("CompareClipboardSelection", function()
-	vim.cmd([[
-		" yank visual selection to z register
-		normal! gv"zy
-		" open new tab, set options to prevent save prompt when closing
-		execute 'tabnew | setlocal buftype=nofile bufhidden=hide noswapfile'
-		" paste z register into new buffer
-		normal! V"zp
-		Ns
-		normal! Vp
-		windo diffthis
-	]])
-	vim.cmd("nnoremap <silent> <buffer> q <cmd>tabclose<CR>")
-end, {
-	nargs = 0,
-	range = true,
-})
-
--- Assign it to a keymap
-vim.keymap.set("v", "<leader>vc", "<esc><cmd>CompareClipboardSelection<cr>")
-
